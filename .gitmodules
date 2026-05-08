@@ -1,0 +1,3 @@
+[submodule "hw/TMR2615F_osu_pad/library"]
+	path = hw/TMR2615F_osu_pad/library
+	url = https://github.com/uwrealitylabs/library.git
