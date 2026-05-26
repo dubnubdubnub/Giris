@@ -1,3 +1,6 @@
 [submodule "hw/TMR2615F_osu_pad/library"]
-	path = hw/TMR2615F_osu_pad/library
+	path = hw/library
 	url = https://github.com/uwrealitylabs/library.git
+[submodule "hw/TMR2615F_osu_pad/marbastlib"]
+	path = hw/marbastlib
+	url = https://github.com/ebastler/marbastlib.git
