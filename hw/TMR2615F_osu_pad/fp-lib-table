@@ -40,7 +40,6 @@
 	(lib (name "Transistor_BJT__C") (type "KiCad") (uri "${KIPRJMOD}/../library/footprints/Transistor_BJT__C.pretty") (options "") (descr ""))
 	(lib (name "Transistor_FET__C") (type "KiCad") (uri "${KIPRJMOD}/../library/footprints/Transistor_FET__C.pretty") (options "") (descr ""))
 	(lib (name "Power_Switch__C") (type "KiCad") (uri "${KIPRJMOD}/../library/footprints/Power_Switch__C.pretty") (options "") (descr ""))
-	(lib (name "Ideal_Diode__C") (type "KiCad") (uri "${KIPRJMOD}/../library/footprints/Ideal_Diode__C.pretty") (options "") (descr ""))
 	(lib (name "Isolator__C") (type "KiCad") (uri "${KIPRJMOD}/../library/footprints/Isolator__C.pretty") (options "") (descr ""))
 	(lib (name "marbastlib-he") (type "KiCad") (uri "${KIPRJMOD}/../marbastlib/footprints/marbastlib-he.pretty") (options "") (descr ""))
 	(lib (name "marbastlib-mx") (type "KiCad") (uri "${KIPRJMOD}/../marbastlib/footprints/marbastlib-mx.pretty") (options "") (descr ""))
