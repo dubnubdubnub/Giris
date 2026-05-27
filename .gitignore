@@ -29,3 +29,8 @@ fp-info-cache
 # Exported BOM files
 *.xml
 *.csv
+!import_parts.csv
+
+# VS Code Local History extension
+.history/
+.history_trim/
