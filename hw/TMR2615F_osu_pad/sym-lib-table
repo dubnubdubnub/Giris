@@ -19,7 +19,6 @@
 	(lib (name "Inductor__C") (type "KiCad") (uri "${KIPRJMOD}/../library/symbols/Inductor__C.kicad_symdir") (options "") (descr ""))
 	(lib (name "Interface_CAN_LIN__C") (type "KiCad") (uri "${KIPRJMOD}/../library/symbols/Interface_CAN_LIN__C.kicad_symdir") (options "") (descr ""))
 	(lib (name "Interface_USB__C") (type "KiCad") (uri "${KIPRJMOD}/../library/symbols/Interface_USB__C.kicad_symdir") (options "") (descr ""))
-	(lib (name "LDO__C") (type "KiCad") (uri "${KIPRJMOD}/../library/symbols/LDO__C.kicad_symdir") (options "") (descr ""))
 	(lib (name "LED__C") (type "KiCad") (uri "${KIPRJMOD}/../library/symbols/LED__C.kicad_symdir") (options "") (descr ""))
 	(lib (name "MCU_Artery__C") (type "KiCad") (uri "${KIPRJMOD}/../library/symbols/MCU_Artery__C.kicad_symdir") (options "") (descr ""))
 	(lib (name "MCU_Espressif__C") (type "KiCad") (uri "${KIPRJMOD}/../library/symbols/MCU_Espressif__C.kicad_symdir") (options "") (descr ""))
