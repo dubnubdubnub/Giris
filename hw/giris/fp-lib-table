@@ -20,7 +20,6 @@
 	(lib (name "Interface_CAN__C") (type "KiCad") (uri "${KIPRJMOD}/../library/footprints/Interface_CAN__C.pretty") (options "") (descr ""))
 	(lib (name "Interface_CAN_LIN__C") (type "KiCad") (uri "${KIPRJMOD}/../library/footprints/Interface_CAN_LIN__C.pretty") (options "") (descr ""))
 	(lib (name "Interface_USB__C") (type "KiCad") (uri "${KIPRJMOD}/../library/footprints/Interface_USB__C.pretty") (options "") (descr ""))
-	(lib (name "LDO__C") (type "KiCad") (uri "${KIPRJMOD}/../library/footprints/LDO__C.pretty") (options "") (descr ""))
 	(lib (name "LED__C") (type "KiCad") (uri "${KIPRJMOD}/../library/footprints/LED__C.pretty") (options "") (descr ""))
 	(lib (name "Logo__C") (type "KiCad") (uri "${KIPRJMOD}/../library/footprints/Logo__C.pretty") (options "") (descr ""))
 	(lib (name "MCU_Artery__C") (type "KiCad") (uri "${KIPRJMOD}/../library/footprints/MCU_Artery__C.pretty") (options "") (descr ""))
