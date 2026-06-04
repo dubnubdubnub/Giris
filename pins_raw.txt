@@ -1,0 +1,1168 @@
+===PAGE 31
+AT32F405/402 Series Datasheet 
+2025.9.5 
+31 
+Ver 2.03 
+The table below is the pin definition of the AT32F405/402. “-” represents that there is no such 
+pinout on the related package. Unless descriptions in () under pin name, the functions during reset 
+and after reset are the same as those of the actual pin name. Unless otherwise specified, all GPIOs 
+are input floating during reset and after reset, by default. Pin multiplexed functions are selected 
+through GPIOx_MUXx registers and the additional functions are directly selected/enabled through 
+peripheral registers. 
+Table 9. AT32F405/402 series pin definitions 
+Pin numbers 
+Pin names 
+(function after 
+reset) 
+Type (1) 
+GPIO level(2) 
+Multiplexed functions (3) 
+Additional functions 
+AT32F405 
+AT32F402 
+QFN32 
+LQFP48/ 
+QFN48 
+LQFP64 
+QFN32 
+LQFP48/ 
+QFN48 
+LQFP64 
+- 
+1 
+1 
+- 
+1 
+1 
+VDD 
+S 
+- 
+Digital power supply 
+- 
+2 
+2 
+- 
+2 
+2 
+PC13(4) 
+I/O 
+FT 
+- 
+ERTC_OUT / TAMP1 / 
+WKUP2 
+- 
+3 
+3 
+- 
+3 
+3 
+PC14(4) 
+I/O TC 
+- 
+LEXT_IN 
+- 
+4 
+4 
+- 
+4 
+4 
+PC15(4) 
+I/O TC 
+- 
+LEXT_OUT 
+2 
+5 
+5 
+2 
+5 
+5 
+PF0 
+I/O TC 
+TMR1_CH1 / I2C1_SDA 
+HEXT_IN 
+3 
+6 
+6 
+3 
+6 
+6 
+PF1 
+I/O TC 
+TMR1_CH2C / I2C1_SCL /  
+SPI2_CS / I2S2_WS 
+HEXT_OUT 
+4 
+7 
+7 
+4 
+7 
+7 
+NRST 
+I/O 
+R 
+Device reset input/internal reset output (active low) 
+- 
+- 
+8 
+- 
+- 
+8 
+PC0 
+I/O FTa 
+I2C3_SCL / I2C1_SCL /  
+USART6_TX / UART7_TX 
+ADC1_IN10 
+- 
+- 
+9 
+- 
+- 
+9 
+PC1 
+I/O FTa 
+I2C3_SDA /  
+SPI3_MOSI / I2S3_SD /  
+SPI2_MOSI / I2S2_SD /  
+I2C1_SDA /  
+USART6_RX / UART7_RX 
+ADC1_IN11 
+- 
+- 
+10 
+- 
+- 
+10 
+PC2 
+I/O FTa 
+SPI2_MISO / I2S2_MCK /  
+I2S_SDEXT / UART8_TX 
+ADC1_IN12 
+ 
+ 
+11 
+ 
+ 
+11 
+PC3 
+I/O FTa 
+SPI2_MOSI / I2S2_SD /  
+UART8_RX 
+ADC1_IN13 
+- 
+8 
+12 
+- 
+8 
+12 
+VSSA 
+S 
+- 
+Analog ground 
+5 
+9 
+13 
+5 
+9 
+13 
+VDDA 
+S 
+- 
+Analog power supply 
+6 
+10 
+14 
+6 
+10 
+14 
+PA0 
+I/O FTa 
+TMR2_CH1 / TMR2_EXT /  
+TMR9_CH2C / I2C2_SCL /  
+USART2_RX / USART2_CTS /  
+USART4_TX /  
+ADC1_IN0 / TAMP2 /  
+WKUP1 
+7 
+11 
+15 
+7 
+11 
+15 
+PA1 
+I/O FTa 
+TMR2_CH2 / TMR9_CH1C /  
+I2C2_SDA / I2C1_SMBA /  
+I2SF5_SD / USART2_RTS_DE /  
+USART4_RX / QSPI1_IO3 
+ADC1_IN1 
+8 
+12 
+16 
+8 
+12 
+16 
+PA2 
+I/O FTa 
+TMR2_CH3 / TMR9_CH1 /  
+I2SF5_CKIN / USART2_TX /  
+QSPI1_CS 
+ADC1_IN2 
+9 
+13 
+17 
+9 
+13 
+17 
+PA3 
+I/O FTa 
+TMR2_CH4 / TMR9_CH2 /  
+I2S2_MCK / USART2_RX 
+ADC1_IN3 
+- 
+- 
+18 
+- 
+- 
+18 
+PF4 
+I/O 
+FT 
+TMR2_CH1 / I2C1_SDA 
+- 
+- 
+- 
+19 
+- 
+- 
+19 
+PF5 
+I/O 
+FT 
+TMR2_CH2 / I2C1_SCL 
+- 
+
+===PAGE 32
+AT32F405/402 Series Datasheet 
+2025.9.5 
+32 
+Ver 2.03 
+Pin numbers 
+Pin names 
+(function after 
+reset) 
+Type (1) 
+GPIO level(2) 
+Multiplexed functions (3) 
+Additional functions 
+AT32F405 
+AT32F402 
+QFN32 
+LQFP48/ 
+QFN48 
+LQFP64 
+QFN32 
+LQFP48/ 
+QFN48 
+LQFP64 
+10 
+14 
+20 
+10 
+14 
+20 
+PA4 
+I/O FTa 
+I2C1_SCL /  
+SPI1_CS / I2S1_WS /  
+SPI3_CS / I2S3_WS /  
+USART2_CK / USART6_TX /  
+TMR14_CH1 / OTGHS1_SOF 
+ADC1_IN4 
+11 
+15 
+21 
+11 
+15 
+21 
+PA5 
+I/O FTa 
+TMR2_CH1 / TMR2_EXT /  
+SPI1_SCK / I2S1_CK /  
+USART3_CK / USART3_RX /  
+USART6_RX / TMR13_CH1C 
+ADC1_IN5 
+12 
+16 
+22 
+12 
+16 
+22 
+PA6 
+I/O FTa 
+TMR1_BRK / TMR3_CH1 /  
+SPI1_MISO / I2S1_MCK /  
+I2S2_MCK / USART3_CTS /  
+USART3_RX / TMR13_CH1 /  
+QSPI1_IO0 / QSPI1_IO2 
+ADC1_IN6 
+13 
+17 
+23 
+13 
+17 
+23 
+PA7 
+I/O FTa 
+TMR1_CH1C / TMR3_CH2 /  
+I2C3_SCL /  
+SPI1_MOSI / I2S1_SD /  
+USART3_TX / TMR14_CH1 /  
+QSPI1_IO1 
+ADC1_IN7 
+- 
+- 
+24 
+- 
+- 
+24 
+PC4 
+I/O FTa 
+TMR9_CH1 / I2S1_MCK /  
+USART3_TX / TMR13_CH1 /  
+QSPI1_IO2 
+ADC1_IN14 
+- 
+- 
+25 
+- 
+- 
+25 
+PC5 
+I/O FTa 
+TMR9_CH2 / I2C1_SMBA /  
+USART3_RX / TMR13_CH1C /  
+QSPI1_IO3 
+ADC1_IN15 
+14 
+18 
+26 
+14 
+18 
+26 
+PB0 
+I/O FTa 
+TMR1_CH2C / TMR3_CH3 /  
+SPI1_MISO / I2S1_MCK /  
+SPI3_MOSI / I2S3_SD /  
+USART2_RX / USART3_CK /  
+QSPI1_IO0 / I2SF5_CK 
+ADC1_IN8 
+15 
+19 
+27 
+15 
+19 
+27 
+PB1 
+I/O FTa 
+TMR1_CH3C / TMR3_CH4 /  
+SPI1_MOSI / I2S1_SD /  
+SPI2_SCK / I2S2_CK /  
+USART2_CK / USART3_RTS_DE /  
+TMR14_CH1 / QSPI1_SCK /  
+I2SF5_WS 
+ADC1_IN9 
+16 
+20 
+28 
+16 
+20 
+28 
+PB2 
+I/O 
+FT 
+TMR2_CH4 / TMR3_EXT /  
+I2C3_SMBA /  
+SPI3_MOSI / I2S3_SD /  
+TMR14_CH1C / QSPI1_SCK 
+- 
+- 
+21 
+29 
+- 
+21 
+29 
+PB10 
+I/O FTf 
+TMR2_CH3 / I2C2_SCL /  
+SPI2_SCK / I2S2_CK /  
+I2S3_MCK / USART3_TX /  
+QSPI1_IO1 / QSPI1_CS 
+- 
+- 
+- 
+- 
+- 
+22 
+30 
+PB11 
+I/O 
+FT 
+TMR2_CH4 / I2C2_SDA /  
+I2SF5_CKIN / USART3_RX /  
+TMR13_BRK / QSPI1_IO0 
+- 
+- 
+22 
+30 
+- 
+- 
+- 
+PB12 
+I/O 
+FT 
+TMR1_BRK / I2C2_SMBA /  
+SPI2_CS / I2S2_WS /  
+SPI3_SCK / I2S3_CK /  
+USART3_CK / OTGHS1_ID /  
+I2SF5_WS 
+- 
+
+===PAGE 33
+AT32F405/402 Series Datasheet 
+2025.9.5 
+33 
+Ver 2.03 
+Pin numbers 
+Pin names 
+(function after 
+reset) 
+Type (1) 
+GPIO level(2) 
+Multiplexed functions (3) 
+Additional functions 
+AT32F405 
+AT32F402 
+QFN32 
+LQFP48/ 
+QFN48 
+LQFP64 
+QFN32 
+LQFP48/ 
+QFN48 
+LQFP64 
+- 
+23 
+31 
+- 
+23 
+31 
+VSS 
+S 
+- 
+Digital ground 
+- 
+- 
+- 
+17 
+24 
+32 
+VDD 
+S 
+- 
+Digital power supply 
+- 
+- 
+- 
+- 
+25 
+33 
+PB12 
+I/O 
+FT 
+TMR1_BRK / I2C2_SMBA /  
+SPI2_CS / I2S2_WS /  
+SPI3_SCK / I2S3_CK /  
+USART3_CK / I2SF5_WS 
+- 
+- 
+24 
+32 
+- 
+26 
+34 
+PB13 
+I/O 
+FT 
+CLKOUT / TMR1_CH1C /  
+I2C3_SMBA /  
+SPI2_SCK / I2S2_CK /  
+I2SF5_CK / I2C3_SCL /  
+USART3_CTS / OTGHS1_VBUS 
+- 
+17 
+25 
+33 
+- 
+- 
+- 
+OTGHS1_R(5) 
+- 
+- 
+OTGHS1 PHY reference current source resistance 
+ (12 kΩ ± 1% resistance to digital ground externally) 
+18 
+26 
+34 
+- 
+- 
+- 
+OTGHS1_D-(5) 
+- 
+- 
+OTGHS1_D- 
+19 
+27 
+35 
+- 
+- 
+- 
+OTGHS1_D+(5) 
+- 
+- 
+OTGHS1_D+ 
+- 
+- 
+- 
+- 
+27 
+35 
+PB14 
+I/O 
+FT 
+TMR1_CH2C / I2C3_SDA /  
+SPI2_MISO / I2S2_MCK /  
+I2S_SDEXT / USART3_RTS_DE 
+- 
+- 
+- 
+- 
+- 
+28 
+36 
+PB15 
+I/O 
+FT 
+RTC_REFIN /  
+TMR1_CH3C / I2C3_SCL /  
+SPI2_MOSI / I2S2_SD 
+- 
+20 
+28 
+36 
+- 
+- 
+- 
+VDD 
+S 
+- 
+Digital power supply 
+- 
+- 
+37 
+- 
+- 
+37 
+PC6 
+I/O 
+FT 
+TMR1_CH1 / TMR3_CH1 /  
+I2C1_SCL / I2S2_MCK /  
+USART6_TX / UART7_TX  
+- 
+- 
+- 
+38 
+- 
+- 
+38 
+PC7 
+I/O 
+FT 
+TMR1_CH2 / TMR3_CH2 /  
+I2C1_SDA /  
+SPI2_SCK / I2S2_CK /  
+I2S3_MCK /  
+USART6_RX / UART7_RX 
+- 
+- 
+- 
+39 
+- 
+- 
+39 
+PC8 
+I/O 
+FT 
+TMR1_CH3 / TMR3_CH3 /  
+I2SF5_MCK / UART8_TX /  
+USART6_CK_RTS_DE / QSPI1_IO2 
+- 
+- 
+- 
+40 
+- 
+- 
+40 
+PC9 
+I/O 
+FT 
+CLKOUT / TMR1_CH4 /  
+TMR3_CH4 / I2C3_SDA /  
+I2SF5_CKIN / UART8_RX /  
+I2C1_SDA / OTGHS1_OE /  
+QSPI1_IO0 
+- 
+- 
+29 
+41 
+18 
+29 
+41 
+PA8 
+I/O 
+FT 
+CLKOUT / TMR1_CH1 /  
+TMR9_BRK / I2C3_SCL /  
+USART1_CK / USART2_TX /  
+UART7_TX / OTGFS1_SOF 
+- 
+- 
+30 
+42 
+19 
+30 
+42 
+PA9 
+I/O 
+FT 
+CLKOUT / TMR1_CH2 /  
+I2C3_SMBA /  
+SPI2_SCK / I2S2_CK /  
+USART1_TX / I2C1_SCL /  
+TMR14_BRK / OTGFS1_VBUS 
+- 
+- 
+31 
+43 
+20 
+31 
+43 
+PA10 
+I/O 
+FT 
+ERTC_REFIN / TMR1_CH3 /  
+SPI2_MOSI / I2S2_SD /  
+I2SF5_SD / USART1_RX /  
+I2C1_SDA / OTGFS1_ID /  
+I2SF5_MCK 
+- 
+
+===PAGE 34
+AT32F405/402 Series Datasheet 
+2025.9.5 
+34 
+Ver 2.03 
+Pin numbers 
+Pin names 
+(function after 
+reset) 
+Type (1) 
+GPIO level(2) 
+Multiplexed functions (3) 
+Additional functions 
+AT32F405 
+AT32F402 
+QFN32 
+LQFP48/ 
+QFN48 
+LQFP64 
+QFN32 
+LQFP48/ 
+QFN48 
+LQFP64 
+21 
+32 
+44 
+21 
+32 
+44 
+PA11 
+I/O 
+FT 
+TMR1_CH4 / I2C2_SCL /  
+SPI2_CS / I2S2_WS /  
+I2C1_SMBA / USART1_CTS /  
+USART6_TX / CAN1_RX 
+OTGFS1_D- 
+22 
+33 
+45 
+22 
+33 
+45 
+PA12 
+I/O 
+FT 
+TMR1_EXT / I2C2_SDA /  
+SPI2_MISO / I2S2_MCK /  
+I2SF5_SDEXT / USART1_RTS_DE /  
+USART6_RX / CAN1_TX 
+OTGFS1_D+ 
+23 
+34 
+46 
+23 
+34 
+46 
+PA13 
+(SWDIO(6)) 
+I/O 
+FT 
+PA13 / IR_OUT /  
+I2C1_SDA / I2S_SDEXT /  
+SPI3_MISO / I2S3_MCK /  
+OTGFS1_OE 
+- 
+- 
+35 
+47 
+- 
+35 
+47 
+PF6 
+I/O 
+FT 
+I2C2_SCL / UART7_RX /  
+QSPI1_IO0 
+- 
+- 
+36 
+48 
+- 
+36 
+48 
+PF7 
+I/O 
+FT 
+I2C2_SDA / UART7_TX 
+- 
+24 
+37 
+49 
+24 
+37 
+49 
+PA14 
+(SWCLK(6)) 
+I/O 
+FT 
+PA14 / I2C1_SMBA /  
+SPI3_MOSI / I2S3_SD /  
+USART2_TX 
+- 
+25 
+38 
+50 
+25 
+38 
+50 
+PA15 
+I/O 
+FT 
+TMR2_CH1 / TMR2_EXT /  
+SPI1_CS / I2S1_WS /  
+SPI3_CS / I2S3_WS /  
+USART1_TX / USART2_RX /  
+UART7_TX / USART4_RTS_DE /  
+QSPI1_IO2 
+- 
+- 
+- 
+51 
+- 
+- 
+51 
+PC10 
+I/O 
+FT 
+SPI3_SCK / I2S3_CK /  
+USART3_TX / USART4_TX /  
+QSPI1_IO1 
+- 
+- 
+- 
+52 
+- 
+- 
+52 
+PC11 
+I/O 
+FT 
+I2S_SDEXT / SPI3_MISO /  
+I2S3_MCK / USART3_RX /  
+USART4_RX / QSPI1_CS 
+- 
+- 
+- 
+53 
+- 
+- 
+53 
+PC12 
+I/O 
+FT 
+TMR11_CH1 / I2C2_SDA /  
+SPI3_MOSI / I2S3_SD /  
+USART3_CK / USART4_CK /  
+USART5_TX 
+- 
+- 
+- 
+54 
+- 
+- 
+54 
+PD2 
+I/O 
+FT 
+TMR3_EXT / USART3_RTS_DE /  
+USART5_RX 
+- 
+26 
+39 
+55 
+26 
+39 
+55 
+PB3 
+I/O FTf 
+SWO / TMR2_CH2 /  
+I2C2_SDA /  
+SPI1_SCK / I2S1_CK /  
+SPI3_SCK / I2S3_CK /  
+USART1_RX / USART1_RTS_DE /  
+UART7_RX / USART5_TX /  
+QSPI1_IO3 
+- 
+27 
+40 
+56 
+27 
+40 
+56 
+PB4 
+I/O 
+FT 
+TMR3_CH1 / TMR11_BRK /  
+I2C3_SDA /  
+SPI1_MISO / I2S1_MCK /  
+SPI3_MISO / I2S3_MCK /  
+USART1_CTS / UART7_TX /  
+USART5_RX / QSPI1_SCK /  
+I2S_SDEXT 
+- 
+
+===PAGE 35
+AT32F405/402 Series Datasheet 
+2025.9.5 
+35 
+Ver 2.03 
+Pin numbers 
+Pin names 
+(function after 
+reset) 
+Type (1) 
+GPIO level(2) 
+Multiplexed functions (3) 
+Additional functions 
+AT32F405 
+AT32F402 
+QFN32 
+LQFP48/ 
+QFN48 
+LQFP64 
+QFN32 
+LQFP48/ 
+QFN48 
+LQFP64 
+28 
+41 
+57 
+28 
+41 
+57 
+PB5 
+I/O 
+FT 
+TMR3_CH2 / TMR10_BRK /  
+I2C3_SMBA /  
+SPI1_MOSI / I2S1_SD /  
+SPI3_MOSI / I2S3_SD /  
+USART1_CK / USART5_RX /  
+USART5_CK_RTS_DE / QSPI1_IO0 
+WKUP6 
+29 
+42 
+58 
+29 
+42 
+58 
+PB6 
+I/O 
+FT 
+TMR4_CH1 / TMR10_CH1C /  
+I2C1_SCL / I2S1_MCK /  
+I2SF5_WS / USART1_TX /  
+USART5_TX / USART4_CK /  
+QSPI1_CS 
+- 
+30 
+43 
+59 
+30 
+43 
+59 
+PB7 
+I/O 
+FT 
+TMR4_CH2 / TMR11_CH1C /  
+I2C1_SDA / I2SF5_CK / 
+ USART1_RX / USART4_CTS /  
+QSPI1_IO1 
+- 
+31 
+44 
+60 
+31 
+44 
+60 PF11(7) / BOOT0 I/O 
+FT 
+- 
+Boot mode 0 
+32 
+45 
+61 
+32 
+45 
+61 
+PB8 
+I/O 
+FT 
+TMR2_CH1 / TMR2_EXT /  
+TMR4_CH3 / TMR10_CH1 /  
+I2C1_SCL / I2SF5_SDEXT /  
+USART1_TX / USART5_RX /  
+CAN1_RX / I2SF5_SD 
+- 
+- 
+46 
+62 
+- 
+46 
+62 
+PB9 
+I/O FTf 
+IR_OUT / TMR2_CH2 /  
+TMR4_CH4 / TMR11_CH1 /  
+I2C1_SDA /  
+SPI2_CS / I2S2_WS /  
+I2SF5_SD / I2C2_SDA /  
+USART5_TX / CAN1_TX /  
+I2S1_MCK / QSPI1_CS 
+- 
+- 
+47 
+63 
+- 
+47 
+63 
+VSS 
+S 
+- 
+Digital ground 
+1 
+48 
+64 
+1 
+48 
+64 
+VDD 
+S 
+- 
+Digital power supply 
+- 
+-/49 
+- 
+- 
+-/49 
+- 
+EPAD 
+(VSS) 
+S 
+- 
+Digital ground 
+33 
+- 
+- 
+33 
+- 
+- 
+EPAD 
+(VSS / VSSA) 
+S 
+- 
+Digital ground / Analog ground 
+(1) I = input, O = output, S = power supply. 
+(2) TC = standard 3.3 V GPIO, FT = general 5 V-tolerant GPIO, FTa = 5 V-tolerant GPIO with analog function, FTf = 5 V-
+tolerant GPIO with 20 mA sink current capability, R = bidirectional reset pin with embedded weak pull-up resistor. Of those, 
+FTa pin has 5 V-tolerant characteristics when configured as input floating, input pull-up, or input pull-down mode. However, 
+it cannot be 5 V-tolerant in analog mode. In this case, its input level should not be higher than VDD + 0.3 V. 
+(3) EVENTOUT feature is available on any GPIO. 
+(4) PC13, PC14 and PC15 are supplied through the power switch. Since the switch can only drive a limited amount of current 
+(3 mA), the use of GPIOs PC13 to PC15 in output mode is limited not to be used as a current source (e.g. to drive an 
+LED). 
+(5) These are dedicated to OTGHS, not sharing with GPIO or other multiplexed functions. 
+(6) After reset, PA13/PA14 are configured as multiplexed SWDIO/SWCLK, while the internal pull-up resistor on the SWDIO pin 
+and the internal pull-down resistor of the SWCLK pin are ON. 
+(7) It is used as BOOT0 during reset, and the boot mode is selected according to its level sampled by the chip. After reset, it is 
+used as PF11 in general-purpose push-pull mode and externally connects a pull-down resistor (3.3 kΩ or below) to ground. 
+
+===PAGE 36
+AT32F405/402 Series Datasheet 
+2025.9.5 
+36 
+Ver 2.03 
+4 
+Electrical characteristics 
+4.1 
+Test conditions 
+4.1.1 
+Minimum and maximum values 
+The minimum and maximum values are obtained in the worst conditions. Data based on 
+characterization results, design simulation and/or technology characteristics are indicated in the 
+table footnotes and are not tested in production. The minimum and maximum values represent the 
+mean value plus or minus three times the standard deviation (mean ± 3σ). 
+4.1.2 
+Typical values 
+Typical values are based on TA = 25 °C, VDD = 3.3 V. 
+4.1.3 
+Typical curves 
+All typical curves are provided only as design guidelines and are not tested. 
+4.1.4 
+Power supply scheme 
+Figure 9. Power supply scheme 
+Backup circuitry
+(LEXT, RTC, Wake-up logic, BPR)
+Level shifter
+IO
+Logic
+Kernel logic
+(CPU,
+Digital
+＆ Memories)
+LDO
+ADC
+HICK, PLL,
+...
+1 x 100 nF
+ each VDD/VSS pair
+100 nF
++ 1 µF
+OUT
+IN
+VSSA
+VDDA
+VDD
+VDD
+VSS...
+VDD...
+GPIO
+4.7 µF
+VDD
+ 
+
+===PAGE 37
+AT32F405/402 Series Datasheet 
+2025.9.5 
+37 
+Ver 2.03 
+4.2 
+Absolute maximum values 
+4.2.1 
+Ratings 
+If stresses were out of the absolute maximum ratings listed in Table 10, Table 11 and Table 12, it 
+may cause permanent damage to the device. These are the maximum stresses only that the device 
+could withstand, but the functional operation of the device under these conditions is not implied. 
+Exposure to maximum rating conditions for an extended period of time may affect device reliability. 
+Table 10. Voltage characteristics 
+Symbol 
+Description 
+Min 
+Max 
+Unit 
+VDDx-VSS 
+External main supply voltage 
+-0.3 
+4.0 
+V 
+VIN 
+Input voltage on FT and FTf GPIO 
+VSS-0.3 
+6.0 
+Input voltage on FTa GPIO (set as input floating, 
+input pull-up, or input pull-down mode) 
+Input voltage on TC GPIO 
+VSS-0.3 
+4.0 
+Input voltage on FTa GPIO (set as analog mode) 
+|ΔVDDx| 
+Variations between different VDD power pins 
+- 
+50 
+mV 
+|VSSx-VSS| 
+Variations between all the different ground pins 
+- 
+50 
+Table 11. Current characteristics 
+Symbol 
+Description 
+Max 
+Unit 
+IVDD 
+Total current into VDD power lines (source) 
+150 
+mA 
+IVSS 
+Total current out of VSS ground lines (sink) 
+150 
+IIO 
+Output current sunk by any GPIO and control pin 
+25 
+Output current source by any GPIO and control pin 
+-25 
+Table 12. Temperature characteristics 
+Symbol 
+Description 
+Value 
+Unit 
+TSTG 
+Storage temperature range 
+-60 ~ +150 
+°C 
+TJ 
+Maximum junction temperature 
+125 
+ 
+
