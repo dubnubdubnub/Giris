@@ -1,0 +1,1842 @@
+                                                                                                        TPS7A4700, TPS7A4701
+
+                                                                                                                 SBVS204G ­ JUNE 2012 ­ REVISED MAY 2026
+
+TPS7A470x 36V, 1A, 4µVRMS, RF LDO Voltage Regulator
+
+1 Features                                         3 Description
+
+· Input Voltage Range: +3V to +36V                 The TPS7A47 is a family of positive voltage (+36V),
+· Output Voltage Noise:                            ultralow-noise (4 µVRMS) low-dropout linear regulators
+                                                   (LDO) capable of sourcing a 1A load.
+    4 µVRMS (10Hz, 100kHz)
+· Power-Supply Ripple Rejection:                   The TPS7A4700 output voltages are user-
+                                                   programmable (up to 20.5V) using a printed circuit
+    ­ 82dB (100Hz)                                 board (PCB) layout without the need of external
+    ­  55dB (10Hz, 10MHz)                          resistors or feed-forward capacitors, thus reducing
+· Two Output Voltage Modes:                        overall component count.
+
+    ­ ANY-OUTTM Version (User-Programmable         The TPS7A4701 output voltage can be configured
+        Output via PCB Layout):                    with a user-programmable PCB layout (up to 20.5V),
+                                                   or adjustable (up to 34V) with external feedback
+        · No External Feedback Resistors or Feed-  resistors.
+            Forward Capacitors Required
+                                                   The TPS7A47 is designed with bipolar
+        · Output Voltage Range: +1.4V to +20.5V    technology primarily for high-accuracy, high-precision
+    ­ Adjustable Version (TPS7A4701 only):         instrumentation applications where clean voltage
+                                                   rails are critical to maximize system performance.
+        · Output Voltage Range: +1.4V to +34V      This feature makes the device ideal for powering
+· Output Current: 1A                               operational amplifiers, analog-to-digital converters
+· Dropout Voltage: 307mV at 1A                     (ADCs), digital-to-analog converters (DACs), and
+· CMOS Logic Level-Compatible Enable Pin           other high-performance analog circuitry in critical
+· Built-In Fixed Current Limit and                 applications such as medical, radio frequency (RF),
+                                                   and test-and-measurement.
+    Thermal Shutdown
+· Available in High-Performance Thermal Package:   In addition, the TPS7A47 is ideal for post dc-dc
+                                                   converter regulation. By filtering out the output
+    5-mm × 5-mm QFN                                voltage ripple inherent to dc-dc switching conversions,
+· Operating Temperature Range:                     maximum system performance is ensured in sensitive
+                                                   instrumentation, test-and-measurement, audio, and
+    ­40°C to 125°C                                 RF applications.
+
+2 Applications                                     For applications where positive and negative low-
+                                                   noise rails are required, consider TI's TPS7A33
+· Voltage-Controlled Oscillators (VCO)             family of negative high-voltage, ultralow-noise linear
+· Frequency Synthesizers                           regulators.
+· Test and Measurement
+· Instrumentation, Medical, and Audio                           Device Information (1)
+· RX, TX, and PA Circuitry
+· Supply Rails for Operational Amplifiers,         PART NUMBER             PACKAGE                     BODY SIZE (NOM)
+
+    DACs, ADCs, and Other High-Precision Analog    TPS7A470x      VQFN (20)                            5 mm × 5 mm
+    Circuitry
+· Post DC-DC Converter Regulation and
+    Ripple Filtering
+· Base Stations and Telecom Infrastructure
+· +12-V and +24-V Industrial Buses
+
+                                                   (1) For all available packages, see the orderable addendum at
+                                                           the end of the datasheet.
+
+                                                                TPS7A47xx
+                                                                  RF LDO
+
+                                                                                            Amplifier
+
+                                                                   TPS7A33
+                                                              Negative-Voltage
+
+                                                                  Regulator
+
+An IMPORTANT NOTICE at the end of this data sheet addresses availability, warranty, changes, use in safety-critical applications,
+intellectual property matters and other important disclaimers. PRODUCTION DATA.
+TPS7A4700, TPS7A4701                                                                     www.ti.com
+
+SBVS204G ­ JUNE 2012 ­ REVISED MAY 2026
+
+                                         Table of Contents
+
+1 Features............................................................................1     7.1 Application Information............................................. 15
+2 Applications..................................................................... 1       7.2 Typical Application.................................................... 15
+3 Description.......................................................................1    8 Power Supply Recommendations................................19
+4 Pin Configuration and Functions...................................3                       8.1 Power Dissipation (PD)............................................. 19
+5 Specifications.................................................................. 4     9 Layout.............................................................................20
+                                                                                            9.1 Layout Guidelines..................................................... 20
+   5.1 Absolute Maximum Ratings........................................ 4                   9.2 Layout Example........................................................ 20
+   5.2 Handling Ratings.........................................................5           9.3 Thermal Protection....................................................21
+   5.3 Recommended Operating Conditions.........................5                           9.4 Estimating Junction Temperature..............................21
+   5.4 Thermal Information....................................................5          10 Device and Documentation Support..........................22
+   5.5 Electrical Characteristics.............................................6             10.1 Documentation Support.......................................... 22
+   5.6 Typical Characteristics................................................ 7            10.2 Trademarks............................................................. 22
+6 Detailed Description...................................................... 11             10.3 Electrostatic Discharge Caution..............................22
+   6.1 Overview................................................................... 11       10.4 Glossary..................................................................22
+   6.2 Functional Block Diagram......................................... 11              11 Revision History.......................................................... 22
+   6.3 Feature Description...................................................11          12 Mechanical, Packaging, and Orderable
+   6.4 Device Functional Modes..........................................12                  Information.................................................................... 23
+   6.5 Programming............................................................ 12
+7 Application and Implementation.................................. 15
+
+2  Submit Document Feedback                                                              Copyright © 2026 Texas Instruments Incorporated
+
+                                         Product Folder Links: TPS7A4700 TPS7A4701
+www.ti.com                                                                                                                    TPS7A4700, TPS7A4701
+
+4 Pin Configuration and Functions                                                                             SBVS204G ­ JUNE 2012 ­ REVISED MAY 2026
+
+                                                                 20 OUT
+                                                                       19 NC
+                                                                              18 NC
+                                                                                     17 NC
+                                                                                            16 IN
+
+                                                         OUT 1      (Thermal Pad)                    15 IN
+                                                           NC 2                                      14 NR
+                                                                                                     13 EN
+                                                 SENSE/FB 3                                          12 0P1V
+                                                      6P4V2 4                                        11 0P2V
+                                                      6P4V1 5
+
+                                                                 3P2V 6
+                                                                       GND 7
+                                                                              1P6V 8
+                                                                                     0P8V 9
+                                                                                            0P4V 10
+
+                      Figure 4-1. RGW Package 5-mm × 5-mm VQFN-20 (Top View)
+
+                                                         Table 4-1. Pin Functions
+
+       PIN            I/O                                                                            DESCRIPTION
+
+NAME        NO.
+
+0P1V        12                   When connected to GND, this pin adds 0.1 V to the nominal output voltage of the regulator.
+                      I
+
+                                 Do not connect any voltage other than GND to this pin. If not used, leave this pin floating.
+
+0P2V        11                   When connected to GND, this pin adds 0.2 V to the nominal output voltage of the regulator.
+                      I
+
+                                 Do not connect any voltage other than GND to this pin. If not used, leave this pin floating.
+
+0P4V        10                   When connected to GND, this pin adds 0.4 V to the nominal output voltage of the regulator.
+                      I
+
+                                 Do not connect any voltage other than GND to this pin. If not used, leave this pin floating.
+
+0P8V        9                    When connected to GND, this pin adds 0.8 V to the nominal output voltage of the regulator.
+                      I
+
+                                 Do not connect any voltage other than GND to this pin. If not used, leave this pin floating.
+
+1P6V        8                    When connected to GND, this pin adds 1.6 V to the nominal output voltage of the regulator.
+                      I
+
+                                 Do not connect any voltage other than GND to this pin. If not used, leave this pin floating.
+
+3P2V        6                    When connected to GND, this pin adds 3.2 V to the nominal output voltage of the regulator.
+                      I
+
+                                 Do not connect any voltage other than GND to this pin. If not used, leave this pin floating.
+
+6P4V1       5                    When connected to GND, this pin adds 6.4 V to the nominal output voltage of the regulator.
+                      I
+
+                                 Do not connect any voltage other than GND to this pin. If not used, leave this pin floating.
+
+6P4V2       4                    When connected to GND, this pin adds 6.4 V to the nominal output voltage of the regulator.
+                      I
+
+                                 Do not connect any voltage other than GND to this pin. If not used, leave this pin floating.
+
+EN          13        I                          Enable pin. The device is enabled when the voltage on this pin exceeds the maximum
+                                                 enable voltage, VEN(HI). If enable is not required, tie EN to IN.
+
+GND         7         --                         Ground
+
+                                                 Input supply. A capacitor greater than or equal to 1 µF must be tied from this pin to ground to
+
+                                                 assure stability.
+
+IN          15, 16    I                          A 10-µF capacitor is recommended to be connected from IN to GND (as close to the device
+
+                                                 as possible) to reduce circuit sensitivity to printed circuit board (PCB) layout, especially
+
+                                                 when long input traces or high source impedances are encountered.
+
+NC          2, 17-19  --                         This pin can be left open or tied to any voltage between GND and IN.
+
+                                                 Noise reduction pin. When a capacitor is connected from this pin to GND, RMS noise can
+
+                                                 be reduced to very low levels. A capacitor greater than or equal to 10 nF must be tied from
+
+NR          14        --                         this pin to ground to assure stability. A 1-µF capacitor is recommended to be connected from
+
+                                                 NR to GND (as close to the device as possible) to maximize ac performance and minimize
+
+                                                 noise.
+
+Copyright © 2026 Texas Instruments Incorporated                                                                   Submit Document Feedback        3
+
+                                                 Product Folder Links: TPS7A4700 TPS7A4701
+TPS7A4700, TPS7A4701                                                                                          www.ti.com
+
+SBVS204G ­ JUNE 2012 ­ REVISED MAY 2026
+
+                                         Table 4-1. Pin Functions (continued)
+
+                PIN          I/O                                  DESCRIPTION
+
+   NAME              NO.
+
+   OUT               1, 20   O           Regulator output. A capacitor greater than or equal to 10 µF must be tied from this pin
+                                         to ground to assure stability. A 47-µF ceramic output capacitor is highly recommended
+   SENSE/FB          3       I           to be connected from OUT to GND (as close to the device as possible) to maximize ac
+                                         performance.
+   SENSE             3       I
+                                         Control-loop error amplifier input (TPS7A4701 only).
+   Thermal Pad               --
+                                         This is the SENSE pin if the device output voltage is programmed using ANY-OUT (no
+                                         external feedback resistors). This pin must be connected to OUT. Connect this pin to the
+                                         point of load to maximize accuracy.
+
+                                         This is the FB pin if the device output voltage is set using external resistors. See the
+                                         Adjustable Operation section for more details.
+
+                                         Control-loop error amplifier input (TPS7A4700 only).
+
+                                         This is the SENSE pin of the device and must be connected to OUT. Connect this pin to the
+                                         point of load to maximize accuracy.
+
+                                         Connect the thermal pad to a large-area ground plane. The thermal pad is internally
+                                         connected to GND.
+
+5 Specifications
+5.1 Absolute Maximum Ratings
+
+Over junction temperature range, unless otherwise noted.(1)
+
+                                                                                    MIN   MAX                 UNIT
+                                                                                                                V
+                                  IN pin to GND pin                                 ­0.4  +36                   V
+                                  EN pin to GND pin                                                             V
+                                  EN pin to IN pin                                  ­0.4  +36                   V
+                                  OUT pin to GND pin                                                            V
+                                  NR pin to GND pin                                 ­36   +0.4                  V
+                                  SENSE/FB pin to GND pin                                                       V
+                                  0P1V pin to GND pin                               ­0.4  +36                   V
+                                  0P2V pin to GND pin                                                           V
+                                  0P4V pin to GND pin                               ­0.4  +36                   V
+                                  0P8V pin to GND pin                                                           V
+                                  1P6V pin to GND pin                               ­0.4  +36                   V
+                                  3P2V pin to GND pin                                                           V
+   Voltage(2)                     6P4V1 pin to GND pin                              ­0.4  +36                   V
+                                  6P4V2 pin to GND pin
+   Current                        Peak output                                       ­0.4  +36                  °C
+   Temperature                    Operating virtual junction, TJ
+                                                                                    ­0.4  +36
+
+                                                                                    ­0.4  +36
+
+                                                                                    ­0.4  +36
+
+                                                                                    ­0.4  +36
+
+                                                                                    ­0.4  +36
+
+                                                                                    ­0.4  +36
+
+                                                                                          Internally limited
+
+                                                                                    ­40   125
+
+(1) Stresses beyond those listed under Absolute Maximum Ratings may cause permanent damage to the device. These are stress
+        ratings only, which do not imply functional operation of the device at these or any other conditions beyond those indicated under
+        Recommended Operating Conditions. Exposure to absolute-maximum-rated conditions for extended periods may affect device
+        reliability..
+
+(2) All voltages are with respect to network ground terminal.
+
+4  Submit Document Feedback                                                         Copyright © 2026 Texas Instruments Incorporated
+
+                                         Product Folder Links: TPS7A4700 TPS7A4701
+www.ti.com                                                                                                       TPS7A4700, TPS7A4701
+
+                                                                                                 SBVS204G ­ JUNE 2012 ­ REVISED MAY 2026
+
+5.2 Handling Ratings
+
+Tstg      Storage temperature range                                                                    MIN      MAX   UNIT
+                                                                                                       ­65      150    °C
+                         TPS7A4700               Human body model (HBM), per ANSI/ESDA/               ­1000     1000
+                         TPS7A4701               JEDEC JS-001, all pins(1)                                              V
+                                                 Charged device model (CDM), per JEDEC                ­500      500
+          Electrostatic                          specification JESD22-C101, all pins(2)
+V(ESD)    discharge                              Human body model (HBM), per ANSI/ESDA/
+                                                 JEDEC JS-001, all pins(1)
+                                                 Charged device model (CDM), per JEDEC                ­2500 2500
+                                                 specification JESD22-C101, all pins(2)
+                                                                                                                            V
+
+                                                                                                      ­500      500
+
+(1) JEDEC document JEP155 states that 500-V HBM allows safe manufacturing with a standard ESD control process.
+(2) JEDEC document JEP157 states that 250-V CDM allows safe manufacturing with a standard ESD control process.
+
+5.3 Recommended Operating Conditions                          MIN                                NOM            MAX UNIT
+
+over junction temperature range (unless otherwise noted)                                    3.0                 35.0  V
+
+VI                                                                                          1.4                 34.0  V
+VO
+VEN                                                                                         0                   VIN   V
+IO
+                                                                                            0                   1.0   A
+
+5.4 Thermal Information
+
+RJA                                        THERMAL METRIC(1)                                     TPS7A47xx            UNIT
+RJC(top)                                                                                             RGW              °C/W
+RJB         Junction-to-ambient thermal resistance
+JT          Junction-to-case (top) thermal resistance                                              20 PINS
+JB          Junction-to-board thermal resistance                                                      32.5
+RJC(bot)    Junction-to-top characterization parameter                                                 27
+            Junction-to-board characterization parameter                                              11.9
+            Junction-to-case (bottom) thermal resistance                                               0.3
+                                                                                                      11.9
+                                                                                                       1.7
+
+(1) For more information about traditional and new thermal metrics, see the IC Package Thermal Metrics application report, SPRA953.
+
+Copyright © 2026 Texas Instruments Incorporated                                                  Submit Document Feedback            5
+
+                                                 Product Folder Links: TPS7A4700 TPS7A4701
+TPS7A4700, TPS7A4701                                                                                                       www.ti.com
+
+SBVS204G ­ JUNE 2012 ­ REVISED MAY 2026
+
+5.5 Electrical Characteristics
+
+At ­40°C  TJ  125°C; VI = VO(nom) + 1.0 V or VI = 3.0 V (whichever is greater); VEN = VI; IO = 0 mA; CIN =10 µF; COUT =
+10 µF; CNR = 10 nF; SENSE/FB tied to OUT; and 0P1V, 0P2V, 0P4V, 0P8V, 1P6V, 3P2V, 6P4V1, 6P4V2 pins OPEN, unless
+otherwise noted.
+
+                PARAMETER                        TEST CONDITIONS                             MIN   TYP               MAX UNIT
+               Input voltage range
+   VI          Under-voltage lockout threshold                                               3                       35    V
+   VUVLO       Reference voltage
+   V(REF)      Under-voltage lockout hysteresis  VI rising                                         2.67                    V
+   VUVLO(HYS)  Noise reduction pin voltage       VI falling
+   VNR                                           V(REF) = V(FB), TPS7A4701 only                    2.5                     V
+               Output voltage range
+   VO                                                                                              1.4                     V
+               Nominal accuracy
+   VO(VI)      Overall accuracy                                                                    177                     mV
+   VO(IO)      Line regulation
+   V(DO)       Load regulation                   TPS7A4700, TPS7A4701 using ANY-OUT                VOUT                    V
+   I(CL)       Dropout voltage                   option
+   I(GND)      Current limit
+   I(EN)       Ground pin current                TPS7A4701 in adjustable mode only                 1.4                     V
+   I(SHDN)     Enable pin current
+   V+EN(HI)    Shutdown supply current                                           TPS7A4700,  1.4                     20.5  V
+   V+EN(LO)    Enable high-level voltage                                         TPS7A4701
+   I(FB)       Enable low-level voltage          VI  VO(nom) + 1.0 V or 3 V      using ANY-
+   PSRR        Feedback pin current              (whichever is greater),         OUT option
+               Power-supply rejection ratio      COUT = 20 µF
+   Vn                                                                            TPS7A4701
+               Output noise voltage                                              using       1.4                     34    V
+   Tsd                                                                           adjustable
+   TJ          Thermal shutdown temperature                                      option
+               Operating junction temperature
+                                                 TJ = 25°C, COUT = 20 µF                     ­1.0                    1.0   %VO
+                                                 VO(nom) + 1.0 V  VI  35 V,
+                                                 0 mA  IO  1 A, COUT = 20 µF                 ­2.5                    2.5   %VO
+                                                 VO(nom) + 1.0 V  VI  35 V
+                                                 0 mA  IO  1 A                                     0.092                   %VO
+                                                 VI = 95% VO(nom), IO = 0.5 A                                              %VO
+                                                 VI = 95% VO(nom), IO = 1 A                        0.3                     mV
+                                                 VO = 90% VO(nom)
+                                                 IO = 0 mA                                         216
+                                                 IO = 1 A
+                                                 VEN = VI                                          307               450   mV
+                                                 VI = VEN = 35 V
+                                                 VEN = 0.4 V                                 1     1.26                    A
+                                                 VEN = 0.4 V, VI = 35 V
+                                                                                                   0.58              1.0   mA
+
+                                                                                                   6.1                     mA
+
+                                                                                                   0.78              2     µA
+
+                                                                                                   0.81              2     µA
+
+                                                                                                   2.55              8     µA
+
+                                                                                                   3.04              60    µA
+
+                                                                                             2.0                     VI    V
+
+                                                                                             0.0                     0.4   V
+
+                                                                                                   350                     nA
+
+                                                 VI = 16 V, VO(nom) = 15 V, COUT = 50 µF,          78                      dB
+                                                 IO = 500 mA, CNR = 1 µF, f = 1 kHz
+                                                 VI = 3 V, VO(nom) = 1.4 V, COUT = 50 µF,          4.17                    µVRMS
+                                                 CNR = 1 µF, BW = 10 Hz to 100 kHz
+                                                 VIN = 6 V, VO(nom) = 5 V, COUT = 50 µF,                       4.67        µVRMS
+                                                 CNR = 1 µF, BW = 10 Hz to 100 kHz
+                                                 Shutdown, temperature increasing                               170        °C
+                                                 Reset, temperature decreasing                                  150
+                                                                                             ­40                           °C
+
+                                                                                                                     125   °C
+
+6  Submit Document Feedback                                                                  Copyright © 2026 Texas Instruments Incorporated
+
+                                                 Product Folder Links: TPS7A4700 TPS7A4701
+www.ti.com                                                                                                                                               TPS7A4700, TPS7A4701
+
+                                                                                                                                         SBVS204G ­ JUNE 2012 ­ REVISED MAY 2026
+
+5.6 Typical Characteristics
+
+At ­40°C  TJ  125°C; VI = VO(nom) + 1.0 V or VI = 3.0 V (whichever is greater); VEN = VI; IO = 0 mA; CIN =10 µF; COUT =
+10 µF; CNR = 1 µF; SENSE/FB tied to OUT; and 0P1V, 0P2V, 0P4V, 0P8V, 1P6V, 3P2V, 6P4V1, 6P4V2 pins OPEN, unless
+otherwise noted.
+
+               100                                                                                                  4
+
+                         VOUT = 1.4 V, VNOISE = 4.17 µVRMS                                                                                                  -40°C
+
+                         VOUT = 5 V, VNOISE = 4.67 µVRMS                                                            3                                       0°C
+
+                         VOUT = 10 V, VNOISE = 7.25 µVRMS                                                                                                   +25°C
+
+               10        VOUT = 15 V, VNOISE = 12.28 µVRMS                                                          2                                       +85°C
+
+Noise (µV Hz)                                                                                        VOUT(NOM) (%)                                                                          +125°C
+                                                                                                                    1
+
+               1                  IOUT = 500 mA                                                                     0
+
+                                  COUT = 50 µF
+
+                                  CNR = 1 µF                                                                        -1
+
+                                  BWRMSNOISE (10 Hz, 100 kHz)
+
+               0.1                                                                                                  -2
+
+                                                                                                                    -3
+
+               0.01  10  100  1k  10k                       100k         1M                                         -4      5 10 15 20 25 30 35 40
+                                                                                                                        0
+
+                              Frequency (Hz)                                                   G020                                      Input Voltage (V)                                          G001
+
+                         Figure 5-1. Noise vs Output Voltage                                                                Figure 5-2. Line Regulation
+
+               4                                                                                                    3
+
+                                                                  -40°C                                             2.9     UVLO Threshold Off
+                                                                                                                            UVLO Threshold On
+               3                                                  0°C
+
+               2                                                  +25°C                                             2.8
+
+                                                                  +85°C                                             2.7
+
+VOUT(NOM) (%)                                                                          +125°C                       2.6
+               1
+
+               0                                                                                     VIN (V)        2.5
+
+               -1                                                                                                   2.4
+
+               -2                                                                                                   2.3
+
+                                                                                                                    2.2
+
+               -3                                                                                                   2.1
+
+               -4                                                                                                   2
+                   0 100 200 300 400 500 600 700 800 900 1000                                                       -40 -25 -10 5 20 35 50 65 80 95 110 125
+
+                              Output Current (mA)                                              G002                                      Temperature (°C)                                           G004
+
+                         Figure 5-3. Load Regulation                                                                Figure 5-4. UVLO Threshold vs Temperature
+
+               3                                                                                              1000
+
+               2.7
+
+               2.4                                                                                                  800
+
+               2.1
+
+VEN (V)        1.8                                                                                   IQ (µA)        600
+
+               1.5
+
+               1.2                                                                                                  400
+
+               0.9                                                                                                                                          -40°C
+
+                                                                                                                                                            0°C
+
+               0.6                                                                                                  200                                     +25°C
+
+               0.3                                                                                                                                          +105°C
+
+                                                                                                                            IOUT = 0 µA                     +125°C
+
+               0                                                                                                    0    0  5 10 15 20 25 30 35 40
+               -40 -25 -10 5 20 35 50 65 80 95 110 125
+
+                              Temperature (°C)                                                 G005                                      Input Voltage (V)                                          G006
+
+Figure 5-5. Enable Voltage Threshold vs Temperature                                                                 Figure 5-6. Quiescent Current vs Input Voltage
+
+Copyright © 2026 Texas Instruments Incorporated                                                                                          Submit Document Feedback                                         7
+
+                                                 Product Folder Links: TPS7A4700 TPS7A4701
+TPS7A4700, TPS7A4701                                                                                                                        www.ti.com
+
+SBVS204G ­ JUNE 2012 ­ REVISED MAY 2026
+
+5.6 Typical Characteristics (continued)
+
+At ­40°C  TJ  125°C; VI = VO(nom) + 1.0 V or VI = 3.0 V (whichever is greater); VEN = VI; IO = 0 mA; CIN =10 µF; COUT =
+10 µF; CNR = 1 µF; SENSE/FB tied to OUT; and 0P1V, 0P2V, 0P4V, 0P8V, 1P6V, 3P2V, 6P4V1, 6P4V2 pins OPEN, unless
+otherwise noted.
+
+               10                                                                              2.0
+
+                                                                                               1.8                                     -40°C
+                                                                                                                                       0°C
+
+                                                                                               1.6                                     +25°C
+
+                                                                                               1.4                                     +85°C
+                                                                                                                                       +125°C
+
+   IGND (mA)                                                                        IEN (µA)   1.2
+
+               1                                                                               1.0
+
+                                                                                               0.8
+
+                                                               -40°C                           0.6
+                                                               0°C
+                                                               +25°C                           0.4
+                                                               +85°C
+                                                               +125°C                          0.2
+
+               0.1                    10                  100      1000                        0.0     5 10 15 20 25 30 35 40
+                    1                                                                               0
+
+                                      Output Current (mA)                     G007                              Input Voltage (V)                                          G008
+
+               Figure 5-7. Ground Current vs Output Current                                    Figure 5-8. Enable Current vs Input Voltage
+
+               10                                                                                3
+                                                                                                                                                     VOUT = 90% VOUT(NOM)
+               9                                               -40°C
+                                                               0°C                             2.5
+
+               8                                               +25°C
+
+               7                                               +105°C                          2
+                                                               +125°C
+
+   ISHDN (µA)  6                                                                    ICL (A)
+
+               5                                                                               1.5
+
+               4
+
+               3                                                                               1                                       -40°C
+
+                                                                                                                                       0°C
+
+               2                                                                               0.5                                     +25°C
+                                                                                                                                       +85°C
+               1
+                                                                                                                                       +125°C
+
+               0    0   5 10 15 20 25 30 35 40                                                 0    0   4             8  12        16           20
+
+                                          Input Voltage (V)                   G009                              Input Voltage (V)                                          G010
+
+               Figure 5-9. Shutdown Current vs Input Voltage                                   Figure 5-10. Current Limit vs Input Voltage
+
+               100                                                                             100
+
+               90                                                                              90
+
+               80                                                                              80
+
+               70                                                                              70
+
+   PSRR (dB)   60                                                                   PSRR (dB)  60
+
+               50                                                                              50
+
+               40                                                                              40
+
+               30 IOUT = 1 A                                   CNR = 0.01 µF                   30      CNR = 0.01 µF               IOUT = 0.5 A
+                                                               CNR = 0.1 µF                    20      CNR = 0.1 µF                COUT = 50 µF
+               20 COUT = 50 µF                                 CNR = 1 µF                      10      CNR = 1 µF                  VIN = 3 V
+                                                               CNR = 2.2 µF                            CNR = 2.2 µF                VOUT = 1.4 V
+               10       VIN = 3 V                                                               0
+                        VOUT = 1.4 V                                                              10
+
+               0    10  100           1k  10k  100k            1M     10M                              100  1k           10k 100k  1M           10M
+
+                                          Frequency (Hz)                      G011                              Frequency (Hz)                                             G012
+
+              Figure 5-11. Power-Supply Rejection Ratio vs CNR                                Figure 5-12. Power-Supply Rejection Ratio vs CNR
+
+8  Submit Document Feedback                                                                                 Copyright © 2026 Texas Instruments Incorporated
+
+                                                             Product Folder Links: TPS7A4700 TPS7A4701
+www.ti.com                                                                                                                     TPS7A4700, TPS7A4701
+
+                                                                                                               SBVS204G ­ JUNE 2012 ­ REVISED MAY 2026
+
+5.6 Typical Characteristics (continued)
+
+At ­40°C  TJ  125°C; VI = VO(nom) + 1.0 V or VI = 3.0 V (whichever is greater); VEN = VI; IO = 0 mA; CIN =10 µF; COUT =
+10 µF; CNR = 1 µF; SENSE/FB tied to OUT; and 0P1V, 0P2V, 0P4V, 0P8V, 1P6V, 3P2V, 6P4V1, 6P4V2 pins OPEN, unless
+otherwise noted.
+
+           100                                                                          100
+
+           90                                                                           90
+
+           80                                                                           80
+
+           70                                                                           70
+
+PSRR (dB)  60                                                                PSRR (dB)  60
+
+           50                                                                           50
+
+           40                                                                           40
+
+           30 CNR = 1 µF                               IOUT = 0 mA                      30 VOUT = 3.3 V                            VDO = 200 mV
+                                                       IOUT = 50 mA                                                                VDO = 300 mV
+           20 COUT = 50 µF                             IOUT = 500 mA                    20 CNR = 1 µF                              VDO = 500 mV
+                                                       IOUT = 1000 mA                                                              VDO = 1 V
+           10       VIN = 3 V                                                           10       COUT = 50 µF
+                    VOUT = 1.4 V                                                                 IOUT = 50 mA
+
+            0   10  100           1k  10k        100k  1M           10M                 0    10  100           1k  10k 100k        1M  10M
+
+                                      Frequency (Hz)                   G013                                        Frequency (Hz)                 G014
+
+           Figure 5-13. Power-Supply Rejection Ratio vs IO                   Figure 5-14. Power-Supply Rejection Ratio vs Dropout
+
+           100                                                                          100
+
+           90                     VDO = 200 mV        VDO = 500 mV                      90       VDO = 200 mV      VDO = 500 mV
+                                  VDO = 300 mV        VDO = 1 V                                  VDO = 300 mV      VDO = 1 V
+
+           80                                                                           80
+
+           70                                                                           70
+
+PSRR (dB)  60                                                                PSRR (dB)  60
+
+           50                                                                           50 VOUT = 3.3 V
+                                                                                        40 CNR = 1 µF
+           40 VOUT = 3.3 V, IOUT = 500 mA
+           30 CNR = 1 µF, COUT = 50 µF                                                         COUT = 50 µF
+                                                                                        30 IOUT = 1 A
+           20
+                                                                                        20
+
+           10                                                                           10
+
+            0   10  100           1k  10k        100k  1M           10M                 0    10  100           1k  10k 100k        1M  10M
+
+                                      Frequency (Hz)                   G015                                        Frequency (Hz)                 G016
+
+Figure 5-15. Power-Supply Rejection Ratio vs Dropout                         Figure 5-16. Power-Supply Rejection Ratio vs Dropout
+
+           100                                                                          100
+
+           90                                                                           90
+
+           80                                                                           80
+
+           70                                                                           70
+
+PSRR (dB)  60                                                                PSRR (dB)  60
+
+           50                                                                           50
+
+           40       VOUT = 1.4 V                       CNR = 1 µF                       40       VOUT = 1.4V                       CNR = 1µF
+           30       VOUT = 3.3 V                       COUT = 50 µF                     30       VOUT = 3.3V                       COUT = 50µF
+           20       VOUT = 5V                          IOUT = 500 mA                    20       VOUT = 5V                         IOUT = 1000mA
+           10       VOUT = 10V                                                          10       VOUT = 10V
+                    VOUT = 15 V                                                                  VOUT = 15V
+            0                                                                            0
+              10    100           1k  10k        100k  1M           10M                    10    100           1k  10k 100k        1M  10M
+
+                                      Frequency (Hz)                   G017                                        Frequency (Hz)                 G018
+
+Figure 5-17. Power-Supply Rejection Ratio vs Output Voltage                  Figure 5-18. Power-Supply Rejection Ratio vs Output Voltage
+
+Copyright © 2026 Texas Instruments Incorporated                                                                    Submit Document Feedback             9
+
+                                                      Product Folder Links: TPS7A4700 TPS7A4701
+TPS7A4700, TPS7A4701                                                                                                                                                                                            www.ti.com
+
+SBVS204G ­ JUNE 2012 ­ REVISED MAY 2026
+
+5.6 Typical Characteristics (continued)
+
+At ­40°C  TJ  125°C; VI = VO(nom) + 1.0 V or VI = 3.0 V (whichever is greater); VEN = VI; IO = 0 mA; CIN =10 µF; COUT =
+10 µF; CNR = 1 µF; SENSE/FB tied to OUT; and 0P1V, 0P2V, 0P4V, 0P8V, 1P6V, 3P2V, 6P4V1, 6P4V2 pins OPEN, unless
+otherwise noted.
+
+     IOUT                                                                                                                                                         VIN = 5 V to 15 V
+(1 A/div)                                                                                                                                                         VOUT = 3.3 V
+                                                                                                                                                                  IOUT = 845 mA
+
+                                                                                                                                                         VIN
+                                                                                                                                                 (10 V/div)
+
+        VOUT     VIN = 5 V                                                                                                                               VOUT
+(10 mV/div)      VOUT = 3.3 V                                                                                                                    (10 mV/div)
+                 IOUT = 10 mA to 845 mA
+
+                                   Time (500 ms/div)                                                                                                                                                Time (5 ms/div)
+                                                                                                                                           G060                                                                                                                                                                         G061
+
+                 Figure 5-19. Load Transient                                                                                                                                  Figure 5-20. Line Transient
+
+            VEN                                                                                                                                                 100
+     (2 V/div)                                                                                                                                                                   IOUT = 50 mA, VNOISE = 5 µVRMS
+                                                                                                                                                                                 IOUT = 20 mA, VNOISE = 5.9 µVRMS
+          VOUT
+     (2 V/div)                                                                                                                                                   10
+
+           IOUT                                                                                                                                  Noise (µV Hz)  1                        VOUT = 4.7 V
+(200 mA/div)
+                                                                                                                                                                                         COUT = 10 µF
+
+                                                   Startup Time = 65 ms                                                                                                                  CNR = 1 µF
+                                                    VIN = 6 V, VOUT = 5 V
+                                                                                                                                                                                         BWRMSNOISE [10 Hz, 100 kHz]
+                                                             IOUT = 500 mA
+                                                                CIN = 10 mF                                                                                     0.1
+
+                                                              COUT = 50 mF                                                                                      0.01  10  100        1k  10k           100k           1M
+
+                              Time (50 ms/div)                                                                                                                                       Frequency (Hz)                   G019
+                                                                                                                                  G062
+
+                 Figure 5-21. Startup
+
+                                                                                                                                                                          Figure 5-22. Noise vs Output Current
+
+10 Submit Document Feedback                                                                                                                                                    Copyright © 2026 Texas Instruments Incorporated
+
+                                         Product Folder Links: TPS7A4700 TPS7A4701
+www.ti.com                                                                                                            TPS7A4700, TPS7A4701
+
+                                                                                                      SBVS204G ­ JUNE 2012 ­ REVISED MAY 2026
+
+6 Detailed Description
+6.1 Overview
+
+The TPS7A4700 and TPS7A4701 (TPS7A470x) are positive voltage (+36 V), ultralow-noise (4 µVRMS)
+LDOs capable of sourcing a 1-A load. The TPS7A470x is designed with bipolar technology primarily for
+high-accuracy, high-precision instrumentation applications where clean voltage rails are critical to maximize
+system performance. This feature makes the device ideal for powering operational amplifiers, analog-to-digital
+converters (ADCs), digital-to-analog converters (DACs), and other high-performance analog circuitry.
+
+6.2 Functional Block Diagram
+
+                            IN          UVLO               Thermal                                    OUT
+                            IN                            Shutdown                                    OUT
+            CIN
+                                                                             Current                            COUT
+                                                                               Limit
+                                Band
+                                 Gap                               100 kW
+
+                                                 265.5 kW
+
+            0P1V                3.2 MW           1.572 MW                                             SENSE/FB
+            0P2V                1.6 MW                                                                EN
+            0P4V                800 kW                                                  Fast  Enable
+            0P8V                400 kW                                                Charge
+
+                                                                               50 kW
+                                                                     50 kW
+                                                           100 kW
+                                                 200 kW
+
+                                                 1P6V 3P2V 6P4V 6P4V                  NR
+                                                                                        CNR
+
+6.3 Feature Description
+
+6.3.1 Internal Current Limit (ICL)
+
+The internal current limit circuit is used to protect the LDO against high-load current faults or shorting events.
+The LDO is not designed to operate at a steady-state current limit. During a current-limit event, the LDO sources
+constant current. Therefore, the output voltage falls while load impedance decreases. Note also that when a
+current limit occurs while the resulting output voltage is low, excessive power is dissipated across the LDO,
+which results in a thermal shutdown of the output.
+
+6.3.2 Enable (EN) And Under-Voltage Lockout (UVLO)
+
+The TPS7A470x only turns on when both EN and UVLO are above the respective voltage thresholds. The UVLO
+circuit monitors input voltage (VI) to prevent device turn-on before VI rises above the lockout voltage. The UVLO
+circuit also causes a shutdown when VI falls below lockout. The EN signal allows independent logic-level turn-on
+and shutdown of the LDO when the input voltage is present. EN can be connected directly to VI if independent
+turn-on is not needed.
+
+Copyright © 2026 Texas Instruments Incorporated                                                       Submit Document Feedback 11
+
+                                                 Product Folder Links: TPS7A4700 TPS7A4701
+TPS7A4700, TPS7A4701                                                                        www.ti.com
+
+SBVS204G ­ JUNE 2012 ­ REVISED MAY 2026
+
+6.3.3 Soft-Start And Inrush Current
+
+Soft-start refers to the ramp-up characteristic of the output voltage during LDO turn-on after EN and UVLO have
+achieved threshold voltage. The noise reduction capacitor serves a dual purpose of both governing output noise
+reduction and programming the soft-start ramp during turn-on.
+
+Inrush current is defined as the current through the LDO from IN to OUT during the time of the turn-on ramp
+up. Inrush current then consists primarily of the sum of load and charge current to the output capacitor. Inrush
+current can be estimated by Equation 1:
+
+IOUT(t) =  COUT ´ dVOUT(t)   +  VOUT(t)
+                   dt           RLOAD
+                                                                                            (1)
+
+where:
+· VOUT(t) is the instantaneous output voltage of the turn-on ramp,
+· dVOUT(t)/dt is the slope of the VO ramp, and
+· RLOAD is the resistive load impedance
+6.4 Device Functional Modes
+
+The TPS7A470x has the following functional modes:
+
+1. Enabled: When EN goes above V+EN(HI), the device is enabled.
+2. Disabled: When EN goes below V+EN(LO), the device is disabled. During this time, OUT is high impedance,
+
+     and the current into IN does not exceed I(SHDN).
+
+6.5 Programming
+
+6.5.1 ANY-OUT Programmable Output Voltage
+
+Both devices can be used in ANY-OUT mode. For ANY-OUT operation, the TPS7A4700 and TPS7A4701 do
+not use external resistors to set the output voltage, but use device pins 4, 5, 6, 8, 9, 10, 11, and 12 to program
+the regulated output voltage. Each pin is either connected to ground (active) or is left open (floating). The
+ANY-OUT programming is set by Equation 2 as the sum of the internal reference voltage (V(REF) = 1.4 V) plus
+the accumulated sum of the respective voltages assigned to each active pin; that is, 100 mV (pin 12), 200 mV
+(pin 11), 400 mV (pin 10), 800 mV (pin 9), 1.6 V (pin 8), 3.2 V (pin 6), 6.4 V (pin 5), or 6.4 V (pin 4). Table 6-1
+summarizes these voltage values associated with each active pin setting for reference. By leaving all program
+pins open, or floating, the output is thereby programmed to the minimum possible output voltage equal to V(REF).
+
+VOUT = VREF + (S ANY-OUT Pins to Ground)                                                    (2)
+
+                             Table 6-1. ANY-OUT Programmable Output Voltage
+
+           ANY-OUT PROGRAM PINS (Active Low)  ADDITIVE OUTPUT VOLTAGE LEVEL
+
+           Pin 4 (6P4V2)                                                            6.4 V
+
+           Pin 5 (6P4V1)                                                            6.4 V
+
+           Pin 6 (3P2)                                                              3.2 V
+
+           Pin 8 (1P6)                                                              1.6 V
+
+           Pin 9 (0P8)                                                              800 mV
+
+           Pin 10 (0P4)                                                             400 mV
+
+           Pin 11 (0P2)                                                             200 mV
+
+           Pin 12 (0P1)                                                             100 mV
+
+12 Submit Document Feedback                                                         Copyright © 2026 Texas Instruments Incorporated
+
+                                         Product Folder Links: TPS7A4700 TPS7A4701
+www.ti.com                                                                                                  TPS7A4700, TPS7A4701
+
+                                                                                            SBVS204G ­ JUNE 2012 ­ REVISED MAY 2026
+
+Table 6-2 shows a list of the most common output voltages and the corresponding pin settings. The voltage
+setting pins have a binary weight; therefore, the output voltage can be programmed to any value from 1.4 V to
+20.5 V in 100-mV steps.
+
+                    Table 6-2. Common Output Voltages and Corresponding Pin Settings
+
+                                                         PIN NAMES AND VOLTAGE PER PIN
+
+VO (V)               0P1V    0P2V                 0P4V    0P8V    1P6V                      3P2V      6P4V1   6P4V2
+  1.4               100 mV  200 mV               400 mV  800 mV   1.6 V                     3.2 V      6.4 V   6.4 V
+  1.5                                                                                                         Open
+  1.8               Open    Open                 Open    Open     Open                      Open      Open    Open
+  2.5                                                                                                         Open
+   3                GND     Open                 Open    Open     Open                      Open      Open    Open
+  3.3                                                                                                         Open
+  4.5               Open    Open                 GND     Open     Open                      Open      Open    Open
+   5                                                                                                          Open
+  10                GND     GND                  Open    GND      Open                      Open      Open    Open
+  12                                                                                                          Open
+  15                Open    Open                 Open    Open     GND                       Open      Open    Open
+  18                                                                                                           GND
+ 20.5               GND     GND                  Open    Open     GND                       Open      Open     GND
+                                                                                                               GND
+                    GND     GND                  GND     GND      GND                       Open      Open
+
+                    Open    Open                 GND     Open     Open                      GND       Open
+
+                    Open    GND                  GND     Open     GND                       Open      GND
+
+                    Open    GND                  Open    GND      Open                      GND       GND
+
+                    Open    Open                 Open    GND      Open                      Open      GND
+
+                    Open    GND                  GND     Open     Open                      GND       GND
+
+                    GND     GND                  GND     GND      GND                       GND       GND
+
+6.5.2 Adjustable Operation (TPS7A4701 Only)
+
+The TPS7A4701 has an output voltage range of 1.4 V to 34 V. For adjustable operation, set the nominal output
+voltage of the device using two external resistors, as shown in Figure 6-1.
+
+                            VIN                  IN      OUT                                    VOUT
+                                     CIN                                 R1
+
+                                 10 mF           EN TPS7A4701 FB                            COUT
+
+                                      CNR/SS                             R2                 47 mF
+                                         1 mF
+                                                 NR      GND
+
+                            Figure 6-1. Adjustable Operation for Maximum AC Performance
+
+R1 and R2 can be calculated for any output voltage within the operational range. The current through feedback
+resistor R2 must be at least 5 µA to ensure stability. Additionally, the current into the FB pin (I(FB), typically
+350 nA) creates an additional output voltage offset that depends on the resistance of R1. For high-accuracy
+applications, select R2 such that the current through R2 is at least 35 µA to minimize any effects of I(FB) variation
+on the output voltage; 10 k is recommended. R1 can be calculated using Equation 3.
+
+R1 =        VOUT - VREF
+
+            IFB  +  VREF                                                                                      (3)
+                     R2
+
+where
+· VREF = 1.4 V
+· IFB = 350 nA
+Use 0.1% tolerance resistors to minimize the effects of resistor inaccuracy on the output voltage.
+
+Copyright © 2026 Texas Instruments Incorporated                                                    Submit Document Feedback 13
+
+                                                 Product Folder Links: TPS7A4700 TPS7A4701
+TPS7A4700, TPS7A4701                                                                        www.ti.com
+
+SBVS204G ­ JUNE 2012 ­ REVISED MAY 2026
+
+Table 6-3 shows the resistor combinations to achieve some standard rail voltages with commercially-available
+1% tolerance resistors. The resulting output voltages yield a nominal error of < 0.5%.
+
+       Table 6-3. Suggested Resistors for Common Voltage Rails
+
+VOUT                                     R1, Calculated  R1, Closest 1% Value          R2
+1.4 V                                           0                    0                  
+1.8 V                                                                               9.76 k
+3.3 V                                    2.782 k         2.8 k                      9.76 k
+ 5V                                                                                  10 k
+12 V                                     13.213 k        13.3 k                     10.2 k
+15 V                                                                                10.5 k
+18 V                                     25.650 k        25.5 k                      10 k
+24 V                                                                                10.2 k
+                                         77.032 k        76.8 k
+
+                                         101.733 k       102 k
+
+                                         118.276 k       118 k
+
+                                         164.238 k       165 k
+
+To achieve higher nominal accuracy, two resistors can be used in the place of R1. Select the two resistor values
+such that the sum results in a value as close as possible to the calculated R1 value.
+
+There are several alternative ways to set the output voltage. The program pins can be pulled low using external
+general-purpose input/output pins (GPIOs), or can be hardwired by the given layout of the printed circuit board
+(PCB) to set the ANY-OUT voltage. The TPS7A4701 evaluation module (EVM), available for purchase from the
+TI eStore, allows the output voltage to be programmed using jumpers.
+
+14 Submit Document Feedback                                                         Copyright © 2026 Texas Instruments Incorporated
+
+                                         Product Folder Links: TPS7A4700 TPS7A4701
+www.ti.com                                                                                                  TPS7A4700, TPS7A4701
+
+                                                                                            SBVS204G ­ JUNE 2012 ­ REVISED MAY 2026
+
+7 Application and Implementation
+
+                                                                 Note
+
+Information in the following applications sections is not part of the TI component specification,
+and TI does not warrant its accuracy or completeness. TI's customers are responsible for
+determining suitability of components for their purposes, as well as validating and testing their design
+implementation to confirm system functionality.
+
+7.1 Application Information
+
+The TPS7A740x is a high-voltage, low-noise, 1-A LDO. Low-noise performance makes this LDO ideal for
+providing rail voltages to noise-sensitive loads, such as PLLs, oscillators, and high-speed ADCs.
+
+7.2 Typical Application
+
+Output voltage is set by grounding the appropriate control pins, as shown in Figure 7-1. When grounded, all
+control pins add a specific voltage on top of the internal reference voltage (V(REF) = 1.4 V). For example, when
+grounding pins 0P1V, 0P2V, and 1P6V, the voltage values 0.1 V, 0.2 V, and 1.6 V are added to the 1.4-V internal
+reference voltage for VO(nom) equal to 3.3 V, as described in the Section 6.5 section.
+
+            VIN = 5 V                            IN               OUT                                             VOUT = 3.3 V
+                             10 mF                                                                 Load
+                                                                                            47 mF
+                                  1 mF
+                                                 EN
+
+                                                 NR    TPS7A4700  SENSE
+                                                 0P1V  TPS7A4701     GND
+
+                                                 0P2V
+
+                                                 0P4V 0P8V 1P6V 3P2V 6P4V1 6P4V2
+
+                                        Figure 7-1. Typical Application, VOUT = 3.3 V
+
+7.2.1 Design Requirements
+
+                PARAMETER                                                         DESIGN REQUIREMENT
+                 Input Voltage                                                             5.0 V, ±10%
+               Output Voltage                                                               3.3 V, ±3%
+               Output Current                                                                 500 mA
+Peak-to-Peak Noise, 10 Hz to 100 kHz                                                         50 µVp-p
+
+7.2.2 Detailed Design Procedure
+
+7.2.2.1 Capacitor Recommendations
+
+These LDOs are designed to be stable using low equivalent series resistance (ESR), ceramic capacitors at
+the input, output, and at the noise reduction pin (NR, pin 14). Multilayer ceramic capacitors have become the
+industry standard for these types of applications and are recommended here, but must be used with good
+judgment. Ceramic capacitors that employ X7R-, X5R-, and COG-rated dielectric materials provide relatively
+good capacitive stability across temperature, but the use of Y5V-rated capacitors is discouraged precisely
+because the capacitance varies so widely. In all cases, ceramic capacitance varies a great deal with operating
+voltage and the design engineer must be aware of these characteristics. It is recommended to apply a 50%
+derating of the nominal capacitance in the design.
+
+Attention must be given to the input capacitance to minimize transient input droop during load current steps
+because the TPS7A470x has a very fast load transient response. Large input capacitors are necessary for good
+transient load response, and have no detrimental influence on the stability of the device. Note, however, that
+
+Copyright © 2026 Texas Instruments Incorporated                                                    Submit Document Feedback 15
+
+                                                 Product Folder Links: TPS7A4700 TPS7A4701
+TPS7A4700, TPS7A4701                                                                                  www.ti.com
+
+SBVS204G ­ JUNE 2012 ­ REVISED MAY 2026
+
+using large ceramic input capacitances can also cause unwanted ringing at the output if the input capacitor, in
+combination with the wire lead inductance, creates a high-Q peaking effect during transients. For example, a
+5-nH lead inductance and a 10-µF input capacitor form an LC filter with a resonance frequency of 712 kHz at the
+edge of the control loop bandwidth. Short, well-designed interconnect leads to the up-stream supply minimize
+this effect without adding damping. Damping of unwanted ringing can be accomplished by using a tantalum
+capacitor, with a few hundred milliohms of ESR, in parallel with the ceramic input capacitor.
+
+7.2.2.1.1 Input and Output Capacitor Requirements
+
+The TPS7A470x is designed and characterized for operation with ceramic capacitors of 10 µF or greater at the
+input and output. Optimal noise performance is characterized using a total output capacitor value of 50 µF. Note
+especially that input and output capacitances must be located as near as practical to the respective input and
+output pins.
+
+7.2.2.1.2 Noise Reduction Capacitor (CNR)
+
+The noise reduction capacitor, connected to the NR pin of the LDO, forms an RC filter for filtering out noise that
+might ordinarily be amplified by the control loop and appear on the output voltage. Larger capacitances, up to 1
+µF, affect noise reduction at lower frequencies while also tending to further reduce noise at higher frequencies.
+Note that CNR also serves a secondary purpose in programming the turn-on rise time of the output voltage and
+thereby controls the turn-on surge current.
+
+7.2.2.2 Dropout Voltage (VDO)
+
+Generally speaking, the dropout voltage often refers to the voltage difference between the input and output
+voltage (V(DO) = VI ­ VO). However, in the Section 5.5 V(DO) is defined as the VI ­ VO voltage at the rated current
+(I(RATED)), where the main current pass-FET is fully on in the Ohmic region of operation and is characterized by
+the classic RDS(on) of the FET. V(DO) indirectly specifies a minimum input voltage above the nominal programmed
+output voltage at which the output voltage is expected to remain within its accuracy boundary. If the input falls
+below this V(DO) limit (VI < VO + V(DO)), then the output voltage decreases in order to follow the input voltage.
+
+Dropout voltage is always determined by the RDS(on) of the main pass-FET. Therefore, if the LDO operates below
+the rated current, the V(DO) is directly proportional to the output current and can be reduced by the same factor.
+The RDS(on) for the TPS7A470x can be calculated using Equation 4:
+
+RDS(ON) =   VDO                                                                                       (4)
+           IRATED
+
+7.2.2.3 Output Voltage Accuracy
+
+The output voltage accuracy specifies minimum and maximum output voltage error, relative to the expected
+nominal output voltage stated as a percent. This accuracy error typically includes the errors introduced by
+the internal reference and the load and line regulation across the full range of rated load and line operating
+conditions over temperature, unless otherwise specified by the Section 5.5. Output voltage accuracy also
+accounts for all variations between manufacturing lots.
+
+7.2.2.4 Startup
+
+The startup time for the TPS7A470x depends on the output voltage and the capacitance of the CNR capacitor.
+Equation 5 calculates the startup time for a typical device.
+
+tSS  100,000       CNR      §    VR      5·                                                           (5)
+                          ln ©¨     5      ¸¹
+
+where
+· CNR = capacitance of the CNR capacitor
+· VR = VO voltage if using the ANY-OUT configuration, or 1.4 V if using the adjustable configuration
+
+16 Submit Document Feedback                                                               Copyright © 2026 Texas Instruments Incorporated
+
+                                               Product Folder Links: TPS7A4700 TPS7A4701
+www.ti.com                                                                                                  TPS7A4700, TPS7A4701
+
+                                                                                            SBVS204G ­ JUNE 2012 ­ REVISED MAY 2026
+
+7.2.2.5 AC Performance
+
+AC performance of the LDO is typically understood to include power-supply rejection ratio, load step transient
+response, and output noise. These metrics are primarily a function of open-loop gain and bandwidth, phase
+margin, and reference noise.
+
+7.2.2.5.1 Power-Supply Rejection Ratio (PSRR)
+
+PSRR is a measure of how well the LDO control loop rejects ripple noise from the input source to make the dc
+output voltage as noise-free as possible across the frequency spectrum (usually 10 Hz to 10 MHz). Equation
+6 gives the PSRR calculation as a function of frequency where input noise voltage [VS(IN)(f)] and output noise
+voltage [VS(OUT)(f)] are understood to be purely ac signals.
+
+PSRR (dB) = 20 Log10   VS(IN)(f)                                                            (6)
+                      VS(OUT)(f)
+
+Noise that couples from the input to the internal reference voltage for the control loop is also a primary
+contributor to reduced PSRR magnitude and bandwidth. This reference noise is greatly filtered by the noise
+reduction capacitor at the NR pin of the LDO in combination with an internal filter resistor (RSS) for optimal
+PSRR.
+
+The LDO is often employed not only as a dc/dc regulator, but also to provide exceptionally clean power-supply
+voltages that are free of noise and ripple to power-sensitive system components. This usage is especially true
+for the TPS7A470x.
+
+7.2.2.5.2 Load Step Transient Response
+
+The load step transient response is the output voltage response by the LDO to a step change in load current
+whereby output voltage regulation is maintained. The worst-case response is characterized for a load step of
+10 mA to 1 A (at 1 A per microsecond) and shows a classic, critically-damped response of a very stable system.
+The voltage response shows a small dip in the output voltage when charge is initially depleted from the output
+capacitor and then the output recovers as the control loop adjusts itself. The depth of the charge depletion
+immediately after the load step is directly proportional to the amount of output capacitance. However, to some
+extent, the speed of recovery is inversely proportional to that same output capacitance. In other words, larger
+output capacitances act to decrease any voltage dip or peak occurring during a load step but also decrease the
+control-loop bandwidth, thereby slowing response.
+
+The worst-case, off-loading step characterization occurs when the current step transitions from 1 A to 0 mA.
+Initially, the LDO loop cannot respond fast enough to prevent a small increase in output voltage charge on the
+output capacitor. Because the LDO cannot sink charge current, the control loop must turn off the main pass-FET
+to wait for the charge to deplete, thus giving the off-load step its typical monotonic decay (which appears
+triangular in shape).
+
+7.2.2.5.3 Noise
+
+The TPS7A470x is designed, in particular, for system applications where minimizing noise on the power-supply
+rail is critical to system performance. This scenario is the case for phase-locked loop (PLL)-based clocking
+circuits for instance, where minimum phase noise is all important, or in-test and measurement systems where
+even small power-supply noise fluctuations can distort instantaneous measurement accuracy. Because the
+TPS7A470x is also designed for higher voltage industrial applications, the noise characteristic is well designed to
+minimize any increase as a function of the output voltage.
+
+LDO noise is defined as the internally-generated intrinsic noise created by the semiconductor circuits alone. This
+noise is the sum of various types of noise (such as shot noise associated with current-through-pin junctions,
+thermal noise caused by thermal agitation of charge carriers, flicker or 1/f noise that is a property of resistors and
+dominates at lower frequencies as a function of 1/f, burst noise, and avalanche noise).
+
+To calculate the LDO RMS output noise, a spectrum analyzer must first measure the spectral noise across the
+bandwidth of choice (typically 10 Hz to 100 kHz in units of µV/ Hz). The RMS noise is then calculated in the
+
+Copyright © 2026 Texas Instruments Incorporated                                             Submit Document Feedback 17
+
+                                                 Product Folder Links: TPS7A4700 TPS7A4701
+TPS7A4700, TPS7A4701                                                                www.ti.com
+
+SBVS204G ­ JUNE 2012 ­ REVISED MAY 2026
+
+usual manner as the integrated square root of the squared spectral noise over the band, then averaged by the
+bandwidth.
+
+7.2.3 Application Curves
+
+                                         VOUT (10 µV/DIV)
+
+VEN (2 V/DIV)
+
+    VOUT (1 V/DIV)
+  ILOAD (500 mA/DIV)
+
+Figure 7-2. Startup with EN Pin rising (10 ms/DIV) Figure 7-3. Output Noise Voltage, 10 Hz to 100 kHz
+                                                                                                      (10 ms/DIV)
+
+18 Submit Document Feedback                                                         Copyright © 2026 Texas Instruments Incorporated
+
+                                         Product Folder Links: TPS7A4700 TPS7A4701
+www.ti.com                                                                                                                                                                                TPS7A4700, TPS7A4701
+
+                                                                                                                                                                          SBVS204G ­ JUNE 2012 ­ REVISED MAY 2026
+
+8 Power Supply Recommendations
+
+The device is designed to operate from an input voltage supply range of 3 V to 35 V. If the input supply is noisy,
+additional input capacitors with low ESR can help improve the output noise performance.
+
+8.1 Power Dissipation (PD)
+
+Power dissipation must be considered in the PCB design. In order to minimize risk of device operation above
+125°C, use as much copper area as available for thermal dissipation. Do not locate other power-dissipating
+devices near the LDO.
+
+Power dissipation in the regulator depends on the input to output voltage difference and load conditions. PD can
+be calculated using Equation 7:
+
+PD = (VOUT - VIN) ´ IOUT                                                                                                                                                        (7)
+
+It is important to note that power dissipation can be minimized, and thus greater efficiency achieved, by proper
+selection of the system voltage rails. Proper selection allows the minimum input voltage necessary for output
+regulation to be obtained.
+
+The primary heat conduction path for the QFN (RGW) package is through the thermal pad to the PCB. The
+thermal pad must be soldered to a copper pad area under the device. Thermal vias are recommended to
+improve the thermal conduction to other layers of the PCB.
+
+The maximum power dissipation determines the maximum allowable junction temperature (TJ) for the device.
+Power dissipation and junction temperature are most often related by the junction-to-ambient thermal resistance
+(JA) of the combined PCB and device package and the temperature of the ambient air (TA), according to
+Equation 8.
+
+TJ = TA + (qJA ´ PD)                                                                                                                                                            (8)
+
+Unfortunately, this thermal resistance (JA) depends primarily on the heat-spreading capability built into the
+particular PCB design, and therefore varies according to the total copper area, copper weight, and location of
+the spreading planes. The JA recorded in the Section 5.4 table is determined by the JEDEC standard, PCB,
+and copper-spreading area and is to be used only as a relative measure of package thermal performance. Note
+that for a well-designed thermal layout, JA is actually the sum of the QFN package junction-to-case (bottom)
+thermal resistance (JCbot) plus the thermal resistance contribution by the PCB copper. By knowing JCbot, the
+minimum amount of appropriate heat sinking can be used to estimate JA with Figure 8-1. JCbot can be found in
+the Section 5.4 table.
+
+                                                                 120
+
+                                      100
+
+                                                 80
+
+                          qJA (°C/W)             60
+
+                                                 40  qJA (RGW)
+
+                                                 20
+
+                                                             0                                                                                                            9 10
+                                                                0 12 3 4 5 6 7 8
+
+                                                                                                                                                                       2
+
+                                                                                         Board Copper Area (in )
+
+NOTE: JA value at a board size of 9-in2 (that is, 3-in × 3-in) is a JEDEC standard.
+
+                                                     Figure 8-1. JA vs Board Size
+
+Copyright © 2026 Texas Instruments Incorporated                                                                                                                                 Submit Document Feedback 19
+
+                                                     Product Folder Links: TPS7A4700 TPS7A4701
+TPS7A4700, TPS7A4701                                                                                      www.ti.com
+
+SBVS204G ­ JUNE 2012 ­ REVISED MAY 2026
+
+9 Layout
+9.1 Layout Guidelines
+
+For best overall performance, all circuit components are recommended to be located on the same side of the
+circuit board and as near as practical to the respective LDO pin connections. Ground return connections to
+the input and output capacitor, and to the LDO ground pin, must also be as close to each other as possible
+and connected by a wide, component-side, copper surface. The use of vias and long traces to create LDO
+circuit connections is strongly discouraged and negatively affects system performance. This grounding and
+layout scheme minimizes inductive parasitics and thereby reduces load-current transients, minimizes noise, and
+increases circuit stability.
+
+A ground reference plane is also recommended. This reference plane serves to assure accuracy of the output
+voltage, shield noise, and behaves similar to a thermal plane to spread (or sink) heat from the LDO device
+when connected to the PowerPADTM. In most applications, this ground plane is necessary to meet thermal
+requirements.
+
+Use the TPS7A4701 evaluation module (EVM), available for purchase from the TI eStore, as a reference for
+layout and application design.
+
+xxxxxxxxxxxxxxxxxxxxx 9.2 Layout Example               Signal Ground
+
+                                               10              GND  6
+                                         11                               5
+
+                                                                                     R1 Use R1 and R2
+
+                       CNR               EN                           SN/FB              with adjustable
+                                                                                         operation
+                                                                                     R2
+                                         NR                           NC
+
+                                         15        NC  NC      NC         1              Connect if
+                                               16                   20                   ANYOUT
+                                                                                         operation is
+                             Input         CIN         Power                 Output      used.
+                                                       Ground                COUT
+
+                                         Orient input and output capacitors
+                                         vertically, so that the grounds are
+
+                                                        separated.
+
+                                                Figure 9-1. Layout Example
+
+20 Submit Document Feedback                                                              Copyright © 2026 Texas Instruments Incorporated
+
+                                             Product Folder Links: TPS7A4700 TPS7A4701
+www.ti.com                                                                                                  TPS7A4700, TPS7A4701
+
+                                                                                            SBVS204G ­ JUNE 2012 ­ REVISED MAY 2026
+
+9.3 Thermal Protection
+
+The TPS7A470x contains a thermal shutdown protection circuit to turn off the output current when excessive
+heat is dissipated in the LDO. Thermal shutdown occurs when the thermal junction temperature (TJ) of the
+main pass-FET exceeds 170°C (typical). Thermal shutdown hysteresis assures that the LDO again resets (turns
+on) when the temperature falls to 150°C (typical). Because the TPS7A470x is capable of supporting high input
+voltages, a great deal of power can be expected to be dissipated across the device at low output voltages, which
+causes a thermal shutdown. The thermal time-constant of the semiconductor die is fairly short, and thus the
+output oscillates on and off at a high rate when thermal shutdown is reached until power dissipation is reduced.
+
+For reliable operation, the junction temperature must be limited to a maximum of 125°C. To estimate the
+thermal margin in a given layout, increase the ambient temperature until the thermal protection shutdown is
+triggered using worst-case load and highest input voltage conditions. For good reliability, thermal shutdown
+must be designed to occur at least 45°C above the maximum expected ambient temperature condition for the
+application. This configuration produces a worst-case junction temperature of 125°C at the highest expected
+ambient temperature and worst-case load.
+
+The internal protection circuitry of the TPS7A470x is designed to protect against thermal overload conditions.
+The circuitry is not intended to replace proper heat sinking. Continuously running the TPS7A470x into thermal
+shutdown degrades device reliability.
+
+9.4 Estimating Junction Temperature
+
+JEDEC standards now recommend the use of PSI thermal metrics to estimate the junction temperatures of
+the LDO while in-circuit on a typical PCB board application. These metrics are not strictly speaking thermal
+resistances, but rather offer practical and relative means of estimating junction temperatures. These PSI metrics
+are determined to be significantly independent of copper-spreading area. The key thermal metrics (JT and JB)
+are given in the Section 5.4 table and are used in accordance with Equation 9.
+
+YJT:  T     =  T     +  YJT  ´  P
+         J        T                D
+
+YJB: TJ = TB + YJB ´ PD                                                                     (9)
+
+where:
+· PD is the power dissipated as explained in Equation 7,
+· TT is the temperature at the center-top of the device package, and
+· TB is the PCB surface temperature measured 1 mm from the device package and centered on the package
+
+    edge
+
+Copyright © 2026 Texas Instruments Incorporated                                             Submit Document Feedback 21
+
+                                                 Product Folder Links: TPS7A4700 TPS7A4701
+TPS7A4700, TPS7A4701                                                                            www.ti.com
+
+SBVS204G ­ JUNE 2012 ­ REVISED MAY 2026
+
+10 Device and Documentation Support
+10.1 Documentation Support
+
+10.1.1 Related Documentation
+
+For related documentation see the following (available for download at www.ti.com):
+
+· TPS7A47XXEVM-094 Evaluation Module. User Guide SLVU741A
+· Pros and Cons of Using a Feed-Forward Capacitor with a Low Dropout Regulator. Application Note SBVA042
+
+10.2 Trademarks
+ANY-OUTTM and PowerPADTM are trademarks of Texas Instruments.
+All trademarks are the property of their respective owners.
+10.3 Electrostatic Discharge Caution
+
+                        This integrated circuit can be damaged by ESD. Texas Instruments recommends that all integrated circuits be handled
+                        with appropriate precautions. Failure to observe proper handling and installation procedures can cause damage.
+
+                        ESD damage can range from subtle performance degradation to complete device failure. Precision integrated circuits may
+                        be more susceptible to damage because very small parametric changes could cause the device not to meet its published
+                        specifications.
+
+10.4 Glossary
+
+TI Glossary    This glossary lists and explains terms, acronyms, and definitions.
+
+11 Revision History
+
+NOTE: Page numbers for previous revisions may differ from page numbers in the current version.
+
+Changes from Revision F (September 2014) to Revision G (May 2026)                               Page
+
+· Updated the numbering format for tables, figures, and cross-references throughout the document................. 1
+
+Changes from Revision E (January 2014) to Revision F (September 2014)                           Page
+
+· Added Handling Rating table, Feature Description section, Device Functional Modes, Application and
+    Implementation section, Power Supply Recommendations section, Layout section, Device and
+    Documentation Support section, and Mechanical, Packaging, and Orderable Information section .................. 1
+
+· Reworded ninth bullet in Features list................................................................................................................ 1
+· Changed polarity of op amp shown on right side of the functional block diagram ...........................................11
+· Reworded second paragraph in Section 6.3.3 section .................................................................................... 12
+· Revised Section 7.2.2.1 section....................................................................................................................... 15
+· Changed paragraph 2 of Section 7.2.2.2 section for clarity .............................................................................16
+· Revised paragraph 1 of Section 7.2.2.4 section ..............................................................................................16
+· Rewrote paragraph 1 of Section 7.2.2.5.1 section to eliminate confusion .......................................................17
+· Changed paragraph 1 of Section 8 section ..................................................................................................... 19
+· Changed paragraph 1 and paragraph 4 of Section 8.1 section........................................................................19
+· Revised paragraph 2 of Section 9.1 section ....................................................................................................20
+· Changed second paragraph of Section 9.3 section .........................................................................................21
+
+Changes from Revision D (December 2013) to Revision E (January 2014)                            Page
+
+· Changed Output Voltage Noise value from 4.17 µV to 4 µV in three instances on front page...........................1
+
+· Changed 2nd and 3rd paragraphs of Description section.................................................................................. 1
+
+· Added "Thermal Pad" to pin configuration drawing............................................................................................ 3
+
+· Added VREF parameter....................................................................................................................................... 6
+· Added TPS7A4701 device to test conditions for VNR parameter....................................................................... 6
+
+22 Submit Document Feedback                                                         Copyright © 2026 Texas Instruments Incorporated
+
+                                         Product Folder Links: TPS7A4700 TPS7A4701
+www.ti.com                                                                                                  TPS7A4700, TPS7A4701
+
+                                                                                            SBVS204G ­ JUNE 2012 ­ REVISED MAY 2026
+
+· Added Feedback Pin Current parameter to Electrical Characteristics .............................................................. 6
+· Deleted Dropout Voltage vs Output Current graph.............................................................................................7
+· Added EN pin to Functional Block Diagram......................................................................................................11
+· Added sentence to ANY-OUT Programmable Output Voltage section to clarify ANY-OUT is for both devices 12
+· Changed last two paragraphs of Adjustable Operation section........................................................................13
+· Added "TPS7A4701 Only" to Adjustable Operation section title...................................................................... 13
+· Deleted equation in Figure 6-1 ........................................................................................................................ 13
+· Changed Equation 3 ........................................................................................................................................13
+
+Changes from Revision C (July 2013) to Revision D (December 2013)                           Page
+
+· Changed data sheeet status from production mix to production data................................................................ 1
+
+· Changed TPS7A4701 ESD rating from > 1 kV to 2.5 kV................................................................................... 1
+
+· Changed noise reduction pin voltage parameter to show both devices............................................................. 6
+
+· Added text clarifying VREF typical value to last paragraph on page..................................................................13
+
+Changes from Revision B (April 2013) to Revision C (July 2013)                              Page
+
+· Deleted TPS7A4702 preview device from data sheet........................................................................................ 1
+
+Changes from Revision A (July 2012) to Revision B (April 2013)                              Page
+
+· Changed TPS7A47 to TPS7A4700.................................................................................................................... 1
+· Added TPS7A4701 and TPS7A4702 preview devices to data sheet................................................................. 1
+· Changed front-page figure..................................................................................................................................1
+· Added FB to SENSE pin to Functional Block Diagram.....................................................................................11
+· Added new paragraph after Table 6-1 ............................................................................................................. 12
+· Added new Table 6-2 .......................................................................................................................................12
+· Added Adjustable Operation section................................................................................................................ 13
+
+Changes from Revision * (June 2012) to Revision A (July 2012)                               Page
+
+· Moved to full production data (changes throughout document)......................................................................... 1
+
+12 Mechanical, Packaging, and Orderable Information
+
+The following pages include mechanical, packaging, and orderable information. This information is the most
+current data available for the designated devices. This data is subject to change without notice and revision of
+this document. For browser-based versions of this data sheet, refer to the left-hand navigation.
+
+Copyright © 2026 Texas Instruments Incorporated                                             Submit Document Feedback 23
+
+                                                 Product Folder Links: TPS7A4700 TPS7A4701
+www.ti.com                                                                                                                                                   PACKAGE OPTION ADDENDUM
+
+                                                                                                                                                                                                                            12-Jan-2026
+
+PACKAGING INFORMATION
+
+Orderable part number  Status Material type  Package | Pins          Package qty | Carrier  RoHS                   Lead finish/         MSL rating/          Op temp (°C)  Part marking
+                                                                                                                   Ball material        Peak reflow
+                       (1)     (2)                                                             (3)                                                             -40 to 125            (6)
+                                                                                                                             (4)                    (5)        -40 to 125
+   TPS7A4700RGWR       Active  Production    VQFN (RGW) | 20         3000 | LARGE T&R        Yes                                                               -40 to 125       PXSQ
+  TPS7A4700RGWR.B      Active  Production    VQFN (RGW) | 20         3000 | LARGE T&R        Yes                      NIPDAU      Level-2-260C-1 YEAR          -40 to 125       PXSQ
+ TPS7A4700RGWRG4       Active  Production    VQFN (RGW) | 20         3000 | LARGE T&R        Yes                      NIPDAU      Level-2-260C-1 YEAR          -40 to 125       PXSQ
+TPS7A4700RGWRG4.B      Active  Production    VQFN (RGW) | 20         3000 | LARGE T&R        Yes                      NIPDAU      Level-2-260C-1 YEAR          -40 to 125       PXSQ
+                       Active  Production    VQFN (RGW) | 20          250 | SMALL T&R        Yes                      NIPDAU      Level-2-260C-1 YEAR          -40 to 125       PXSQ
+   TPS7A4700RGWT       Active  Production    VQFN (RGW) | 20          250 | SMALL T&R        Yes                      NIPDAU      Level-2-260C-1 YEAR          -40 to 125       PXSQ
+  TPS7A4700RGWT.B      Active  Production    VQFN (RGW) | 20         3000 | LARGE T&R        Yes                      NIPDAU      Level-2-260C-1 YEAR          -40 to 125      7A4701
+   TPS7A4701RGWR       Active  Production    VQFN (RGW) | 20         3000 | LARGE T&R        Yes                      NIPDAU      Level-2-260C-1 YEAR          -40 to 125      7A4701
+  TPS7A4701RGWR.B      Active  Production    VQFN (RGW) | 20         3000 | LARGE T&R        Yes                      NIPDAU      Level-2-260C-1 YEAR          -40 to 125      7A4701
+ TPS7A4701RGWRG4       Active  Production    VQFN (RGW) | 20         3000 | LARGE T&R        Yes                      NIPDAU      Level-2-260C-1 YEAR          -40 to 125      7A4701
+TPS7A4701RGWRG4.B      Active  Production    VQFN (RGW) | 20          250 | SMALL T&R        Yes                      NIPDAU      Level-2-260C-1 YEAR                          7A4701
+   TPS7A4701RGWT       Active  Production    VQFN (RGW) | 20          250 | SMALL T&R        Yes                      NIPDAU      Level-1-260C-UNLIM                           7A4701
+  TPS7A4701RGWT.B                                                                                                     NIPDAU      Level-1-260C-UNLIM
+
+(1) Status: For more details on status, see our product life cycle.
+
+(2) Material type: When designated, preproduction parts are prototypes/experimental devices, and are not yet approved or released for full production. Testing and final process, including without limitation quality assurance,
+reliability performance testing, and/or process qualification, may not yet be complete, and this item is subject to further changes or possible discontinuation. If available for ordering, purchases will be subject to an additional
+waiver at checkout, and are intended for early internal evaluation purposes only. These items are sold without warranties of any kind.
+
+(3) RoHS values: Yes, No, RoHS Exempt. See the TI RoHS Statement for additional information and value definition.
+
+(4) Lead finish/Ball material: Parts may have multiple material finish options. Finish options are separated by a vertical ruled line. Lead finish/Ball material values may wrap to two lines if the finish value exceeds the maximum
+column width.
+
+(5) MSL rating/Peak reflow: The moisture sensitivity level ratings and peak solder (reflow) temperatures. In the event that a part has multiple moisture sensitivity ratings, only the lowest level per JEDEC standards is shown.
+Refer to the shipping label for the actual reflow temperature that will be used to mount the part to the printed circuit board.
+
+(6) Part marking: There may be an additional marking, which relates to the logo, the lot trace code information, or the environmental category of the part.
+
+Multiple part markings will be inside parentheses. Only one part marking contained in parentheses and separated by a "~" will appear on a part. If a line is indented then it is a continuation of the previous line and the two
+combined represent the entire part marking for that device.
+
+                                                                     Addendum-Page 1
+www.ti.com                   PACKAGE OPTION ADDENDUM
+
+                                                                                            12-Jan-2026
+
+Important Information and Disclaimer:The information provided on this page represents TI's knowledge and belief as of the date that it is provided. TI bases its knowledge and belief on information provided by third parties, and
+makes no representation or warranty as to the accuracy of such information. Efforts are underway to better integrate information from third parties. TI has taken and continues to take reasonable steps to provide representative
+and accurate information but may not have conducted destructive testing or chemical analysis on incoming materials and chemicals. TI and TI suppliers consider certain information to be proprietary, and thus CAS numbers
+and other limited information may not be available for release.
+
+In no event shall TI's liability arising out of such information exceed the total purchase price of the TI part(s) at issue in this document sold by TI to Customer on an annual basis.
+
+OTHER QUALIFIED VERSIONS OF TPS7A47 :
+
+· Automotive : TPS7A47-Q1
+
+NOTE: Qualified Version Definitions:
+
+       · Automotive - Q100 devices qualified for high-reliability automotive applications targeting zero defects
+
+            Addendum-Page 2
+                                                                     PACKAGE MATERIALS INFORMATION
+
+www.ti.com                                                                                                                             12-Jan-2026
+
+TAPE AND REEL INFORMATION                                               TAPE DIMENSIONS
+                                                                     K0 P1
+         REEL DIMENSIONS
+
+                                                                                                                             B0 W
+
+                                Reel
+                             Diameter
+
+                                                                     Cavity  A0
+
+                                                   A0 Dimension designed to accommodate the component width
+                                                   B0 Dimension designed to accommodate the component length
+                                                   K0 Dimension designed to accommodate the component thickness
+                                                   W Overall width of the carrier tape
+                                                   P1 Pitch between successive cavity centers
+
+                                          Reel Width (W1)
+                             QUADRANT ASSIGNMENTS FOR PIN 1 ORIENTATION IN TAPE
+
+                                                                                                             Sprocket Holes
+
+                                       Q1 Q2             Q1 Q2               User Direction of Feed
+                                       Q3 Q4             Q3 Q4
+
+                                                   Pocket Quadrants
+
+*All dimensions are nominal
+
+Device                       Package Package Pins  SPQ   Reel Reel A0 B0 K0 P1 W                                                   Pin1
+                               Type Drawing
+                                                   3000  Diameter Width (mm) (mm) (mm) (mm) (mm) Quadrant
+                                                   3000
+                                                   250   (mm) W1 (mm)
+                                                   3000
+TPS7A4700RGWR                VQFN RGW 20           3000  330.0 12.4 5.3 5.3 1.1 8.0 12.0                                           Q2
+                                                   250
+TPS7A4700RGWRG4 VQFN RGW 20                              330.0 12.4 5.3 5.3 1.1 8.0 12.0                                           Q2
+
+TPS7A4700RGWT                VQFN RGW 20                 180.0 12.4 5.3 5.3 1.1 8.0 12.0                                           Q2
+
+TPS7A4701RGWR                VQFN RGW 20                 330.0 12.4 5.3 5.3 1.1 8.0 12.0                                           Q2
+
+TPS7A4701RGWRG4 VQFN RGW 20                              330.0 12.4 5.3 5.3 1.1 8.0 12.0                                           Q2
+
+TPS7A4701RGWT                VQFN RGW 20                 180.0 12.4 5.3 5.3 1.1 8.0 12.0                                           Q2
+
+                                                   Pack Materials-Page 1
+www.ti.com                                         PACKAGE MATERIALS INFORMATION
+ TAPE AND REEL BOX DIMENSIONS
+                                                                                                                                                 12-Jan-2026
+
+                                                   Width (mm)
+
+                                                                      H
+
+W                                               L
+
+*All dimensions are nominal  Package Type  Package Drawing Pins  SPQ     Length (mm)  Width (mm)  Height (mm)
+              Device              VQFN                           3000         346.0       346.0        33.0
+                                  VQFN     RGW     20            3000         346.0       346.0        33.0
+      TPS7A4700RGWR               VQFN                           250          210.0       185.0        35.0
+   TPS7A4700RGWRG4                VQFN     RGW     20            3000         346.0       346.0        33.0
+                                  VQFN                           3000         346.0       346.0        33.0
+      TPS7A4700RGWT               VQFN     RGW     20            250          210.0       185.0        35.0
+      TPS7A4701RGWR
+   TPS7A4701RGWRG4                         RGW     20
+      TPS7A4701RGWT
+                                           RGW     20
+
+                                           RGW     20
+
+                                                Pack Materials-Page 2
+RGW 20                            GENERIC PACKAGE VIEW
+
+5 x 5, 0.65 mm pitch                        VQFN - 1 mm max height
+
+                                                  PLASTIC QUAD FLATPACK - NO LEAD
+
+This image is a representation of the package family, actual package may vary.
+                  Refer to the product data sheet for package details.
+
+                                                                                4227157/A
+
+                      www.ti.com
+RGW0020A                                                                           PACKAGE OUTLINE
+
+                                        B                                               VQFN - 1 mm max height
+
+             PIN 1 INDEX AREA                                                             PLASTIC QUAD FLATPACK-NO LEAD
+
+                                                     5.1
+                                                     4.9
+
+                                                                                            5.1
+                                                                                             4.9
+
+        1 MAX                                        3.15±0.1                           C
+                                                                                             SEATING PLANE
+        0.05                                         2X 2.6
+        0.00                                                                           0.08 C
+                                                 6             10                                                   (0.1) TYP
+16X 0.65
+                  5                                  21                    11
+                                                                             SYMM
+       2X
+       2.6
+
+                                              1                            15
+                           PIN1 ID
+                    (OPTIONAL)                                                 20X  0.36
+                                                                                    0.26
+NOTES:
+                                                                                0.1       CAB
+                                                                                           C
+                                                 20            16               0.05
+
+                                                     SYMM                       0.65
+                                                                                0.45
+                                                                           20X
+
+                                                                                               4219039/A 06/2018
+
+1. All linear dimensions are in millimeters. Any dimensions in parenthesis are for reference only. Dimensioning and tolerancing
+      per ASME Y14.5M.
+
+2. This drawing is subject to change without notice.
+3. The package thermal pad must be soldered to the printed circuit board for optimal thermal and mechanical performance.
+
+                                                               www.ti.com
+RGW0020A                                                                        EXAMPLE BOARD LAYOUT
+
+                                16X (0.65)                                                 VQFN - 1 mm max height
+                                                   1
+                                                                                       PLASTIC QUAD FLATPACK-NO LEAD
+                         (4.65) (2.6)
+                                                                       (4.65)
+
+                                                                       ( 3.15)
+
+                                                                       (2.6)
+
+                                                      20                        16
+
+                                                                                             15
+
+                                                                                             (1.325)
+
+                                                                       21                        SYMM
+
+(R0.05) TYP                                                                                  11
+                                                                                                       20X (0.31)
+                                             5
+                                                                                               20X (0.75)
+
+             (Ø0.2) VIA                               6                        (1.325) 10
+                 TYP                                                   SYMM
+
+                                                      LAND PATTERN EXAMPLE
+
+                                                                     SCALE: 15X
+
+                       0.07 MAX                               0.07 MIN                            SOLDER MASK
+                    ALL AROUND                            ALL AROUND                              OPENING
+
+             EXPOSED METAL                                METAL                              EXPOSED METAL
+
+                            SOLDER MASK               NON SOLDER MASK           SOLDER MASK  METAL UNDER
+                                    OPENING                   DEFINED               DEFINED  SOLDER MASK
+
+NOTES: (continued)                                        (PREFERRED)                                                  4219039/A 06/2018
+
+                                                         SOLDER MASK DETAILS
+
+4. This package is designed to be soldered to a thermal pad on the board. For more information, see Texas Instruments literature
+
+     number SLUA271 (www.ti.com/lit/slua271).
+
+5. Vias are optional depending on application, refer to device data sheet. If any vias are implemented, refer to their locations shown
+      on this view. It is recommended that vias under paste be filled, plugged or tented.
+
+                                                          www.ti.com
+RGW0020A                                                                 (4.65)  EXAMPLE STENCIL DESIGN
+                                                          4X ( 1.37)
+                                 16X (0.65)                                                  VQFN - 1 mm max height
+                                                    1  20
+                                                                                          PLASTIC QUAD FLATPACK-NO LEAD
+                          (4.65) (2.6)
+      (R0.05) TYP                                                                2X (0.785)
+                                                                                    16
+                                                    5
+                                 METAL                                           21
+                                                                                                              15
+                                      TYP                                                                                2X (0.785)
+
+                                                                                                                        SYMM
+
+                                                                                        11
+                                                                                                  20X (0.31)
+
+                                                                                          20X (0.75)
+
+                                                       6  SYMM                   10
+
+                                                          (2.6)
+
+                                                         SOLDER PASTE EXAMPLE
+
+                                                       BASED ON 0.125 mm THICK STENCIL
+
+                                                                      EXPOSED PAD
+                                                       75% PRINTED COVERAGE BY AREA
+
+                                                                         SCALE: 15X
+
+                                                                                        4219039/A 06/2018
+
+NOTES: (continued)
+
+6. Laser cutting apertures with trapezoidal walls and rounded corners may offer better paste release. IPC-7525 may have alternate
+      design recommendations.
+
+                                                          www.ti.com
+                                 IMPORTANT NOTICE AND DISCLAIMER
+
+TI PROVIDES TECHNICAL AND RELIABILITY DATA (INCLUDING DATASHEETS), DESIGN RESOURCES (INCLUDING REFERENCE
+DESIGNS), APPLICATION OR OTHER DESIGN ADVICE, WEB TOOLS, SAFETY INFORMATION, AND OTHER RESOURCES "AS IS"
+AND WITH ALL FAULTS, AND DISCLAIMS ALL WARRANTIES, EXPRESS AND IMPLIED, INCLUDING WITHOUT LIMITATION ANY
+IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE OR NON-INFRINGEMENT OF THIRD
+PARTY INTELLECTUAL PROPERTY RIGHTS.
+
+These resources are intended for skilled developers designing with TI products. You are solely responsible for (1) selecting the appropriate
+TI products for your application, (2) designing, validating and testing your application, and (3) ensuring your application meets applicable
+standards, and any other safety, security, regulatory or other requirements.
+
+These resources are subject to change without notice. TI grants you permission to use these resources only for development of an
+application that uses the TI products described in the resource. Other reproduction and display of these resources is prohibited. No license
+is granted to any other TI intellectual property right or to any third party intellectual property right. TI disclaims responsibility for, and you fully
+indemnify TI and its representatives against any claims, damages, costs, losses, and liabilities arising out of your use of these resources.
+
+TI's products are provided subject to TI's Terms of Sale, TI's General Quality Guidelines, or other applicable terms available either on
+ti.com or provided in conjunction with such TI products. TI's provision of these resources does not expand or otherwise alter TI's applicable
+warranties or warranty disclaimers for TI products. Unless TI explicitly designates a product as custom or customer-specified, TI products
+are standard, catalog, general purpose devices.
+
+TI objects to and rejects any additional or different terms you may propose.
+
+IMPORTANT NOTICE
+
+                                                           Copyright © 2026, Texas Instruments Incorporated
+
+                                                                               Last updated 10/2025
+
