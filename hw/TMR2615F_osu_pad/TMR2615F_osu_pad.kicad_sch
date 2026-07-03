@@ -5366,148 +5366,6 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "Device:NetTie_2"
-			(pin_numbers
-				(hide yes)
-			)
-			(pin_names
-				(offset 0)
-				(hide yes)
-			)
-			(exclude_from_sim no)
-			(in_bom no)
-			(on_board yes)
-			(in_pos_files yes)
-			(duplicate_pin_numbers_are_jumpers no)
-			(property "Reference" "NT"
-				(at 0 1.27 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Value" "NetTie_2"
-				(at 0 -1.27 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Footprint" ""
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Datasheet" ""
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Description" "Net tie, 2 pins"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "ki_keywords" "net tie short"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "ki_fp_filters" "Net*Tie*"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(symbol "NetTie_2_0_1"
-				(polyline
-					(pts
-						(xy -1.27 0) (xy 1.27 0)
-					)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-			)
-			(symbol "NetTie_2_1_1"
-				(pin passive line
-					(at -2.54 0 0)
-					(length 2.54)
-					(name "1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at 2.54 0 180)
-					(length 2.54)
-					(name "2"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "2"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-			)
-			(embedded_fonts no)
-		)
 		(symbol "Diode__C:SRV05-4"
 			(pin_names
 				(offset 0)
@@ -10617,121 +10475,6 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "power:GNDA"
-			(power global)
-			(pin_numbers
-				(hide yes)
-			)
-			(pin_names
-				(offset 0)
-				(hide yes)
-			)
-			(exclude_from_sim no)
-			(in_bom yes)
-			(on_board yes)
-			(in_pos_files yes)
-			(duplicate_pin_numbers_are_jumpers no)
-			(property "Reference" "#PWR"
-				(at 0 -6.35 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Value" "GNDA"
-				(at 0 -3.81 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Footprint" ""
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Datasheet" ""
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Description" "Power symbol creates a global label with name \"GNDA\" , analog ground"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "ki_keywords" "global power"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(symbol "GNDA_0_1"
-				(polyline
-					(pts
-						(xy 0 0) (xy 0 -1.27) (xy 1.27 -1.27) (xy 0 -2.54) (xy -1.27 -1.27) (xy 0 -1.27)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-			)
-			(symbol "GNDA_1_1"
-				(pin power_in line
-					(at 0 0 270)
-					(length 0)
-					(name ""
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-			)
-			(embedded_fonts no)
-		)
 	)
 	(rectangle
 		(start 233.045 328.93)
@@ -11115,6 +10858,12 @@
 		(uuid "059176bd-cbab-4062-9fec-8a6507779b50")
 	)
 	(junction
+		(at 105.41 208.28)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "0928fa14-c13b-4cd9-94b1-2625f2e0c4d5")
+	)
+	(junction
 		(at 284.48 33.02)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -11131,6 +10880,12 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "0c85951c-00df-4c38-a4f4-c4ac848484ac")
+	)
+	(junction
+		(at 181.61 33.02)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "0c97600b-7001-40a8-a589-77a19016f838")
 	)
 	(junction
 		(at 300.99 114.3)
@@ -11223,6 +10978,12 @@
 		(uuid "36e0023f-2f4d-4b61-9469-14f613b43021")
 	)
 	(junction
+		(at 220.98 45.72)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "37cadc9b-daa9-479d-ae1b-c281f5ed332b")
+	)
+	(junction
 		(at 259.08 33.02)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -11257,12 +11018,6 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "3f8fd216-500f-40be-81df-1d10680a21ba")
-	)
-	(junction
-		(at 219.71 33.02)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "44be0641-d326-409f-b5a1-f4f163aa159d")
 	)
 	(junction
 		(at 191.77 111.76)
@@ -11347,6 +11102,12 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "726981b0-bdb8-4371-a52d-8a48b0c7b4f5")
+	)
+	(junction
+		(at 320.04 326.39)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "72f46001-d5a7-4e03-a9e5-bd8fb00de63f")
 	)
 	(junction
 		(at 66.04 107.95)
@@ -11856,16 +11617,6 @@
 	)
 	(wire
 		(pts
-			(xy 182.88 179.07) (xy 182.88 182.88)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "0df67cc2-b8fe-41b1-a6f8-5302836162b3")
-	)
-	(wire
-		(pts
 			(xy 389.89 245.11) (xy 389.89 237.49)
 		)
 		(stroke
@@ -11916,7 +11667,7 @@
 	)
 	(wire
 		(pts
-			(xy 105.41 177.8) (xy 105.41 213.36)
+			(xy 105.41 177.8) (xy 105.41 208.28)
 		)
 		(stroke
 			(width 0)
@@ -12106,7 +11857,7 @@
 	)
 	(wire
 		(pts
-			(xy 219.71 33.02) (xy 212.09 33.02)
+			(xy 212.09 33.02) (xy 231.14 33.02)
 		)
 		(stroke
 			(width 0)
@@ -12126,13 +11877,13 @@
 	)
 	(wire
 		(pts
-			(xy 231.14 33.02) (xy 219.71 33.02)
+			(xy 222.25 45.72) (xy 220.98 45.72)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "270610c9-c67b-4ea4-9d3b-fe7e6f8eccaf")
+		(uuid "260e1995-1f79-471f-aff6-3b45d5aaa6f4")
 	)
 	(wire
 		(pts
@@ -12216,7 +11967,7 @@
 	)
 	(wire
 		(pts
-			(xy 161.29 33.02) (xy 184.15 33.02)
+			(xy 161.29 33.02) (xy 181.61 33.02)
 		)
 		(stroke
 			(width 0)
@@ -12336,6 +12087,16 @@
 	)
 	(wire
 		(pts
+			(xy 105.41 208.28) (xy 134.62 208.28)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "3bd0f0a0-4db9-44c6-94e5-c78dcc24ae32")
+	)
+	(wire
+		(pts
 			(xy 508 57.15) (xy 527.05 57.15)
 		)
 		(stroke
@@ -12416,13 +12177,13 @@
 	)
 	(wire
 		(pts
-			(xy 134.62 208.28) (xy 121.92 208.28)
+			(xy 220.98 25.4) (xy 220.98 35.56)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "4428d915-a119-4742-a432-74f49751edcf")
+		(uuid "48f08595-b5cb-49cf-a56f-14b1dd98f23a")
 	)
 	(wire
 		(pts
@@ -12536,6 +12297,16 @@
 	)
 	(wire
 		(pts
+			(xy 212.09 38.1) (xy 217.17 38.1)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "505a253c-ce0b-4820-aaeb-6514f31b9a93")
+	)
+	(wire
+		(pts
 			(xy 102.87 335.28) (xy 106.68 335.28)
 		)
 		(stroke
@@ -12613,16 +12384,6 @@
 			(type default)
 		)
 		(uuid "5389674a-cd46-46da-8f6e-1a80fc27cdda")
-	)
-	(wire
-		(pts
-			(xy 322.58 334.01) (xy 322.58 326.39)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "54176f0c-0c4c-433a-9ad2-86b714e539e8")
 	)
 	(wire
 		(pts
@@ -13146,6 +12907,16 @@
 	)
 	(wire
 		(pts
+			(xy 184.15 38.1) (xy 181.61 38.1)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "7b9827a8-1429-412e-a89a-2ae7a2b860e1")
+	)
+	(wire
+		(pts
 			(xy 562.61 64.77) (xy 562.61 69.85)
 		)
 		(stroke
@@ -13406,16 +13177,6 @@
 	)
 	(wire
 		(pts
-			(xy 212.09 38.1) (xy 212.09 43.18)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "93dab552-30a8-415f-b9d1-4ce14515115e")
-	)
-	(wire
-		(pts
 			(xy 82.55 304.8) (xy 82.55 317.5)
 		)
 		(stroke
@@ -13513,26 +13274,6 @@
 			(type default)
 		)
 		(uuid "9c80aad0-a2cf-478f-bbd5-75dd7e9c5754")
-	)
-	(wire
-		(pts
-			(xy 195.58 179.07) (xy 195.58 182.88)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "9ca471eb-e056-41aa-98fe-1be5d70bacc4")
-	)
-	(wire
-		(pts
-			(xy 121.92 208.28) (xy 121.92 240.03)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "9d57dca8-37fa-4cd4-8472-1c1024b5442e")
 	)
 	(wire
 		(pts
@@ -13866,16 +13607,6 @@
 	)
 	(wire
 		(pts
-			(xy 186.69 179.07) (xy 182.88 179.07)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "b963eedb-5a72-44f4-adf8-dc92318fe32e")
-	)
-	(wire
-		(pts
 			(xy 259.08 33.02) (xy 246.38 33.02)
 		)
 		(stroke
@@ -13976,6 +13707,16 @@
 	)
 	(wire
 		(pts
+			(xy 217.17 45.72) (xy 220.98 45.72)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c03d5133-4d02-4203-a1f1-604c27792127")
+	)
+	(wire
+		(pts
 			(xy 24.13 36.83) (xy 24.13 39.37)
 		)
 		(stroke
@@ -14023,6 +13764,16 @@
 			(type default)
 		)
 		(uuid "c2234006-14f7-4e16-be11-712c8dc905e5")
+	)
+	(wire
+		(pts
+			(xy 320.04 326.39) (xy 322.58 326.39)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c260811d-2fcf-4daa-ad25-da5ee34e542e")
 	)
 	(wire
 		(pts
@@ -14226,6 +13977,16 @@
 	)
 	(wire
 		(pts
+			(xy 181.61 33.02) (xy 184.15 33.02)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "cd9dcb6e-93c9-48b6-a988-4c22c675c8d8")
+	)
+	(wire
+		(pts
 			(xy 92.71 182.88) (xy 102.87 182.88)
 		)
 		(stroke
@@ -14263,16 +14024,6 @@
 			(type default)
 		)
 		(uuid "cf86a401-fd4a-497a-b83f-4d5da976ec7b")
-	)
-	(wire
-		(pts
-			(xy 191.77 179.07) (xy 195.58 179.07)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "d068314b-6a69-48aa-aa2e-c72c38f47deb")
 	)
 	(wire
 		(pts
@@ -14373,6 +14124,16 @@
 			(type default)
 		)
 		(uuid "d7d35cea-1665-43be-a97a-a49b985e3c56")
+	)
+	(wire
+		(pts
+			(xy 181.61 38.1) (xy 181.61 33.02)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d8ac73e4-1b63-4aa2-8100-f0657b82f779")
 	)
 	(wire
 		(pts
@@ -14483,6 +14244,16 @@
 			(type default)
 		)
 		(uuid "de5c0879-35f0-4bba-931f-891bdfa4ba5a")
+	)
+	(wire
+		(pts
+			(xy 105.41 208.28) (xy 105.41 213.36)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "de9c4879-891e-492b-a01f-1be6b8dbd5c9")
 	)
 	(wire
 		(pts
@@ -14866,16 +14637,6 @@
 	)
 	(wire
 		(pts
-			(xy 212.09 43.18) (xy 219.71 43.18)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "f9733b00-265f-4c3c-a6c3-bfd2322723f1")
-	)
-	(wire
-		(pts
 			(xy 102.87 182.88) (xy 102.87 175.26)
 		)
 		(stroke
@@ -14923,6 +14684,16 @@
 			(type default)
 		)
 		(uuid "ff1ba96a-35c3-4001-a505-0c571137e34a")
+	)
+	(wire
+		(pts
+			(xy 217.17 38.1) (xy 217.17 45.72)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ff5a8fe1-d014-4898-a292-346a3a5edca9")
 	)
 	(wire
 		(pts
@@ -16207,6 +15978,16 @@
 		)
 		(uuid "3bdf11d1-1108-464f-8b9d-c7d6ac8e5fd3")
 	)
+	(label "IO9"
+		(at 222.25 45.72 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "3f35d570-191f-4817-ace3-c7104e9712f4")
+	)
 	(label "UART7_TX"
 		(at 363.22 300.99 0)
 		(effects
@@ -16696,16 +16477,6 @@
 			(justify left bottom)
 		)
 		(uuid "8b89f154-d757-41c7-99f1-ad53522a8105")
-	)
-	(label "IO9"
-		(at 184.15 38.1 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "8bf91e3c-0a93-4219-8702-5007d1af1251")
 	)
 	(label "ADC1_IN10"
 		(at 134.62 220.98 180)
@@ -17266,84 +17037,6 @@
 			(justify left bottom)
 		)
 		(uuid "ffdb24c0-db0c-4829-b5f2-0d53fcb862a5")
-	)
-	(symbol
-		(lib_id "power:GNDA")
-		(at 267.97 184.15 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "00ba456f-7738-40ca-bbbe-7ef34803bdbc")
-		(property "Reference" "#PWR055"
-			(at 267.97 190.5 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "GNDA"
-			(at 267.97 189.23 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 267.97 184.15 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 267.97 184.15 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"GNDA\" , analog ground"
-			(at 267.97 184.15 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "517d39e7-f5fc-413f-8836-5bdab318e647")
-		)
-		(instances
-			(project "TMR2615F_osu_pad"
-				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d"
-					(reference "#PWR055")
-					(unit 1)
-				)
-			)
-		)
 	)
 	(symbol
 		(lib_id "Basic_Capacitors_Resistors__C:CL10A475KO8NNNC")
@@ -18622,84 +18315,6 @@
 			(project "TMR2615F_osu_pad"
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d"
 					(reference "#PWR038")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:GNDA")
-		(at 82.55 317.5 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "12a496d6-445c-4bb4-9b80-a0a199c8f7bc")
-		(property "Reference" "#PWR012"
-			(at 82.55 323.85 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "GNDA"
-			(at 82.55 322.58 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 82.55 317.5 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 82.55 317.5 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"GNDA\" , analog ground"
-			(at 82.55 317.5 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "aa79ae6c-7219-4651-b2ec-3ace06c57633")
-		)
-		(instances
-			(project "TMR2615F_osu_pad"
-				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d"
-					(reference "#PWR012")
 					(unit 1)
 				)
 			)
@@ -20508,134 +20123,6 @@
 		)
 	)
 	(symbol
-		(lib_id "Basic_Capacitors_Resistors__C:0402WGF1002TCE")
-		(at 219.71 38.1 90)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "2c3cb50a-50d2-499e-875d-2d46fd25d9eb")
-		(property "Reference" "R7"
-			(at 222.25 38.0999 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Value" "0402WGF1002TCE"
-			(at 222.25 38.1 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "Resistor_SMD:R_0402_1005Metric"
-			(at 229.87 38.1 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-					(italic yes)
-				)
-			)
-		)
-		(property "Datasheet" "https://item.szlcsc.com/323315.html"
-			(at 219.583 40.386 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Description" "10kΩ ±1% 62.5mW 0402 Thick Film Resistor"
-			(at 219.71 38.1 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "LCSC" "C25744"
-			(at 219.71 38.1 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Symbol Name" "0402WGF1002TCE"
-			(at 219.71 38.1 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Sim.Device" ""
-			(at 219.71 38.1 90)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Sim.Pins" ""
-			(at 219.71 38.1 90)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "2"
-			(uuid "9d137c9d-0458-443e-b970-f7ee8bf16873")
-		)
-		(pin "1"
-			(uuid "c6b58be4-ca5b-4d94-920b-003529bd2d77")
-		)
-		(instances
-			(project "TMR2615F_osu_pad"
-				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d"
-					(reference "R7")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "power:+3.3V")
 		(at 234.95 171.45 0)
 		(unit 1)
@@ -20899,86 +20386,6 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:NetTie_2")
-		(at 189.23 179.07 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "34b1197e-f9f7-4bb8-86c4-dda3f4578458")
-		(property "Reference" "NT1"
-			(at 189.23 173.99 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "NetTie_2"
-			(at 189.23 176.53 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "NetTie:NetTie-2_SMD_Pad2.0mm"
-			(at 189.23 179.07 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 189.23 179.07 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Net tie, 2 pins"
-			(at 189.23 179.07 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "2"
-			(uuid "95bfd52e-d8c3-4270-b3d5-2af52d9f96e8")
-		)
-		(pin "1"
-			(uuid "ffb116fb-7b9f-4b5a-8c7f-2e18d9a455d5")
-		)
-		(instances
-			(project "TMR2615F_osu_pad"
-				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d"
-					(reference "NT1")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "power:GND")
 		(at 236.22 361.95 0)
 		(mirror y)
@@ -21052,6 +20459,85 @@
 			(project "TMR2615F_osu_pad"
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d"
 					(reference "#PWR069")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 267.97 184.15 0)
+		(mirror y)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "35aca52d-4ded-4536-ba21-2c2fe0077287")
+		(property "Reference" "#PWR022"
+			(at 267.97 190.5 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "GND"
+			(at 267.97 189.23 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 267.97 184.15 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 267.97 184.15 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 267.97 184.15 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "a236d13d-f2f0-488f-92fc-cbfe37c80e3e")
+		)
+		(instances
+			(project "TMR2615F_osu_pad"
+				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d"
+					(reference "#PWR022")
 					(unit 1)
 				)
 			)
@@ -21524,6 +21010,85 @@
 			(project "TMR2615F_osu_pad"
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d"
 					(reference "R26")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 499.11 83.82 0)
+		(mirror y)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "411302c3-47c2-4e85-af28-50b1399bcb23")
+		(property "Reference" "#PWR076"
+			(at 499.11 90.17 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "GND"
+			(at 499.11 88.9 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 499.11 83.82 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 499.11 83.82 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 499.11 83.82 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "4e9dc74a-d6c6-444f-a9e3-e14e6e794844")
+		)
+		(instances
+			(project "TMR2615F_osu_pad"
+				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d"
+					(reference "#PWR076")
 					(unit 1)
 				)
 			)
@@ -22268,84 +21833,6 @@
 		)
 	)
 	(symbol
-		(lib_id "power:GNDA")
-		(at 508 83.82 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "50e54f47-72db-4a4b-84a9-7709e81e48cf")
-		(property "Reference" "#PWR080"
-			(at 508 90.17 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "GNDA"
-			(at 508 88.9 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 508 83.82 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 508 83.82 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"GNDA\" , analog ground"
-			(at 508 83.82 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "47672238-a6cc-4ac5-8fc3-4f7b557f2e6a")
-		)
-		(instances
-			(project "TMR2615F_osu_pad"
-				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d"
-					(reference "#PWR080")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "Basic_Capacitors_Resistors__C:0402WGF5101TCE")
 		(at 160.02 135.89 90)
 		(unit 1)
@@ -22717,6 +22204,85 @@
 	)
 	(symbol
 		(lib_id "power:GND")
+		(at 562.61 83.82 0)
+		(mirror y)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "5affaaad-79bf-4d90-9e9a-735bc17ebb9b")
+		(property "Reference" "#PWR061"
+			(at 562.61 90.17 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "GND"
+			(at 562.61 88.9 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 562.61 83.82 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 562.61 83.82 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 562.61 83.82 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "b7cb9c7f-58ea-4012-95ad-bbd74a48a385")
+		)
+		(instances
+			(project "TMR2615F_osu_pad"
+				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d"
+					(reference "#PWR061")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
 		(at 309.88 59.69 0)
 		(mirror y)
 		(unit 1)
@@ -22789,84 +22355,6 @@
 			(project "TMR2615F_osu_pad"
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d"
 					(reference "#PWR057")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:GNDA")
-		(at 406.4 218.44 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "5b32df14-f796-46ca-8553-ce69703ee690")
-		(property "Reference" "#PWR074"
-			(at 406.4 224.79 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "GNDA"
-			(at 406.4 223.52 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 406.4 218.44 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 406.4 218.44 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"GNDA\" , analog ground"
-			(at 406.4 218.44 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "0c41eb65-419b-4fed-884b-9a7094eee3a7")
-		)
-		(instances
-			(project "TMR2615F_osu_pad"
-				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d"
-					(reference "#PWR074")
 					(unit 1)
 				)
 			)
@@ -23783,84 +23271,6 @@
 		)
 	)
 	(symbol
-		(lib_id "power:GNDA")
-		(at 121.92 240.03 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "65f377e4-144c-465b-9d1e-01d8870e3043")
-		(property "Reference" "#PWR027"
-			(at 121.92 246.38 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "GNDA"
-			(at 121.92 245.11 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 121.92 240.03 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 121.92 240.03 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"GNDA\" , analog ground"
-			(at 121.92 240.03 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "b8dd6f44-28dd-4781-8dd7-c1ae5e2460ad")
-		)
-		(instances
-			(project "TMR2615F_osu_pad"
-				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d"
-					(reference "#PWR027")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "Power_Management:LM66100DCK")
 		(at 121.92 34.29 0)
 		(unit 1)
@@ -24527,6 +23937,85 @@
 		)
 	)
 	(symbol
+		(lib_id "power:GND")
+		(at 127 317.5 0)
+		(mirror y)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "7159d3e9-8d45-452c-a347-5b8bee965ec9")
+		(property "Reference" "#PWR018"
+			(at 127 323.85 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "GND"
+			(at 127 322.58 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 127 317.5 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 127 317.5 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 127 317.5 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "461fd45e-19ff-4840-9466-69fc8633ed2a")
+		)
+		(instances
+			(project "TMR2615F_osu_pad"
+				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d"
+					(reference "#PWR018")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Basic_Capacitors_Resistors__C:CL05B104KB54PNC")
 		(at 256.54 306.07 270)
 		(mirror x)
@@ -24734,8 +24223,9 @@
 		)
 	)
 	(symbol
-		(lib_id "power:GNDA")
-		(at 568.96 83.82 0)
+		(lib_id "power:GND")
+		(at 519.43 83.82 0)
+		(mirror y)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -24744,9 +24234,9 @@
 		(in_pos_files yes)
 		(dnp no)
 		(fields_autoplaced yes)
-		(uuid "73ebd337-628a-4482-80ac-96873d6fa695")
-		(property "Reference" "#PWR085"
-			(at 568.96 90.17 0)
+		(uuid "74c2f5be-a119-4542-b07a-d0378909893e")
+		(property "Reference" "#PWR071"
+			(at 519.43 90.17 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -24756,8 +24246,8 @@
 				)
 			)
 		)
-		(property "Value" "GNDA"
-			(at 568.96 88.9 0)
+		(property "Value" "GND"
+			(at 519.43 88.9 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -24767,7 +24257,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 568.96 83.82 0)
+			(at 519.43 83.82 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -24778,7 +24268,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 568.96 83.82 0)
+			(at 519.43 83.82 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -24788,8 +24278,8 @@
 				)
 			)
 		)
-		(property "Description" "Power symbol creates a global label with name \"GNDA\" , analog ground"
-			(at 568.96 83.82 0)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 519.43 83.82 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -24800,12 +24290,12 @@
 			)
 		)
 		(pin "1"
-			(uuid "53d9469c-0613-48c8-aeed-0a3dcfc5cf0a")
+			(uuid "c1659480-2632-4c44-8e47-00c781fc471b")
 		)
 		(instances
 			(project "TMR2615F_osu_pad"
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d"
-					(reference "#PWR085")
+					(reference "#PWR071")
 					(unit 1)
 				)
 			)
@@ -25218,6 +24708,85 @@
 		)
 	)
 	(symbol
+		(lib_id "power:GND")
+		(at 406.4 218.44 0)
+		(mirror y)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "7d52bb5a-764d-405f-a540-e8215611f93b")
+		(property "Reference" "#PWR027"
+			(at 406.4 224.79 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "GND"
+			(at 406.4 223.52 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 406.4 218.44 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 406.4 218.44 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 406.4 218.44 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "eda9d811-831d-4f5a-9fa3-8c0f202d2854")
+		)
+		(instances
+			(project "TMR2615F_osu_pad"
+				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d"
+					(reference "#PWR027")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Power_Switch__C:AP22653W6-7")
 		(at 198.12 35.56 0)
 		(unit 1)
@@ -25395,6 +24964,84 @@
 			(project "TMR2615F_osu_pad"
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d"
 					(reference "#PWR015")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:+3.3V")
+		(at 220.98 25.4 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "809b64b7-aac5-4fbe-9558-e2ac815e300a")
+		(property "Reference" "#PWR0123"
+			(at 220.98 29.21 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "+3.3V"
+			(at 220.98 20.32 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 220.98 25.4 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 220.98 25.4 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"+3.3V\""
+			(at 220.98 25.4 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "84b8e719-dd9b-4e48-86cb-0dc0228746fa")
+		)
+		(instances
+			(project "TMR2615F_osu_pad"
+				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d"
+					(reference "#PWR0123")
 					(unit 1)
 				)
 			)
@@ -25974,84 +25621,6 @@
 		)
 	)
 	(symbol
-		(lib_id "power:GNDA")
-		(at 195.58 182.88 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "8887606b-10d7-486a-978e-39b8c20846e3")
-		(property "Reference" "#PWR077"
-			(at 195.58 189.23 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "GNDA"
-			(at 195.58 187.96 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 195.58 182.88 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 195.58 182.88 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"GNDA\" , analog ground"
-			(at 195.58 182.88 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "e297fd43-d089-46ae-8183-fea5abf3dda1")
-		)
-		(instances
-			(project "TMR2615F_osu_pad"
-				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d"
-					(reference "#PWR077")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "Basic_Capacitors_Resistors__C:CL05A105KA5NQNC")
 		(at 519.43 78.74 90)
 		(unit 1)
@@ -26258,6 +25827,85 @@
 			(project "TMR2615F_osu_pad"
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d"
 					(reference "C11")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 508 83.82 0)
+		(mirror y)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "8ad3fca5-5452-454d-8dab-f932e8d68236")
+		(property "Reference" "#PWR074"
+			(at 508 90.17 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "GND"
+			(at 508 88.9 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 508 83.82 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 508 83.82 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 508 83.82 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "899e0add-4b39-4ec7-a567-783eff926fc4")
+		)
+		(instances
+			(project "TMR2615F_osu_pad"
+				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d"
+					(reference "#PWR074")
 					(unit 1)
 				)
 			)
@@ -26852,84 +26500,6 @@
 			(project "TMR2615F_osu_pad"
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d"
 					(reference "L1")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:GNDA")
-		(at 322.58 334.01 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "9502a4a5-933d-415d-a137-3ce89ed294c8")
-		(property "Reference" "#PWR061"
-			(at 322.58 340.36 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "GNDA"
-			(at 322.58 339.09 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 322.58 334.01 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 322.58 334.01 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"GNDA\" , analog ground"
-			(at 322.58 334.01 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "6640e31a-ec5a-46f4-baf8-84d12dc51b0a")
-		)
-		(instances
-			(project "TMR2615F_osu_pad"
-				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d"
-					(reference "#PWR061")
 					(unit 1)
 				)
 			)
@@ -27741,6 +27311,85 @@
 		)
 	)
 	(symbol
+		(lib_id "power:GND")
+		(at 82.55 317.5 0)
+		(mirror y)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "a3f6454d-8f40-4a99-a9b1-e49ea076bb46")
+		(property "Reference" "#PWR021"
+			(at 82.55 323.85 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "GND"
+			(at 82.55 322.58 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 82.55 317.5 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 82.55 317.5 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 82.55 317.5 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "15eae2a5-0598-4134-8a0e-8e23b30a3f74")
+		)
+		(instances
+			(project "TMR2615F_osu_pad"
+				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d"
+					(reference "#PWR021")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "power:+5V")
 		(at 25.4 93.98 0)
 		(unit 1)
@@ -27948,84 +27597,6 @@
 			(project "TMR2615F_osu_pad"
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d"
 					(reference "J2")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:GNDA")
-		(at 499.11 83.82 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "a6f36020-a8b1-4f3f-bad9-95b4ed0d41ec")
-		(property "Reference" "#PWR078"
-			(at 499.11 90.17 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "GNDA"
-			(at 499.11 88.9 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 499.11 83.82 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 499.11 83.82 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"GNDA\" , analog ground"
-			(at 499.11 83.82 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "cb8e38d2-0cc2-48ca-ab88-f823e97ce2aa")
-		)
-		(instances
-			(project "TMR2615F_osu_pad"
-				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d"
-					(reference "#PWR078")
 					(unit 1)
 				)
 			)
@@ -29085,84 +28656,6 @@
 		)
 	)
 	(symbol
-		(lib_id "power:GND")
-		(at 182.88 182.88 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "bf01f59b-5e51-45eb-8edc-795f613b0fc1")
-		(property "Reference" "#PWR071"
-			(at 182.88 189.23 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "GND"
-			(at 182.88 187.96 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 182.88 182.88 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 182.88 182.88 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 182.88 182.88 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "b12e703f-3e51-47cc-a293-e5869bbc64de")
-		)
-		(instances
-			(project "TMR2615F_osu_pad"
-				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d"
-					(reference "#PWR071")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "LED__C:KT-0603W")
 		(at 247.65 204.47 0)
 		(mirror y)
@@ -29351,84 +28844,6 @@
 			(project "TMR2615F_osu_pad"
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d"
 					(reference "#PWR034")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:GNDA")
-		(at 127 317.5 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "c3fed6e9-8083-4b68-8fed-3c17d1afc73e")
-		(property "Reference" "#PWR021"
-			(at 127 323.85 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "GNDA"
-			(at 127 322.58 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 127 317.5 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 127 317.5 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"GNDA\" , analog ground"
-			(at 127 317.5 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "59de4a1d-1a23-4533-ab04-602cf7e4ac65")
-		)
-		(instances
-			(project "TMR2615F_osu_pad"
-				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d"
-					(reference "#PWR021")
 					(unit 1)
 				)
 			)
@@ -30094,6 +29509,134 @@
 		)
 	)
 	(symbol
+		(lib_id "Basic_Capacitors_Resistors__C:0402WGF1002TCE")
+		(at 220.98 40.64 90)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "d29d8168-c19e-42f6-aed0-933d585306b2")
+		(property "Reference" "R7"
+			(at 223.52 40.6399 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Value" "0402WGF1002TCE"
+			(at 223.52 40.64 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_0402_1005Metric"
+			(at 231.14 40.64 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+					(italic yes)
+				)
+			)
+		)
+		(property "Datasheet" "https://item.szlcsc.com/323315.html"
+			(at 220.853 42.926 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Description" "10kΩ ±1% 62.5mW 0402 Thick Film Resistor"
+			(at 220.98 40.64 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C25744"
+			(at 220.98 40.64 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Symbol Name" "0402WGF1002TCE"
+			(at 220.98 40.64 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Sim.Device" ""
+			(at 220.98 40.64 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Sim.Pins" ""
+			(at 220.98 40.64 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "2"
+			(uuid "1833c987-74e0-45d2-a9ef-28d10ee6f948")
+		)
+		(pin "1"
+			(uuid "8563d6c9-157e-4cde-9c8a-cc73eeab1cb9")
+		)
+		(instances
+			(project "TMR2615F_osu_pad"
+				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d"
+					(reference "R7")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Connector_Generic:Conn_01x23")
 		(at 87.63 205.74 0)
 		(mirror y)
@@ -30233,84 +29776,6 @@
 			(project "TMR2615F_osu_pad"
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d"
 					(reference "J9")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:GNDA")
-		(at 562.61 83.82 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "d4e49aa9-93b8-45f4-b10e-32aac2072a92")
-		(property "Reference" "#PWR083"
-			(at 562.61 90.17 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "GNDA"
-			(at 562.61 88.9 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 562.61 83.82 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 562.61 83.82 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"GNDA\" , analog ground"
-			(at 562.61 83.82 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "6bace5d0-e063-4847-899c-db96956e58f2")
-		)
-		(instances
-			(project "TMR2615F_osu_pad"
-				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d"
-					(reference "#PWR083")
 					(unit 1)
 				)
 			)
@@ -30674,6 +30139,85 @@
 			(project "TMR2615F_osu_pad"
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d"
 					(reference "J10")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 568.96 83.82 0)
+		(mirror y)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "db0ddfc3-22a5-4bc8-bc6d-59580d2faf9a")
+		(property "Reference" "#PWR055"
+			(at 568.96 90.17 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "GND"
+			(at 568.96 88.9 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 568.96 83.82 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 568.96 83.82 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 568.96 83.82 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "aebdafab-2f5d-4d98-bc2c-0d54f97daa59")
+		)
+		(instances
+			(project "TMR2615F_osu_pad"
+				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d"
+					(reference "#PWR055")
 					(unit 1)
 				)
 			)
@@ -32040,84 +31584,6 @@
 			(project "TMR2615F_osu_pad"
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d"
 					(reference "C6")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:GNDA")
-		(at 519.43 83.82 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "f513125c-3438-4cde-a261-1bb63ed06c07")
-		(property "Reference" "#PWR081"
-			(at 519.43 90.17 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "GNDA"
-			(at 519.43 88.9 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 519.43 83.82 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 519.43 83.82 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"GNDA\" , analog ground"
-			(at 519.43 83.82 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "c4b9df06-5a05-407e-b061-106ce6b715c3")
-		)
-		(instances
-			(project "TMR2615F_osu_pad"
-				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d"
-					(reference "#PWR081")
 					(unit 1)
 				)
 			)
