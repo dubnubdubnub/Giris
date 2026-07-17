@@ -1,0 +1,9 @@
+* data-phase push-pull: MCU drives 3.3V step through 120R into 80pF line
+Vdrv drv 0 PULSE(0 3.3 100n 1n 1n 2u 4u)
+Rser drv line 120
+Cline line 0 80p
+.control
+tran 1n 1u
+meas tran t_rise TRIG v(line) VAL=0.33 RISE=1 TARG v(line) VAL=2.97 RISE=1
+.endc
+.end

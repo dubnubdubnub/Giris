@@ -1,0 +1,1084 @@
+                                                                                        AP22652/AP22653/AP22652A/AP22653A
+                                                               PRECISION ADJUSTABLE CURRENT-LIMITED POWER SWITCHES
+
+
+Description                                                                        Pin Assignments
+The AP22652, AP22653, AP22652A, and AP22653A are single-
+channel, precision-adjustable, current-limited switches optimized for                                                 (Top View)
+applications that require precision current limiting, or to provide up to
+2.1A of continuous load current during heavy loads/short circuits.
+These devices offer a programmable current-limit threshold between
+125mA and 2665mA (typ) via an external resistor. Current-limit
+accuracy ±10% can be achieved at high current-limit settings. The rise                                                                      EN/EN
+and fall times are controlled to minimize current surges during turn
+on/off.                                                                                                      W-DFN2020-6 (Type A1)
+                                                                                                                         (Top View)
+The devices have fast short-circuit response time for improved overall
+system robustness. They provide a complete protection solution for                                                      1             6
+                                                                                                            IN                                   OUT
+applications subject to heavy capacitive loads and the prospect of short
+circuit, offering reverse-current blocking and limiting, overcurrent,
+                                                                                                         GND            2             5          ILIM
+overtemperature, and short-circuit protection, as well as controlled rise
+time and undervoltage lockout functionality. A 6ms deglitch capability
+on the open-drain flag output prevents false overcurrent reporting and                                EN/EN             3             4          FAULT
+does not require any external components.
+                                                                                                                     SOT26 (Type A1)
+The AP22652 and AP22653 limit the output current to a safe level when
+the output current exceeds current-limit threshold.                                Features
+                                                                                   •    Up to 2.1A Maximum Load Current
+The AP22652A and AP22653A provide latch-off function during
+                                                                                   •    Accurate Adjustable Current Limit, 125mA to 2665mA
+overcurrent or reverse-voltage conditions.
+                                                                                   •    ±7% Accurate Adjustable Current Limit, 1.735A with RLIM = 15kΩ
+                                                                                   •    Constant-Current (AP22652/53) During Overcurrent
+All devices are available in the SOT26 (Type A1) and W-DFN2020-6
+                                                                                   •    Output Latch-Off (AP22652A/53A) at Overcurrent
+(Type A1) packages.
+                                                                                   •    Fast Short-Circuit Response Time: 5µs (typ)
+                                                                                   •    Reverse Current Blocking During Shutdown and Reverse Current
+Applications                                                                            Limiting During Enable
+                                                                                   •    Operating Range: 3.0V to 5.5V
+•    Set-top boxes
+                                                                                   •    Built-In Soft-Start with 0.5ms Typical Rise Time
+•    LCD TVs & monitors
+                                                                                   •    Overcurrent, and TherEmal Protection
+•    Residential gateways
+                                                                                   •    Fault Report (FAULT) with Blanking Time
+•    Laptops, desktops, servers, e-readers, printers, docking stations,
+                                                                                   •    ESD Protection: 2kV HBM, 500V CDM
+     HUBs
+                                                                                   •    15kV ESD Protection per IEC61000-4-2 (With External Capacitance)
+                                                                                   •    UL Recognized, File Number E322375, Vol. 1
+                                                                                   •    IEC60950-1 CB Scheme Certified
+                                                                                   •    Active-Low (AP22652/52A) or Active-High (AP22653/53A) Enable
+                                                                                   •    Ambient Temperature Range: -40ºC to +85°C
+                                                                                   •    SOT26 (Type A1) and W-DFN2020-6 (Type A1) Packages:
+                                                                                        Available in “Green” Molding Compound (No Br, Sb)
+                                                                                   •    Totally Lead-Free & Fully RoHS Compliant (Notes 1 & 2)
+                                                                                   •    Halogen and Antimony Free. “Green” Device (Note 3)
+                                                                                   •    An automotive-compliant part is available under a separate
+                                                                                        datasheet (AP22653Q)
+
+
+
+Notes:    1. No purposely added lead. Fully EU Directive 2002/95/EC (RoHS), 2011/65/EU (RoHS 2) & 2015/863/EU (RoHS 3) compliant.
+          2. See https://www.diodes.com/quality/lead-free/ for more information about Diodes Incorporated’s definitions of Halogen- and Antimony-free, "Green" and
+             Lead-free.
+          3. Halogen- and Antimony-free "Green” products are defined as those which contain <900ppm bromine, <900ppm chlorine (<1500ppm total Br + Cl) and
+             <1000ppm antimony compounds.
+
+
+
+
+AP22652/AP22653/AP22652A/AP22653A                                           1 of 17                                                                        March 2026
+Document number: DS41186 Rev. 5 - 2                                     www.diodes.com                           © 2026 Copyright Diodes Incorporated. All Rights Reserved.
+                                                                                     AP22652/AP22653/AP22652A/AP22653A
+
+
+Typical Applications Circuit (Note 4)
+
+
+
+
+                                                                      FAULT
+                                                                      EN/EN
+
+
+Note:       4. 120µF output capacitance is a requirement of USB.
+
+
+
+
+Available Options
+                                                                    Recommended Maximum              Current-Limit
+        Part Number            Channel        Enable Pin (EN/EN)                                                                         Package
+                                                                   Continuous Load Current (A)        Protection
+         AP22652                   1               Active Low                                                                  W-DFN2020-6 (Type A1)
+         AP22653                   1               Active High                                                                 W-DFN2020-6 (Type A1)
+                                                                                                    Constant-Current
+         AP22652                   1               Active Low                                                                       SOT26 (Type A1)
+         AP22653                   1               Active High                                                                      SOT26 (Type A1)
+                                                                               2.1
+         AP22652A                  1               Active Low                                                                  W-DFN2020-6 (Type A1)
+         AP22653A                  1               Active High                                                                 W-DFN2020-6 (Type A1)
+                                                                                                        Latch-Off
+         AP22652A                  1               Active Low                                                                       SOT26 (Type A1)
+         AP22653A                  1               Active High                                                                      SOT26 (Type A1)
+
+
+
+
+Pin Descriptions
+                                              Pin Number
+  Pin
+                      SOT26 (Type A1)                      W-DFN2020-6 (Type A1)          I/O                             Function
+ Name
+             AP22652/52A         AP22653/53A          AP22652/52A        AP22653/53A
+                                                                                                 Input, connect a 0.1µF or greater ceramic capacitor
+    IN                1                  1                    6               6            I     from IN to GND as close to IC as possible.
+  GND                 2                  2                    5               5            —     Ground, connect to external exposed pad.
+
+   EN                 3                 —                     4               —            I     Enable input, logic low turns on power switch.
+
+   EN               —                    3                   —                4            I     Enable input, logic high turns on power switch.
+                                                                                                 Active-low open-drain output, asserted during
+ FAULT                4                  4                    3               3            O     overcurrent, overtemperature, or reverse-voltage
+                                                                                                 conditions.
+                                                                                                 Use external resistor to set current-limit threshold;
+  ILIM                5                  5                    2               2            O     recommended 10kΩ ≤ RLIM ≤ 210kΩ
+                                                                                                 Voltage Output Pin, connect a 0.1μF bypass
+  OUT                 6                  6                    1               1            O     capacitor and a high-value capacitor to GND, close
+                                                                                                 to IC. (At least 10μF in USB application.)
+                                                                                                 Internal connection to GND; Connect to GND
+Exposed
+                    —                   —                   Pad              Pad           —     externally for improved power dissipation. It should
+  Pad                                                                                            not be used as electrical ground conduction path.
+
+
+
+
+AP22652/AP22653/AP22652A/AP22653A                                        2 of 17                                                                  March 2026
+Document number: DS41186 Rev. 5 - 2                                  www.diodes.com                     © 2026 Copyright Diodes Incorporated. All Rights Reserved.
+                                                                     AP22652/AP22653/AP22652A/AP22653A
+
+
+Functional Block Diagram
+
+                           AP22652/                                   Reverse current limit &
+                           AP22653                                       RV comparator
+                                                          Current
+                    IN                                    Sense                                                        OUT
+
+
+                                      UVLO                                 Discharge
+                                                                            Control
+                                                           Current
+                                             Driver
+               EN/EN                                        Limit
+                                                                                                                      FAULT
+
+
+
+                                                                            Deglitch
+                                             Thermal
+                                              Sense
+
+                                                                              Non
+                                                                            Latch off                                  GND
+
+                  ILIM
+
+
+
+
+                           AP22652A/                                  Reverse current limit &
+                           AP22653A                                      RV comparator
+                                                          Current
+                    IN                                    Sense                                                        OUT
+
+
+                                      UVLO                                 Discharge
+                                                                            Control
+                                                           Current
+                                             Driver
+               EN/EN                                        Limit
+                                                                                                                      FAULT
+
+
+
+                                                                            Deglitch
+                                             Thermal
+                                              Sense
+
+                                                                              Latch
+                                                                               off                                     GND
+
+                  ILIM
+
+
+
+
+AP22652/AP22653/AP22652A/AP22653A                          3 of 17                                                                   March 2026
+Document number: DS41186 Rev. 5 - 2                    www.diodes.com                      © 2026 Copyright Diodes Incorporated. All Rights Reserved.
+                                                                                               AP22652/AP22653/AP22652A/AP22653A
+
+
+Absolute Maximum Ratings (@TA = +25°C, unless otherwise specified.)
+     Symbol                                         Parameter                                                          Ratings                                   Unit
+         HBM                  Human Body Model ESD Protection                                                             2                                       kV
+         CDM                  Charged Device Model ESD Protection                                                       500                                       V
+ ESD
+      IEC System              Surges per IEC61000-4-2. 1999 Applied to Output
+                                                                                                                          15                                      kV
+         Level                Terminals of EVM (Note 6)
+  VIN, VOUT, V FAULT ,
+                              Voltage on IN, OUT, FAULT , ILIM, EN, EN                                                -0.3 to +6.0                                V
+   VILIM, VEN, V
+                     EN
+
+              —               Continuous FAULT Sink Current                                                               25                                     mA
+              —               ILIM Source Current                                                                          1                                     mA
+            ILOAD             Maximum Continuous Load Current                                                     Internal Limited                                A
+           TJ(MAX)            Maximum Junction Temperature                                                            -40 to +150                                 °C
+            TSTG              Storage Temperature Range (Note 5)                                                      -65 to +150                                 °C
+
+Notes:       5. UL Recognized Rating from -30°C to +70°C (Diodes Incorporated qualified TSTG from -65°C to +150°C).
+             6. External capacitors need to be connected to the output, EVM board was tested with external capacitor. This level is a pass test only and not a limit.
+Caution:     Stresses greater than Absolute Maximum Ratings specified above can cause permanent damage to the device. These are stress ratings only;
+             functional operation of the device at these or any other conditions exceeding those indicated in this specification is not implied. Device reliability can be
+             affected by exposure to absolute maximum rating conditions for extended periods of time.
+             Semiconductor devices are ESD sensitive and can be damaged by exposure to ESD events. Suitable ESD precautions should be taken when
+             handling and transporting these devices.
+
+
+
+
+Dissipation Rating Table
+                                              Thermal              Thermal                                  Derating Factor
+                                             Resistance           Resistance           TA ≤ +25°C               Above                 TA = +70°C              TA = +85°C
+        Board             Package
+                                                                                      Power Rating                                   Power Rating            Power Rating
+                                                θJA                  θJC                                      TA = +25°C
+         High-K            SOT26
+                                               120°C/W              35°C/W                830mW                 8.3mW/°C                 450mW                    330mW
+        (Note 7)          (Type A1)
+         High-K         W-DFN2020-
+                                                95°C/W              25°C/W               1050mW               10.05mW/°C                 570mW                    420mW
+        (Note 7)        6 (Type A1)
+Note:        7. The JEDEC high-K (2s2p) board used to derive this data was a 3inch x 3inch, multilayer board with 1oz internal power and ground planes with
+                2oz copper traces on top and bottom of the board.
+
+
+
+
+Recommended Operating Conditions (@TA = +25°C, unless otherwise specified.)
+           Symbol                                          Parameter                                            Min                     Max                        Unit
+             VIN               Input Voltage                                                                     3                       5.5                          V
+            IOUT               Continuous Output Current (-40°C ≤ TA ≤ +85°C)                                    0                       2.1                          A
+         VEN, VEN              Enable Voltage                                                                    0                       5.5                          V
+
+             VIH               High-Level Input Voltage on EN or EN                                             1.5                      VIN                          V
+             VIL               Low-Level Input Voltage on EN or EN                                               0                       0.4                          V
+                               Current-Limit Threshold Resistor Range
+            RLIM                                                                                                10                       210                        kΩ
+                               (1% Initial Tolerance)
+             IO                Continuous FAULT Sink Current                                                     0                        10                       mA
+             —                 Input De-Coupling Capacitance, IN to GND                                         0.1                       —                         µF
+             TA                Operating Ambient Temperature                                                    -40                      +85                        °C
+             TJ                Operating Junction Temperature                                                   -40                     +125                        °C
+
+
+
+
+AP22652/AP22653/AP22652A/AP22653A                                                  4 of 17                                                                         March 2026
+Document number: DS41186 Rev. 5 - 2                                            www.diodes.com                            © 2026 Copyright Diodes Incorporated. All Rights Reserved.
+                                                                                            AP22652/AP22653/AP22652A/AP22653A
+
+
+Electrical Characteristics (@TA = +25°C, VIN = 3.0V to 5.5V, VEN = 0 or VEN = VIN, RFAULT = 10kΩ, unless otherwise specified.)
+  Symbol                        Parameter                                     Test Conditions (Note 8)                            Min        Typ        Max         Unit
+Supply
+    VUVLO         Input UVLO                               VIN Rising                                                              —         2.65       2.95          V
+   VUVLO         Input UVLO Hysteresis                    VIN Decreasing                                                          —          65          —          mV
+    ISHDN         Input Shutdown Current                   VIN = 5.5V, Disabled, OUT = Open                                        —          0.1         1          µA
+                                                           VIN = 5.5V, Enabled, OUT = Open, RLIM = 20kΩ                            —          140        160         µA
+         IQ       Input Quiescent Current
+                                                           VIN = 5.5V, Enabled, OUT = Open, RLIM = 210kΩ                           —          120        140         µA
+     IREV         Reverse Leakage Current                  Disabled, VIN = 0, VOUT = 5.5V, IREV at VIN                             —         0.01         1          µA
+Power Switch
+                                                                                                  TJ = +25°C, VIN = 5.0V           —          65          90
+                                                           SOT26 (Type A1)
+                                                                                                  -40°C ≤ TA ≤ +85°C               —           —         135
+   RDS(ON)        Switch On-Resistance                                                                                                                               mΩ
+                                                                                                  TJ = +25°C, VIN = 5.0V           —          65          90
+                                                           W-DFN2020-6 (Type A1)
+                                                                                                  -40°C ≤ TA ≤ +85°C               —           —         135
+                                                           VIN = 5.5V, CL = 1µF, RLOAD = 100Ω. See Figure 1                        —          0.5        1.5         ms
+         tR       Output Turn-On Rise Time
+                                                           VIN = 3.0V, CL = 1µF, RLOAD = 100Ω                                      —          0.3         1          ms
+                                                           VIN = 5.5V, CL = 1µF, RLOAD = 100Ω. See Figure 1                        0.1         —         0.5         ms
+         tF       Output Turn-Off Fall Time
+                                                           VIN = 3.0V, CL = 1µF, RLOAD = 100Ω                                      0.1         —         0.5         ms
+Current Limit
+                                                                                                  TA = +25°C                      2478       2665       2852
+                                                           RLIM = 10kΩ
+                                                                                                  -40°C ≤ TA ≤ +85°C              2398       2665       2931
+                                                                                                  TA = +25°C                      1614       1735       1856
+                                                           RLIM = 15kΩ
+                                                                                                  -40°C ≤ TA ≤ +85°C              1561       1735       1908
+                  Current-Limit Threshold
+                                                                                                  TA = +25°C                      1196       1286       1376
+    ILIMIT        (Maximum DC Output Current),             RLIM = 20kΩ                                                                                               mA
+                  VIN = 5V, VOUT = 4.5V                                                           -40°C ≤ TA ≤ +85°C              1157       1286       1414
+                                                                                                  TA = +25°C                      456         490        524
+                                                           RLIM = 49.9kΩ
+                                                                                                  -40°C ≤ TA ≤ +85°C              441         490        539
+                                                           RLIM = 210kΩ                           TA = +25°C                       95         125        155
+                                                           RLIM Shorted to GND                                                     40         80         120
+                                                           RLIM = 10kΩ, TA = +25°C                                                 —          700         —
+                                                           RLIM = 15kΩ, TA = +25°C                                                 —          470         —
+                  Short-Circuit Current Limit, OUT         RLIM = 20kΩ, TA = +25°C                                                 —          350         —
+   ISHORT                                                                                                                                                           mA
+                  Connected to GND                         RLIM = 49.9kΩ, TA = +25°C                                               —          140         —
+                                                           RLIM = 210kΩ, TA = +25°C                                                —          35          —
+                                                           RLIM Shorted to GND, TA = +25°C                                         —          80          —
+Enable Pin
+   ILEAK-EN       EN Input Leakage Current                 VIN = 5V, VEN = 0 and 5.5V                                               -2         —          2          µA
+     tON          Turn-On Time                             CL = 1µF, RL = 100Ω. See Figure 1                                       —           —          4          ms
+     tOFF         Turn-Off Time                            CL = 1µF, RL = 100Ω. See Figure 1                                       —           —          1          ms
+Output Discharge
+    RDIS          Discharge Resistance (Note 9)            VIN = 5V, Disabled, IOUT = 1mA                                          —          600         —           Ω
+Notes:        8. Pulse-testing techniques maintain junction temperature close to ambient temperature; thermal effects must be taken into account separately.
+              9. The discharge function is active when the device is disabled (when enable is de-asserted or during power-up power-down when VIN < VUVLO).
+                 The discharge function offers a resistive discharge path for the external storage capacitor for limited time.
+
+
+
+
+AP22652/AP22653/AP22652A/AP22653A                                               5 of 17                                                                        March 2026
+Document number: DS41186 Rev. 5 - 2                                         www.diodes.com                          © 2026 Copyright Diodes Incorporated. All Rights Reserved.
+                                                                                                AP22652/AP22653/AP22652A/AP22653A
+
+
+Electrical Characteristics (continued) (@TA = +25°C, VIN = 3.0V to 5.5V, VEN = 0 or VEN = VIN, RFAULT = 10kΩ, unless otherwise
+specified.)
+
+  Symbol                   Parameter                                                  Test Conditions (Note 8)                         Min        Typ         Max        Unit
+Reverse Voltage Protection
+    VRVP             Reverse-Voltage Comparator Trip Point               VOUT - VIN                                                     —          65          —          mV
+    IROCP            Reverse Current Limit                               VOUT - VIN = 150mV                                             —         0.32         —           A
+                     Time from Reverse-Voltage Condition to
+    tTRIG                                                                VIN = 5V                                                        2           6         20         ms
+                     MOSFET Turn Off
+Fault Flag
+        VOL          FAULT Output Low Voltage                            IFAULT = 1mA                                                   —           —         180         mV
+        IFOH         FAULT Off Current                                   VFAULT = 5.5V                                                  —           —          1          µA
+                                                                         Assertion or deassertion due to overcurrent and
+    tBLANK           FAULT Blanking Time                                                                                                 2           6         20         ms
+                                                                         overtemperature condition
+Thermal Shutdown
+    TSHDN            Thermal Shutdown Threshold                          Enabled                                                        —         +145         —           °C
+    THYS             Thermal Shutdown Hysteresis                         Only for AP22652 and AP22653                                   —          +40         —           °C
+Note:          8. Pulse-testing techniques maintain junction temperature close to ambient temperature; thermal effects must be taken into account separately.
+
+
+
+
+Typical Performance Characteristics
+
+
+
+
+               VEN
+                           50%                     50%                                                    50%                        50%
+                                                                                         VEN
+                               tON                                                                            tON
+                                                             tOFF                                                                                 tOFF
+
+                                     tR                             tF                                              tR                                   tF
+                                          90%             90%                                                              90%                 90%
+
+
+               VOUT                  10%                                   10%           VOUT                       10%                                       10%
+
+
+
+                                             Figure 1. Voltage Waveforms: AP22652/52A (Left), AP22653/53A (Right)
+
+
+
+
+AP22652/AP22653/AP22652A/AP22653A                                                    6 of 17                                                                        March 2026
+Document number: DS41186 Rev. 5 - 2                                              www.diodes.com                          © 2026 Copyright Diodes Incorporated. All Rights Reserved.
+                                                                          AP22652/AP22653/AP22652A/AP22653A
+
+
+Typical Performance Characteristics (continued)
+
+                                                       VIN=5V                                                                       VIN=5V
+                                                       RLIM=20kΩ        VOUT
+                                                                                                                                    RLIM=20kΩ
+                                                       ROUT=5Ω          5V/div
+   VOUT                                                                                                                             ROUT=5Ω
+   5V/div
+
+   VEN                                                                  VEN
+   5V/div                                                               5V/div
+
+
+
+                                                                        IIN
+                                                                        1A/div
+   IIN
+   1A/div
+
+
+                              1ms/div                                                            400µs/div
+               Figure 2. Turn-On Delay and Rise Time                               Figure 3. Turn-Off Delay and Fall Time
+
+
+                                                                        VOUT                                                      VIN=5V
+                                                                        2V/div                                                    RLIM=20kΩ
+
+                                                        VIN=5V
+   VEN
+                                                        RLIM=20kΩ
+   2V/div
+                                                        ROUT=0
+                                                                       FLAG
+                                                                       5V/div
+
+
+
+
+   IIN                                                                  IIN
+   1A/div                                                               2A/div
+
+
+                               1ms/div                                                             1ms/div
+              Figure 4. Device Enabled into Short-Circuit                        Figure 5. No Load to 1Ω Transient Response
+
+
+  VOUT                                                                 VOUT
+  2V/div                                                VIN=5V                                                                    VIN=5V
+                                                                                                                                      VIN=5V
+                                                                       2V/div                                                     RLIMR=20kΩ
+                                                        RLIM=20kΩ                                                                       LIM=20kΩ
+
+
+
+
+  FLAG                                                                 FLAG
+  2V/div                                                               2V/div
+
+
+
+  IOUT                                                                 IOUT
+  2A/div                                                               2A/div
+
+
+                               2ms/div                                                          200ms/div
+            Figure 6. Short-Circuit Current Limit Response                  Figure 7. Extended Short-Circuit into Thermal Cycles
+
+
+
+
+AP22652/AP22653/AP22652A/AP22653A                                  7 of 17                                                              March 2026
+Document number: DS41186 Rev. 5 - 2                            www.diodes.com                 © 2026 Copyright Diodes Incorporated. All Rights Reserved.
+                                                                           AP22652/AP22653/AP22652A/AP22653A
+
+
+Typical Performance Characteristics (continued)
+
+
+   Trigger signal
+   VOUT-VIN
+   200mV/div
+
+
+
+   FLAG
+   5V/div
+
+
+
+   IOUT
+   500mA/div
+
+
+
+
+                                 1ms/div
+               Figure 8. Reverse Current Limit Response                                    Figure 9. Reverse Current Limit vs. Temperature
+
+
+
+
+            Figure 10. Input Quiescent Current vs. Temperature                            Figure 11. Input Quiescent Current vs. Temperature
+
+
+
+
+                                                                           Undervoltage
+
+
+
+
+             Figure 12. Switch On-Resistance vs. Temperature                              Figure 13. Undervoltage Lockout vs. Temperature
+
+
+
+AP22652/AP22653/AP22652A/AP22653A                                    8 of 17                                                                 March 2026
+Document number: DS41186 Rev. 5 - 2                              www.diodes.com                    © 2026 Copyright Diodes Incorporated. All Rights Reserved.
+                                                                                  AP22652/AP22653/AP22652A/AP22653A
+
+
+Application Information
+The AP22652/52A and AP22653/53A are integrated high-side power switches optimized for universal serial bus (USB) that require protection
+functions. The power switches are equipped with a driver that controls the gate voltage and incorporates slew-rate limitation. This, along with the
+various protection features and special functions, makes these power switches ideal for hot-swap or hot-plug applications.
+
+Protection Features
+Undervoltage Lockout (UVLO)
+Whenever the input voltage falls below UVLO threshold (~2.5V), the power switch is turned off. This facilitates the design of hot-insertion systems
+where it is not possible to turn off the power switch before input power is removed.
+
+Overcurrent and Short-Circuit Protection
+An internal sensing FET is employed to check for overcurrent conditions. Unlike current-sense resistors, sense FETs do not increase the series
+resistance of the current path. When an overcurrent condition is detected, the AP22652 and AP22653 maintain a constant output current and reduce
+the output voltage accordingly. Complete shutdown occurs only if the fault stays long enough to activate thermal limiting.
+
+For AP22652A/53A, when an overcurrent condition is detected, the devices will limit the current until the overload condition is removed or the internal
+deglitch time (6ms typical) is reached, and AP22652A/53A will be turned off. The AP22652A/53A will remain latched off until power is cycled or the
+device enable is toggled.
+
+The different overload conditions and the corresponding response of the AP22652/52A and AP22653/53A are outlined below:
+
+
+  NO.              Conditions                         Explanation                             Behavior of the AP22652 and AP22653
+                                           Output is shorted before input
+          Short-circuit condition at                                             The IC senses the short circuit and immediately clamps output
+   1                                       voltage is applied or before the
+          startup                                                                current to a certain safe level namely ISHORT.
+                                           part is enabled.
+                                                                                  • At the instance the overload occurs, higher current may flow for
+                                                                                    a very short period of time before the current limit function can
+                                           Short-circuit or overload condition
+          Short-circuit or overcurrent                                              react.
+   2                                       that occurs when the part is
+          condition                                                               • After the current limit function has tripped (reached the
+                                           enabled.
+                                                                                    overcurrent trip threshold), the device switches into current
+                                                                                    limiting mode and the current is clamped at ISHORT/ILIMIT.
+          Gradual increase from                                                  The current rises until ILIMIT or thermal limit. Once the threshold has
+                                           Load increases gradually until the
+   3      nominal operating current to                                           been reached, the device switches into its current limiting mode
+                                           current-limit threshold. (ITRIG)
+          ILIMIT                                                                 and is set at ILIMIT.
+
+
+  NO.              Conditions                         Explanation                                 Behavior of the AP22652A/53A
+                                                                                 The IC senses the short circuit and immediately clamps output
+                                           Output is shorted before input
+          Short-circuit condition at                                             current to a certain safe level namely ISHORT. When the internal
+   1                                       voltage is applied or before the
+          startup                                                                deglitch time (6ms typical) is reached and the devices will be
+                                           part is enabled
+                                                                                 turned off.
+                                                                                  • At the instance the overload occurs, higher current may flow for
+                                                                                    a very short period of time before the current limit function can
+                                                                                    react.
+                                           Short-circuit or overload condition
+          Short-circuit or overcurrent                                            • After the current limit function has tripped (reached the
+   2                                       that occurs when the part is
+          condition                                                                 overcurrent trip threshold), the device switches into current
+                                           enabled.
+                                                                                    limiting mode and the current is clamped at ISHORT/ILIMIT. When
+                                                                                    the internal deglitch time (6ms typical) is reached and the
+                                                                                    devices will be turned off.
+                                                                                 The current rises until ILIMIT or thermal limit. Once the threshold has
+          Gradual increase from
+                                           Load increases gradually until the    been reached, the device switches into its current limiting mode
+   3      nominal operating current to
+                                           current-limit threshold.(ITRIG)       and is set at ILIMIT. When the internal deglitch time (6ms typical) is
+          ILIMIT
+                                                                                 reached and the devices will be turned off.
+
+
+
+
+AP22652/AP22653/AP22652A/AP22653A                                      9 of 17                                                                    March 2026
+Document number: DS41186 Rev. 5 - 2                                www.diodes.com                       © 2026 Copyright Diodes Incorporated. All Rights Reserved.
+                                                                                                 AP22652/AP22653/AP22652A/AP22653A
+
+
+Application Information (continued)
+Current-Limit Threshold Programming
+The current-limit threshold can be programmed using an external resistor. The current-limit threshold is proportional to the current sourced out of
+ILIM.
+
+The recommended 1% resistor range for RLIM is 10kΩ ≤ RLIM ≤ 210kΩ. Figure 14 includes current-limit tolerance due to variations caused by
+temperature and process. This graph does not include the external resistor tolerance. The traces routing the RLIM resistor to the AP22652/52A and
+AP22653/53A should be as short as possible to reduce parasitic effects on the current-limit accuracy.
+
+To design below a maximum current-limit threshold, find the intersection of RLIM and the maximum desired load current on the IOS(max) (ILIM) curve
+and choose a value of RLIM above this value. Programming the current limit below a maximum threshold is important to avoid current limiting
+upstream power supplies causing the input voltage bus to drop. The resulting minimum current-limit threshold is the intersection of the selected
+value of RLIM and the IOS(min) (ILIM) curve.
+
+Best-Fit Current-Limit Threshold Equations (ILIMIT):
+
+ILIMIT_Min[mA] = 28955/R[kΩ]1.075                  ILIMIT_Typ[mA] = 30321/R[kΩ]1.055    ILIMIT_Max[mA] = 31033/R[kΩ]1.031
+
+
+
+                                                                                                          VIN=5V
+
+
+
+
+                          ILIM Current Limit (A)
+                                                               ILIM(max)
+
+
+                                                                            ILIM(typ)
+
+
+                                                             ILIM(min)
+
+
+                                                         RLIM Current-Limit Programming Resistor (kΩ)
+                                                                     Figure 14. Current-Limit Threshold vs. RLIM
+
+Thermal Protection
+Thermal protection prevents the IC from damage when the die temperature exceeds safe margins. This mainly occurs when heavy-overload or
+short-circuit faults are present for extended periods of time. The AP22652/52A and AP22653/53A implement a thermal sensing to monitor the
+operating junction temperature of the power distribution switch. Once the die temperature rises to approximately +145°C, the thermal protection
+feature activates as follows: The internal thermal sense circuitry turns the power switch off and the FAULT output is asserted, thus preventing the
+power switch from damage. Hysteresis in the thermal sense circuit allows the device to cool down by approximately +40°C before the output is
+turned back on. This built-in thermal hysteresis feature is an excellent feature, as it avoids undesirable oscillations of the thermal protection circuit.
+
+Reverse-Current and Reverse-Voltage Protection
+The USB specification does not allow an output device to source current back into the USB port. In a normal MOSFET switch, current will flow in
+reverse direction (from the output side to the input side) when the output side voltage is higher than the input side. A reverse-current limit (ROCP)
+feature is implemented in the AP22652/52A and AP22653/53A to limit such back currents. The ROCP circuit is activated when the output voltage is
+higher than the input voltage. After the reverse current circuit has tripped (reached the reverse current trip threshold), the current is clamped at this
+IROCP level.
+
+In addition to ROCP, reverse overvoltage protection (ROVP) is also implemented. The ROVP circuit is activated by the reverse voltage comparator
+trip point; i.e., the difference between the output voltage and the input voltage.
+
+For AP22652/53, once ROVP is activated, FAULT assertion occurs at a de-glitch time of 6ms. Recovery from ROVP is automatic when the fault is
+removed. FAULT de-assertion de-glitch time is same as the de-assertion time.
+
+For AP22652A/53A, once ROVP is activated and when the condition exists for more than 5ms (typ), output device is disabled and shut down. This
+is called the "Time from Reverse-Voltage Condition to MOSFET Turn Off". FAULT assertion occurs at a de-glitch time of 6ms after ROVP is reached.
+Recovery from this fault is achieved by recycling power or toggling EN. FAULT de-assertion de-glitch time is same as the de-assertion time.
+
+
+
+
+AP22652/AP22653/AP22652A/AP22653A                                                     10 of 17                                                                  March 2026
+Document number: DS41186 Rev. 5 - 2                                                www.diodes.com                     © 2026 Copyright Diodes Incorporated. All Rights Reserved.
+                                                                                     AP22652/AP22653/AP22652A/AP22653A
+
+
+Application Information (continued)
+Special Functions
+Discharge Function
+When enable is de-asserted, or when the input voltage is under UVLO level, the discharge function is active. The output capacitor is discharged
+through an internal NMOS that has a discharge resistance of 600Ω. Hence, the output voltage drops down to zero. The time taken for discharge is
+dependent on the RC time constant of the resistance and the output capacitor.
+
+FAULT Response
+The FAULT open-drain output goes active low for any of following faults: overcurrent, OUT pin short-circuit, reverse-voltage condition, or thermal
+shutdown. The time from when a fault condition is encountered to when the FAULT output goes low is 6ms (typ). The FAULT output remains low
+until overcurrent, OUT pin short-circuit, and overtemperature conditions are removed. Connecting a heavy capacitive load to the output of the device
+can cause a momentary overcurrent condition, which does not trigger the FAULT due to the 6ms deglitch timeout. This 6ms timeout is also applicable
+for overcurrent recovery and overtemperature recovery. The AP22652 and AP22653 are designed to eliminate erroneous overcurrent reporting
+without the need for external components, such as an RC delay network.
+
+For the AP22652/52A and AP22653/53A when the reverse voltage condition is triggered, FAULT output goes low after 6ms (typ). This 6ms (typ)
+timeout is also applicable for the recovery from reverse voltage fault. The Flag Current is always higher than Current Limit threshold to ensure
+maximum loading consuming.
+
+When the ILIM pin is shorted to GND, current-limit threshold and short-circuit current limit will be clamped at typically 100mA. When the ILIM pin is
+shorted to GND, the AP22652/53 and AP22652A/53A FAULT pin will assert during current-limiting and short-circuit conditions.
+
+For latch-off version, once Fault signal is triggered, the device will stay off until EN pin is toggled or power is restarted.
+
+Power Supply Considerations
+A 0.01μF to 0.1μF, X7R or X5R ceramic bypass capacitor between IN and GND, close to the device, is recommended. This limits the input voltage
+drop during line transients. Placing a high-value electrolytic capacitor on the input (10μF minimum) and output pin (120µF) is recommended when
+the output load is heavy. This precaution also reduces power-supply transients that may cause ringing on the input. Additionally, bypassing the
+device output with a 0.1μF to 4.7μF ceramic capacitor improves the immunity of the device to short-circuit transients. This capacitor also prevents
+output from going negative during turn-off due to parasitic inductance.
+
+Power Dissipation and Junction Temperature
+The low on-resistance of the internal MOSFET allows the small surface-mount packages to pass large current. Using the maximum operating
+ambient temperature (TA) and RDS(ON), the power dissipation can be calculated by:
+
+PD = RDS(ON)× I2
+
+Finally, calculate the junction temperature:
+
+TJ = PD x ΘJA + TA
+
+Where:
+TA = Ambient temperature °C
+θJA = Thermal resistance
+PD = Total power dissipation
+
+Generic Hot-Plug Applications
+In many applications, it may be necessary to remove modules or PC boards while the main unit is still operating. These are considered hot-plug
+applications. Such implementations require the control of current surges seen by the main power supply and the card being inserted. The most
+effective way to control these surges is to limit and slowly ramp the current and voltage being applied to the card, similar to the way in which a power
+supply normally turns on. Due to the controlled rise and fall times of the AP22652/52A and AP22653/53A, these devices can be used to provide a
+softer startup to devices being hot-plugged into a powered system. The UVLO feature of the AP22652/52A and AP22653/53A also ensures that the
+switch is off after the card has been removed, and that the switch is off during the next insertion.
+
+Generic Hot-Plug Applications
+By placing the AP22652/52A and AP22653/53A between the VCC input and the rest of the circuitry, the input power reaches these devices first after
+insertion. The typical rise time of the switch is approximately 1ms, providing a slow voltage ramp at the output of the device. This implementation
+controls system surge current and provides a hot-plugging mechanism for any device.
+
+
+
+AP22652/AP22653/AP22652A/AP22653A                                        11 of 17                                                                     March 2026
+Document number: DS41186 Rev. 5 - 2                                   www.diodes.com                        © 2026 Copyright Diodes Incorporated. All Rights Reserved.
+                                                                                       AP22652/AP22653/AP22652A/AP22653A
+
+
+Ordering Information (Note 10)
+
+                                                                    AP2265 X X X - X
+
+
+
+
+                      Enable                             Latch-Off                           Package                               Packing
+                 2 : Active Low                 Blank : Non Latch-off              W6 : SOT26 (Type A1)                 7 7B:
+                                                                                                                        7; ;-7B :
+                                                                                                                               7”Tape
+                                                                                                                                  Tape&&Reel
+                                                                                                                                         Reel
+                 3 : Active High                    A : Latch-off                  FDZ : W-DFN2020-6
+                                                                                         (Type A1)
+
+                                          Output                                                             Part                          Packing
+    Orderable Part         Enable                         Package
+                                           Fault                                  Package                  Number
+       Number              Active                          Code                                                                 Qty.                  Carrier
+                                         Condition                                                          Suffix
+
+    AP22652W6-7                                              W6              SOT26 (Type A1)                   -7               3000             7” Tape & Reel
+
+    AP22652FDZ-7             Low                                                                               -7
+                                                             FDZ         W-DFN2020-6 (Type A1)                                  3000             7” Tape & Reel
+   AP22652FDZ-7B                           Output                                                             -7B
+                                           Current
+    AP22653W6-7                             Limits           W6              SOT26 (Type A1)                   -7               3000             7” Tape & Reel
+
+    AP22653FDZ-7             High                                                                              -7
+                                                             FDZ         W-DFN2020-6 (Type A1)                                  3000             7” Tape & Reel
+   AP22653FDZ-7B                                                                                              -7B
+
+   AP22652AW6-7                                              W6              SOT26 (Type A1)                   -7               3000             7” Tape & Reel
+
+   AP22652AFDZ-7             Low                                                                               -7
+                                                             FDZ         W-DFN2020-6 (Type A1)                                  3000             7” Tape & Reel
+  AP22652AFDZ-7B                                                                                              -7B
+                                          Output
+                                        Latches Off
+   AP22653AW6-7                                              W6              SOT26 (Type A1)                   -7               3000             7” Tape & Reel
+
+   AP22653AFDZ-7             High                                                                              -7
+                                                             FDZ         W-DFN2020-6 (Type A1)                                  3000             7” Tape & Reel
+  AP22653AFDZ-7B                                                                                              -7B
+
+Note:     10. For packaging details, go to our website at https://www.diodes.com/design/support/packaging/diodes-packaging/.
+
+
+
+
+AP22652/AP22653/AP22652A/AP22653A                                         12 of 17                                                                       March 2026
+Document number: DS41186 Rev. 5 - 2                                    www.diodes.com                          © 2026 Copyright Diodes Incorporated. All Rights Reserved.
+                                                                              AP22652/AP22653/AP22652A/AP22653A
+
+
+Marking Information
+
+(1)   SOT26 (Type A1)
+
+                                              (Top View)
+                                              6       5    4
+                                                           7       XX : Identification Code
+                                                                   Y : Year 0~9
+                                                  XX Y W X         W : Week : A~Z : 1~26 week;
+                                                                        a~z : 27~52 week; z represents
+                                                                        52 and 53 week
+                                              1       2    3       X : Internal Code
+
+
+
+                                  Orderable Part Number              Package             Identification Code
+                                      AP22652W6-7                 SOT26 (Type A1)                 FJ
+                                      AP22653W6-7                 SOT26 (Type A1)                 FK
+                                      AP22652AW6-7                SOT26 (Type A1)                 FR
+                                      AP22653AW6-7                SOT26 (Type A1)                 FS
+
+
+
+
+(2)   W-DFN2020-6 (Type A1)
+                                                  (Top View)
+                                                                   XX : Identification Code
+                                                                   Y : Year : 0~9
+                                                    XX
+                                                                   W : Week : A~Z : 1~26 week;
+                                                    YWX                 a~z : 27~52 week; z represents
+                                                                        52 and 53 week
+                                                                   X : Internal Code
+
+
+
+                                Orderable Part Number               Package                Identification Code
+                                    AP22652FDZ-7               W-DFN2020-6 (Type A1)                FJ
+                                   AP22652FDZ-7B               W-DFN2020-6 (Type A1)                FJ
+                                    AP22653FDZ-7               W-DFN2020-6 (Type A1)                FK
+                                   AP22653FDZ-7B               W-DFN2020-6 (Type A1)                FK
+                                   AP22652AFDZ-7               W-DFN2020-6 (Type A1)                FR
+                                  AP22652AFDZ-7B               W-DFN2020-6 (Type A1)                FR
+                                   AP22653AFDZ-7               W-DFN2020-6 (Type A1)                FS
+                                  AP22653AFDZ-7B               W-DFN2020-6 (Type A1)                FS
+
+
+
+
+AP22652/AP22653/AP22652A/AP22653A                                   13 of 17                                                                 March 2026
+Document number: DS41186 Rev. 5 - 2                              www.diodes.com                    © 2026 Copyright Diodes Incorporated. All Rights Reserved.
+                                                                                            AP22652/AP22653/AP22652A/AP22653A
+
+
+Package Outline Dimensions
+Please see http://www.diodes.com/package-outlines.html for the latest version.
+
+(1)   Package Type: SOT26 (Type A1)
+
+
+
+                             D                                                 DE TAIL 1
+                      b
+                                                                                                                                  SOT26 (Type A1)
+                                                                                                                             Dim Min Max         Typ
+                                                                                                                              A      --   1.45     --
+                                                                                                                             A1 0.00 0.15          --
+                                                                                                                             A2 0.90 1.30        1.15
+             E                                  E1                                                                            b     0.30 0.50      --
+                                                                                                                               c    0.08 0.22      --
+                                                                                                                              D          2.90 BSC
+                                                                                                                              E          2.80 BSC
+                                                                                                                             E1          1.60 BSC
+                                                         c                                                                     e         0.95 BSC
+                                 e                                                                                            e1         1.90 BSC
+                                                                                                                              L     0.30 0.60    0.45
+                            e1                               DE TAIL 1                                                        L1         0.60 REF
+                                                                                   R1
+                                                                                                                              L2         0.25 BSC
+                                                                                                                              R     0.10    --     --
+                                           01
+                                                                                                                             R1 0.10 0.25          --
+                                                                                    R           L2                             θ     0°    8°     4°
+                                                                                                                              θ1     5° 15°       10°
+                                                                                                Gauge Plane
+                                                                                                                               All Dimensions in mm
+         A A2                                                                                   S eating Plane
+                                                                           L            0
+                                                S eating Plane
+                 A1                                                       L1
+                                           01
+
+
+
+
+(2)   Package Type: W-DFN2020-6 (Type A1)
+
+
+
+                      D
+                                                                 4                          6                                             W-DFN2020-6
+                                                                                                                                             Type A1
+                                                  L                                                                               Dim      Min    Max    Typ
+                                                                                                                                   A       0.70   0.80   0.75
+                                                                     D2
+                                                                                                                                  A1       0.00   0.05   0.02
+                                                                                                                                  A3            0.20 REF
+                                       E                                                             E2                            b       0.25   0.35   0.30
+                                                                                                                                   D            2.00 BSC
+                                                                                                                                  D2       1.35   1.45   1.40
+                                                  k                                                                                E            2.00 BSC
+                                                                                                     C0.20x45°
+                                                                                                                                  E2       0.55   0.65   0.60
+                                                                                                                                   e            0.65 BSC
+         1                                                       3                          1                                      k       0.20    ––     ––
+                                                                                                                                   L       0.25   0.35   0.30
+                                                                 b             e
+                                                                                                                                     All Dimensions in mm
+                                                A3
+                                                  A
+                                                         S eating Plane
+
+                                 A1
+
+
+
+
+AP22652/AP22653/AP22652A/AP22653A                                        14 of 17                                                                          March 2026
+Document number: DS41186 Rev. 5 - 2                                   www.diodes.com                             © 2026 Copyright Diodes Incorporated. All Rights Reserved.
+                                                                                 AP22652/AP22653/AP22652A/AP22653A
+
+
+Suggested Pad Layout
+Please see http://www.diodes.com/package-outlines.html for the latest version.
+
+(1)   Package Type: SOT26 (Type A1)
+
+
+                             C            C
+
+
+
+                                                                                                                Value
+                                                                                           Dimensions
+                                                                                                               (in mm)
+                                                                                                C                0.950
+                                                                                                G                1.600
+                                                    G Y1                                        X                0.700
+                                                                                                Y                0.900
+                                                                                                Y1               3.400
+
+
+
+
+                                              X
+
+
+
+
+(2)   Package Type: W-DFN2020-6 (Type A1)
+
+
+                                      X
+
+                                                                                                         Value
+                                                   Y                                    Dimensions
+                                                                                                        (in mm)
+                                                                                           C              0.65
+                                                                                           X              0.38
+                                                                                           X1             1.50
+                                                   Y1 Y2                                   Y              0.45
+                                                                                           Y1             0.70
+                                                                                           Y2             2.10
+                              X1
+
+
+
+                                          C
+
+
+
+
+AP22652/AP22653/AP22652A/AP22653A                                  15 of 17                                                           March 2026
+Document number: DS41186 Rev. 5 - 2                             www.diodes.com              © 2026 Copyright Diodes Incorporated. All Rights Reserved.
+                                                                          AP22652/AP22653/AP22652A/AP22653A
+
+
+Mechanical Data
+SOT26 (Type A1)
+•  Moisture Sensitivity: Level 1 per J-STD-020
+•  Terminals: Finish – Matte Tin Plated Leads, Solderable per MIL-STD-202, Method 208
+•  Weight: 0.016 grams (Approximate)
+
+W-DFN2020-6 (Type A1)
+•  Moisture Sensitivity: Level 1 per J-STD-020
+•  Terminals: Finish – Matte Tin Plated Leads, Solderable per MIL-STD-202, Method 208
+•  Weight: 0.0075 grams (Approximate)
+
+
+
+
+Pin 1 Orientation
+
+•    Pin 1 in second quadrant for -7 (top left):
+
+
+
+
+                 XX           XX          XX          XX
+                 YWX          YWX         YWX         YWX
+
+
+
+
+•    Pin 1 in second quadrant for -7B (top right):
+
+
+
+
+              XX        XX          XX          XX
+              YWX       YWX         YWX         YWX
+
+
+
+
+AP22652/AP22653/AP22652A/AP22653A                               16 of 17                                                          March 2026
+Document number: DS41186 Rev. 5 - 2                          www.diodes.com             © 2026 Copyright Diodes Incorporated. All Rights Reserved.
+                                                                                   AP22652/AP22653/AP22652A/AP22653A
+
+
+
+                                                                 IMPORTANT NOTICE
+
+1.      DIODES INCORPORATED (Diodes) AND ITS SUBSIDIARIES MAKE NO WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, WITH
+REGARDS TO ANY INFORMATION CONTAINED IN THIS DOCUMENT, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE OR NON-INFRINGEMENT OF THIRD PARTY INTELLECTUAL PROPERTY
+RIGHTS (AND THEIR EQUIVALENTS UNDER THE LAWS OF ANY JURISDICTION).
+
+2.         The Information contained herein is for informational purpose only and is provided only to illustrate the operation of Diodes’ products
+described herein and application examples. Diodes does not assume any liability arising out of the application or use of this document or any product
+described herein. This document is intended for skilled and technically trained engineering customers and users who design with Diodes’ products.
+Diodes’ products may be used to facilitate safety-related applications; however, in all instances customers and users are responsible for (a) selecting
+the appropriate Diodes products for their applications, (b) evaluating the suitability of Diodes’ products for their intended applications, (c) ensuring
+their applications, which incorporate Diodes’ products, comply the applicable legal and regulatory requirements as well as safety and functional-
+safety related standards, and (d) ensuring they design with appropriate safeguards (including testing, validation, quality control techniques,
+redundancy, malfunction prevention, and appropriate treatment for aging degradation) to minimize the risks associated with their applications.
+
+3.         Diodes assumes no liability for any application-related information, support, assistance or feedback that may be provided by Diodes from
+time to time. Any customer or user of this document or products described herein will assume all risks and liabilities associated with such use, and
+will hold Diodes and all companies whose products are represented herein or on Diodes’ websites, harmless against all damages and liabilities.
+
+4.        Products described herein may be covered by one or more United States, international or foreign patents and pending patent applications.
+Product names and markings noted herein may also be covered by one or more United States, international or foreign trademarks and trademark
+applications. Diodes does not convey any license under any of its intellectual property rights or the rights of any third parties (including third parties
+whose products and services may be described in this document or on Diodes’ website) under this document.
+
+5.         Diodes’    products      are      provided    subject     to    Diodes’      Standard      Terms       and     Conditions     of    Sale
+(https://www.diodes.com/about/company/terms-and-conditions/terms-and-conditions-of-sales/) or other applicable terms. This document does not
+alter or expand the applicable warranties provided by Diodes. Diodes does not warrant or accept any liability whatsoever in respect of any products
+purchased through unauthorized sales channel.
+
+6.        Diodes’ products and technology may not be used for or incorporated into any products or systems whose manufacture, use or sale is
+prohibited under any applicable laws and regulations. Should customers or users use Diodes’ products in contravention of any applicable laws or
+regulations, or for any unintended or unauthorized application, customers and users will (a) be solely responsible for any damages, losses or
+penalties arising in connection therewith or as a result thereof, and (b) indemnify and hold Diodes and its representatives and agents harmless
+against any and all claims, damages, expenses, and attorney fees arising out of, directly or indirectly, any claim relating to any noncompliance with
+the applicable laws and regulations, as well as any unintended or unauthorized application.
+
+7.         While efforts have been made to ensure the information contained in this document is accurate, complete and current, it may contain
+technical inaccuracies, omissions and typographical errors. Diodes does not warrant that information contained in this document is error-free and
+Diodes is under no obligation to update or otherwise correct this information. Notwithstanding the foregoing, Diodes reserves the right to make
+modifications, enhancements, improvements, corrections or other changes without further notice to this document and any product described herein.
+This document is written in English but may be translated into multiple languages for reference. Only the English version of this document is the final
+and determinative format released by Diodes.
+
+8.        Any unauthorized copying, modification, distribution, transmission, display or other use of this document (or any portion hereof) is
+prohibited. Diodes assumes no responsibility for any losses incurred by the customers or users or any third parties arising from any such unauthorized
+use.
+
+9. This Notice may be periodically updated with the most recent version available at https://www.diodes.com/about/company/terms-and-
+conditions/important-notice
+
+
+The Diodes logo is a registered trademark of Diodes Incorporated in the United States and other countries.
+All other trademarks are the property of their respective owners.
+© 2026 Diodes Incorporated. All Rights Reserved.
+
+www.diodes.com
+
+
+
+
+AP22652/AP22653/AP22652A/AP22653A                                      17 of 17                                                                     March 2026
+Document number: DS41186 Rev. 5 - 2                                 www.diodes.com                        © 2026 Copyright Diodes Incorporated. All Rights Reserved.
+

@@ -1,7 +1,7 @@
 (kicad_sch
-	(version 20260306)
+	(version 20260629)
 	(generator "eeschema")
-	(generator_version "10.0")
+	(generator_version "10.99")
 	(uuid "b728a47a-bd21-4bd8-b3e3-3ffd6db95c28")
 	(paper "A4")
 	(lib_symbols
@@ -194,7 +194,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "Basic_Capacitors_Resistors__C:0402WGF0000TCE"
+		(symbol "Basic_Capacitors_Resistors__C:0402WGF3300TCE"
 			(pin_numbers
 				(hide yes)
 			)
@@ -216,7 +216,7 @@
 					)
 				)
 			)
-			(property "Value" "0402WGF0000TCE"
+			(property "Value" "0402WGF3300TCE"
 				(at 0 -2.54 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -251,7 +251,7 @@
 					(justify left)
 				)
 			)
-			(property "Description" "0Ω ±1% 62.5mW 0402 Thick Film Resistor"
+			(property "Description" "RES 330Ω ±1% 62.5mW 0402"
 				(at 0 0 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -262,7 +262,7 @@
 					)
 				)
 			)
-			(property "LCSC" "C17168"
+			(property "LCSC" "C25104"
 				(at 0 0 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -273,7 +273,7 @@
 					)
 				)
 			)
-			(property "Symbol Name" "0402WGF0000TCE"
+			(property "Symbol Name" "0402WGF3300TCE"
 				(at 0 0 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -284,7 +284,7 @@
 					)
 				)
 			)
-			(property "ki_keywords" "C17168"
+			(property "ki_keywords" "C25104"
 				(at 0 0 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -295,7 +295,7 @@
 					)
 				)
 			)
-			(symbol "0402WGF0000TCE_0_1"
+			(symbol "0402WGF3300TCE_0_1"
 				(rectangle
 					(start -2.54 1.016)
 					(end 2.54 -1.016)
@@ -344,8 +344,8 @@
 					)
 				)
 			)
-			(symbol "0402WGF0000TCE_1_1"
-				(text "0Ω"
+			(symbol "0402WGF3300TCE_1_1"
+				(text "330Ω"
 					(at 0 2.032 0)
 					(effects
 						(font
@@ -557,6 +557,329 @@
 			)
 			(embedded_fonts no)
 		)
+		(symbol "Basic_Capacitors_Resistors__C:CL10B473KB8NNNC"
+			(pin_numbers
+				(hide yes)
+			)
+			(pin_names
+				(hide yes)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(in_pos_files yes)
+			(duplicate_pin_numbers_are_jumpers no)
+			(property "Reference" "C"
+				(at 0 4.826 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "CL10B473KB8NNNC"
+				(at 0 -2.54 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
+				(at 0 -10.16 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+						(italic yes)
+					)
+				)
+			)
+			(property "Datasheet" "https://item.szlcsc.com/362304.html"
+				(at -5.08 -9.525 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(property "Description" "47nF ±10% 50V Ceramic Capacitor X7R 0603"
+				(at -2.794 -9.652 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "LCSC" "C1622"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Symbol Name" "CL10B473KB8NNNC"
+				(at -1.778 -5.334 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_keywords" "C1622"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(symbol "CL10B473KB8NNNC_0_1"
+				(polyline
+					(pts
+						(xy -1.27 0) (xy -0.508 0)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -0.508 2.032) (xy -0.508 -2.032)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0.508 2.032) (xy 0.508 -2.032)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0.508 0) (xy 1.27 0)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(pin passive line
+					(at -3.81 0 0)
+					(length 2.54)
+					(name "1"
+						(effects
+							(font
+								(size 1 1)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1 1)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 3.81 0 180)
+					(length 2.54)
+					(name "2"
+						(effects
+							(font
+								(size 1 1)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1 1)
+							)
+						)
+					)
+				)
+			)
+			(symbol "CL10B473KB8NNNC_1_1"
+				(text "47nF/50V/X7R"
+					(at 0 3.048 0)
+					(effects
+						(font
+							(size 1.27 1.27)
+							(color 163 59 255 1)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+		(symbol "Connector:TestPoint"
+			(pin_numbers
+				(hide yes)
+			)
+			(pin_names
+				(offset 0.762)
+				(hide yes)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(in_pos_files yes)
+			(duplicate_pin_numbers_are_jumpers no)
+			(property "Reference" "TP"
+				(at 0 6.858 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "TestPoint"
+				(at 0 5.08 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 5.08 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Datasheet" ""
+				(at 5.08 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Description" "test point"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_keywords" "test point tp"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_fp_filters" "Pin* Test*"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(symbol "TestPoint_0_1"
+				(circle
+					(center 0 3.302)
+					(radius 0.762)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "TestPoint_1_1"
+				(pin passive line
+					(at 0 0 90)
+					(length 2.54)
+					(name "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
 		(symbol "HOTSWAP__C:CPG151101S11-16_C41430893"
 			(pin_names
 				(hide yes)
@@ -566,8 +889,8 @@
 			(on_board yes)
 			(in_pos_files yes)
 			(duplicate_pin_numbers_are_jumpers no)
-			(property "Reference" "U"
-				(at 0 1.27 0)
+			(property "Reference" "SW"
+				(at -5.334 2.54 0)
 				(show_name no)
 				(do_not_autoplace no)
 				(effects
@@ -580,6 +903,7 @@
 				(at 0 -2.54 0)
 				(show_name no)
 				(do_not_autoplace no)
+				(hide yes)
 				(effects
 					(font
 						(size 1.27 1.27)
@@ -599,7 +923,7 @@
 				)
 			)
 			(property "Datasheet" "https://cn.bing.com/search?q=datasheet%3A+%20MX-KEY-INSTALLED"
-				(at -2.286 0.127 0)
+				(at -3.556 0.127 0)
 				(show_name no)
 				(do_not_autoplace no)
 				(hide yes)
@@ -611,7 +935,7 @@
 				)
 			)
 			(property "Description" "Kailh-style MX hotswap socket (CPG151101S11-16)"
-				(at 0 0 0)
+				(at -1.27 0 0)
 				(show_name no)
 				(do_not_autoplace no)
 				(hide yes)
@@ -646,19 +970,7 @@
 			(symbol "CPG151101S11-16_C41430893_0_1"
 				(polyline
 					(pts
-						(xy 1.27 2.54) (xy 1.27 3.81)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 3.81 0) (xy 5.08 0)
+						(xy 2.54 0) (xy 3.81 0)
 					)
 					(stroke
 						(width 0)
@@ -694,7 +1006,7 @@
 				)
 				(polyline
 					(pts
-						(xy -2.54 0) (xy -1.524 0)
+						(xy -3.81 0) (xy -2.794 0)
 					)
 					(stroke
 						(width 0)
@@ -706,7 +1018,19 @@
 				)
 				(polyline
 					(pts
-						(xy -1.27 2.54) (xy 3.81 2.54)
+						(xy -2.54 2.54) (xy 2.54 2.54)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 2.54) (xy 0 3.81)
 					)
 					(stroke
 						(width 0)
@@ -717,7 +1041,7 @@
 					)
 				)
 				(pin passive line
-					(at -5.08 0 0)
+					(at -6.35 0 0)
 					(length 2.54)
 					(name "1"
 						(effects
@@ -735,7 +1059,7 @@
 					)
 				)
 				(pin passive line
-					(at 7.62 0 180)
+					(at 6.35 0 180)
 					(length 2.54)
 					(name "2"
 						(effects
@@ -1503,6 +1827,12 @@
 		(uuid "32225403-c1fd-4e05-85d9-f339b2e6d905")
 	)
 	(junction
+		(at 228.6 87.63)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "415f2ed7-c9ea-4d11-800f-ffba6af5026b")
+	)
+	(junction
 		(at 110.49 77.47)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -1520,9 +1850,15 @@
 		(color 0 0 0 0)
 		(uuid "c95072cc-831b-4a00-8863-d567231ee445")
 	)
+	(junction
+		(at 143.51 77.47)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "e874f397-358c-44a1-addd-bffe25310411")
+	)
 	(wire
 		(pts
-			(xy 148.59 77.47) (xy 148.59 82.55)
+			(xy 148.59 77.47) (xy 148.59 85.09)
 		)
 		(stroke
 			(width 0)
@@ -1602,7 +1938,17 @@
 	)
 	(wire
 		(pts
-			(xy 110.49 95.25) (xy 110.49 100.33)
+			(xy 148.59 92.71) (xy 148.59 100.33)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "7ca9648b-1ce0-4735-ae56-f1f238772c1d")
+	)
+	(wire
+		(pts
+			(xy 110.49 92.71) (xy 110.49 100.33)
 		)
 		(stroke
 			(width 0)
@@ -1622,7 +1968,17 @@
 	)
 	(wire
 		(pts
-			(xy 137.16 77.47) (xy 148.59 77.47)
+			(xy 236.22 87.63) (xy 228.6 87.63)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "98a4c3ec-1178-4a18-a33f-80e764e14d60")
+	)
+	(wire
+		(pts
+			(xy 137.16 77.47) (xy 143.51 77.47)
 		)
 		(stroke
 			(width 0)
@@ -1642,6 +1998,16 @@
 	)
 	(wire
 		(pts
+			(xy 236.22 105.41) (xy 236.22 101.6)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c296adcc-d65c-42e9-9b5a-4432572ccbec")
+	)
+	(wire
+		(pts
 			(xy 123.19 77.47) (xy 127 77.47)
 		)
 		(stroke
@@ -1652,7 +2018,7 @@
 	)
 	(wire
 		(pts
-			(xy 200.66 90.17) (xy 200.66 99.06)
+			(xy 200.66 90.17) (xy 200.66 105.41)
 		)
 		(stroke
 			(width 0)
@@ -1692,13 +2058,23 @@
 	)
 	(wire
 		(pts
-			(xy 148.59 100.33) (xy 148.59 90.17)
+			(xy 236.22 91.44) (xy 236.22 87.63)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "ee052937-b1b0-4bb3-8771-274e91d96b52")
+		(uuid "de54c14c-5393-4372-822f-5fadd6d9fb1f")
+	)
+	(wire
+		(pts
+			(xy 143.51 77.47) (xy 148.59 77.47)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "edb41f2d-e5b6-4611-840e-415d16c31f91")
 	)
 	(wire
 		(pts
@@ -1764,8 +2140,8 @@
 		(uuid "580ed76b-5d15-433c-833a-3bbbace27bdc")
 	)
 	(symbol
-		(lib_id "Basic_Capacitors_Resistors__C:CL05B104KB54PNC")
-		(at 110.49 90.17 90)
+		(lib_id "Connector:TestPoint")
+		(at 143.51 77.47 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -1773,44 +2149,20 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "27bfc8f0-87cc-4504-910c-0dfdc37117e5")
-		(property "Reference" "C35"
-			(at 114.3 90.1698 90)
+		(uuid "05842874-a390-4b5c-be06-d201c41337b0")
+		(property "Reference" "TP17"
+			(at 141.986 72.136 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify right)
+				(justify left)
 			)
 		)
-		(property "Value" "CL05B104KB54PNC"
-			(at 113.03 90.17 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
-			(at 120.65 90.17 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-					(italic yes)
-				)
-			)
-		)
-		(property "Datasheet" "https://item.szlcsc.com/15869.html"
-			(at 110.363 92.456 0)
+		(property "Value" "TestPoint"
+			(at 146.05 75.4379 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -1821,8 +2173,8 @@
 				(justify left)
 			)
 		)
-		(property "Description" "100nF ±10% 50V Ceramic Capacitor X7R 0402"
-			(at 110.49 90.17 0)
+		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
+			(at 148.59 77.47 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -1832,8 +2184,8 @@
 				)
 			)
 		)
-		(property "LCSC" "C307331"
-			(at 110.49 90.17 0)
+		(property "Datasheet" ""
+			(at 148.59 77.47 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -1843,8 +2195,8 @@
 				)
 			)
 		)
-		(property "Symbol Name" "CL05B104KB54PNC"
-			(at 110.49 90.17 0)
+		(property "Description" "test point"
+			(at 143.51 77.47 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -1855,35 +2207,32 @@
 			)
 		)
 		(pin "1"
-			(uuid "c23fcf93-9831-4a97-9096-ef9a8b6fa3b8")
-		)
-		(pin "2"
-			(uuid "27505616-587c-4ec2-8f9d-0ca01b7732d0")
+			(uuid "6ce32fb0-1cb5-465d-96ba-863ae2c94b1b")
 		)
 		(instances
 			(project "TMR2615F_osu_pad"
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/1c908246-f45e-479b-81f5-310842a674b3"
-					(reference "C41")
+					(reference "TP19")
 					(unit 1)
 				)
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/27bf897c-e7c4-42f0-a892-9a5ce92b0666"
-					(reference "C44")
+					(reference "TP20")
 					(unit 1)
 				)
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/7f9ef015-2204-4ce0-87cb-ceb865f14cf5"
-					(reference "C38")
+					(reference "TP18")
 					(unit 1)
 				)
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/b67cf318-8f26-4075-8130-210e83bda6ef"
-					(reference "C47")
+					(reference "TP21")
 					(unit 1)
 				)
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/c054f78e-e93e-4508-aa3c-98e78e922ef3"
-					(reference "C50")
+					(reference "TP22")
 					(unit 1)
 				)
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/f1fb0698-e95b-4af0-8838-756e58475d83"
-					(reference "C35")
+					(reference "TP17")
 					(unit 1)
 				)
 			)
@@ -1896,12 +2245,12 @@
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
-		(in_bom no)
+		(in_bom yes)
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
 		(uuid "2bad6969-1701-48fb-b83e-713f4adffe06")
-		(property "Reference" "U10"
+		(property "Reference" "U13"
 			(at 92.71 71.12 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -1954,6 +2303,39 @@
 				)
 			)
 		)
+		(property "MPN" "TMR2615F-AAC"
+			(at 0 0 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Manufacturer" "MultiDimension Technology (MDT)"
+			(at 0 0 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C9900212297"
+			(at 0 0 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(property "Symbol Name" "TMR2615x"
 			(at 92.71 81.28 0)
 			(hide yes)
@@ -1980,7 +2362,7 @@
 		(instances
 			(project "TMR2615F_osu_pad"
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/1c908246-f45e-479b-81f5-310842a674b3"
-					(reference "U16")
+					(reference "U17")
 					(unit 1)
 				)
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/27bf897c-e7c4-42f0-a892-9a5ce92b0666"
@@ -1988,19 +2370,19 @@
 					(unit 1)
 				)
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/7f9ef015-2204-4ce0-87cb-ceb865f14cf5"
-					(reference "U13")
+					(reference "U15")
 					(unit 1)
 				)
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/b67cf318-8f26-4075-8130-210e83bda6ef"
-					(reference "U22")
+					(reference "U21")
 					(unit 1)
 				)
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/c054f78e-e93e-4508-aa3c-98e78e922ef3"
-					(reference "U25")
+					(reference "U23")
 					(unit 1)
 				)
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/f1fb0698-e95b-4af0-8838-756e58475d83"
-					(reference "U10")
+					(reference "U13")
 					(unit 1)
 				)
 			)
@@ -2008,7 +2390,7 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 200.66 99.06 0)
+		(at 200.66 105.41 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -2018,8 +2400,8 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "50f0c3c4-12b8-4bc3-a6a6-1ce4aa78a84e")
-		(property "Reference" "#PWR092"
-			(at 200.66 105.41 0)
+		(property "Reference" "#PWR0109"
+			(at 200.66 111.76 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2030,7 +2412,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 200.66 104.14 0)
+			(at 200.66 110.49 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -2040,7 +2422,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 200.66 99.06 0)
+			(at 200.66 105.41 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2051,7 +2433,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 200.66 99.06 0)
+			(at 200.66 105.41 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2062,7 +2444,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 200.66 99.06 0)
+			(at 200.66 105.41 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2078,27 +2460,27 @@
 		(instances
 			(project "TMR2615F_osu_pad"
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/1c908246-f45e-479b-81f5-310842a674b3"
-					(reference "#PWR0108")
+					(reference "#PWR0127")
 					(unit 1)
 				)
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/27bf897c-e7c4-42f0-a892-9a5ce92b0666"
-					(reference "#PWR0116")
+					(reference "#PWR0136")
 					(unit 1)
 				)
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/7f9ef015-2204-4ce0-87cb-ceb865f14cf5"
-					(reference "#PWR0100")
+					(reference "#PWR0118")
 					(unit 1)
 				)
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/b67cf318-8f26-4075-8130-210e83bda6ef"
-					(reference "#PWR0124")
+					(reference "#PWR0145")
 					(unit 1)
 				)
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/c054f78e-e93e-4508-aa3c-98e78e922ef3"
-					(reference "#PWR0132")
+					(reference "#PWR0154")
 					(unit 1)
 				)
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/f1fb0698-e95b-4af0-8838-756e58475d83"
-					(reference "#PWR092")
+					(reference "#PWR0109")
 					(unit 1)
 				)
 			)
@@ -2117,7 +2499,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "59a4cb6e-8a57-486c-b3f2-fed0b17705b5")
-		(property "Reference" "#PWR077"
+		(property "Reference" "#PWR0108"
 			(at 148.59 106.68 0)
 			(hide yes)
 			(show_name no)
@@ -2177,142 +2559,27 @@
 		(instances
 			(project "TMR2615F_osu_pad"
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/1c908246-f45e-479b-81f5-310842a674b3"
-					(reference "#PWR080")
+					(reference "#PWR0126")
 					(unit 1)
 				)
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/27bf897c-e7c4-42f0-a892-9a5ce92b0666"
-					(reference "#PWR081")
+					(reference "#PWR0135")
 					(unit 1)
 				)
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/7f9ef015-2204-4ce0-87cb-ceb865f14cf5"
-					(reference "#PWR078")
+					(reference "#PWR0117")
 					(unit 1)
 				)
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/b67cf318-8f26-4075-8130-210e83bda6ef"
-					(reference "#PWR083")
+					(reference "#PWR0144")
 					(unit 1)
 				)
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/c054f78e-e93e-4508-aa3c-98e78e922ef3"
-					(reference "#PWR085")
+					(reference "#PWR0153")
 					(unit 1)
 				)
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/f1fb0698-e95b-4af0-8838-756e58475d83"
-					(reference "#PWR077")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Basic_Capacitors_Resistors__C:0402CG300J500NT")
-		(at 148.59 86.36 90)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp yes)
-		(fields_autoplaced yes)
-		(uuid "5c6e1110-b65d-4ba6-aeb6-82df72b385b1")
-		(property "Reference" "C36"
-			(at 152.4 86.3598 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Value" "0402CG300J500NT"
-			(at 151.13 86.36 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
-			(at 158.75 86.36 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-					(italic yes)
-				)
-			)
-		)
-		(property "Datasheet" "https://item.szlcsc.com/15869.html"
-			(at 148.463 88.646 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Description" "30pF ±5% 50V Ceramic Capacitor C0G 0402"
-			(at 148.59 86.36 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "LCSC" "C1570"
-			(at 148.59 86.36 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "2"
-			(uuid "216cd002-7e24-4418-85ca-a7d8083db8db")
-		)
-		(pin "1"
-			(uuid "b61c267f-afcd-4e2c-811a-78bbd824804d")
-		)
-		(instances
-			(project "TMR2615F_osu_pad"
-				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/1c908246-f45e-479b-81f5-310842a674b3"
-					(reference "C42")
-					(unit 1)
-				)
-				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/27bf897c-e7c4-42f0-a892-9a5ce92b0666"
-					(reference "C45")
-					(unit 1)
-				)
-				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/7f9ef015-2204-4ce0-87cb-ceb865f14cf5"
-					(reference "C39")
-					(unit 1)
-				)
-				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/b67cf318-8f26-4075-8130-210e83bda6ef"
-					(reference "C48")
-					(unit 1)
-				)
-				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/c054f78e-e93e-4508-aa3c-98e78e922ef3"
-					(reference "C51")
-					(unit 1)
-				)
-				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/f1fb0698-e95b-4af0-8838-756e58475d83"
-					(reference "C36")
+					(reference "#PWR0108")
 					(unit 1)
 				)
 			)
@@ -2331,7 +2598,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "5fa7380a-cfaa-4d04-bd52-e50d99b31efc")
-		(property "Reference" "#PWR087"
+		(property "Reference" "#PWR0107"
 			(at 123.19 106.68 0)
 			(hide yes)
 			(show_name no)
@@ -2391,27 +2658,174 @@
 		(instances
 			(project "TMR2615F_osu_pad"
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/1c908246-f45e-479b-81f5-310842a674b3"
-					(reference "#PWR089")
+					(reference "#PWR0125")
 					(unit 1)
 				)
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/27bf897c-e7c4-42f0-a892-9a5ce92b0666"
-					(reference "#PWR090")
+					(reference "#PWR0134")
 					(unit 1)
 				)
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/7f9ef015-2204-4ce0-87cb-ceb865f14cf5"
-					(reference "#PWR088")
+					(reference "#PWR0116")
 					(unit 1)
 				)
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/b67cf318-8f26-4075-8130-210e83bda6ef"
-					(reference "#PWR091")
+					(reference "#PWR0143")
 					(unit 1)
 				)
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/c054f78e-e93e-4508-aa3c-98e78e922ef3"
-					(reference "#PWR095")
+					(reference "#PWR0152")
 					(unit 1)
 				)
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/f1fb0698-e95b-4af0-8838-756e58475d83"
-					(reference "#PWR087")
+					(reference "#PWR0107")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Basic_Capacitors_Resistors__C:0402WGF3300TCE")
+		(at 132.08 77.47 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "7ce4e5e0-5920-43aa-b409-ee9ddfa65712")
+		(property "Reference" "R29"
+			(at 132.08 72.39 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "0402WGF3300TCE"
+			(at 132.08 80.01 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_0402_1005Metric"
+			(at 132.08 87.63 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+					(italic yes)
+				)
+			)
+		)
+		(property "Datasheet" "https://item.szlcsc.com/323315.html"
+			(at 129.794 77.343 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Description" "RES 330Ω ±1% 62.5mW 0402"
+			(at 132.08 77.47 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C25104"
+			(at 132.08 77.47 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Symbol Name" "0402WGF3300TCE"
+			(at 132.08 77.47 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Sim.Device" ""
+			(at 132.08 77.47 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Sim.Pins" ""
+			(at 132.08 77.47 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "3a0d62c6-9792-4777-a893-eea16a29921e")
+		)
+		(pin "2"
+			(uuid "a42eccf0-2ed1-4ba7-aae2-8470a35cfb07")
+		)
+		(instances
+			(project "TMR2615F_osu_pad"
+				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/1c908246-f45e-479b-81f5-310842a674b3"
+					(reference "R31")
+					(unit 1)
+				)
+				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/27bf897c-e7c4-42f0-a892-9a5ce92b0666"
+					(reference "R32")
+					(unit 1)
+				)
+				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/7f9ef015-2204-4ce0-87cb-ceb865f14cf5"
+					(reference "R30")
+					(unit 1)
+				)
+				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/b67cf318-8f26-4075-8130-210e83bda6ef"
+					(reference "R33")
+					(unit 1)
+				)
+				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/c054f78e-e93e-4508-aa3c-98e78e922ef3"
+					(reference "R34")
+					(unit 1)
+				)
+				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/f1fb0698-e95b-4af0-8838-756e58475d83"
+					(reference "R29")
 					(unit 1)
 				)
 			)
@@ -2429,7 +2843,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "93eca166-2967-4436-b15c-424110968098")
-		(property "Reference" "#PWR093"
+		(property "Reference" "#PWR0103"
 			(at 228.6 81.28 0)
 			(hide yes)
 			(show_name no)
@@ -2489,27 +2903,268 @@
 		(instances
 			(project "TMR2615F_osu_pad"
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/1c908246-f45e-479b-81f5-310842a674b3"
-					(reference "#PWR0109")
+					(reference "#PWR0121")
 					(unit 1)
 				)
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/27bf897c-e7c4-42f0-a892-9a5ce92b0666"
-					(reference "#PWR0117")
+					(reference "#PWR0130")
 					(unit 1)
 				)
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/7f9ef015-2204-4ce0-87cb-ceb865f14cf5"
-					(reference "#PWR0101")
+					(reference "#PWR0112")
 					(unit 1)
 				)
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/b67cf318-8f26-4075-8130-210e83bda6ef"
-					(reference "#PWR0125")
+					(reference "#PWR0139")
 					(unit 1)
 				)
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/c054f78e-e93e-4508-aa3c-98e78e922ef3"
-					(reference "#PWR0133")
+					(reference "#PWR0148")
 					(unit 1)
 				)
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/f1fb0698-e95b-4af0-8838-756e58475d83"
-					(reference "#PWR093")
+					(reference "#PWR0103")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Basic_Capacitors_Resistors__C:CL10B473KB8NNNC")
+		(at 148.59 88.9 90)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "a23ce9f4-9ae9-470f-a108-133402fd21c9")
+		(property "Reference" "C34"
+			(at 152.4 88.8999 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Value" "CL10B473KB8NNNC"
+			(at 151.13 88.9 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
+			(at 158.75 88.9 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+					(italic yes)
+				)
+			)
+		)
+		(property "Datasheet" "https://item.szlcsc.com/362304.html"
+			(at 158.115 93.98 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Description" "47nF ±10% 50V Ceramic Capacitor X7R 0603"
+			(at 158.242 91.694 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C1622"
+			(at 148.59 88.9 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Symbol Name" "CL10B473KB8NNNC"
+			(at 153.924 90.678 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "004c1ea8-d5b5-4dbb-ae0a-d5fc4abd0f1f")
+		)
+		(pin "2"
+			(uuid "f275cf3d-ad69-4ba6-a36a-84daa0021781")
+		)
+		(instances
+			(project "TMR2615F_osu_pad"
+				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/1c908246-f45e-479b-81f5-310842a674b3"
+					(reference "C42")
+					(unit 1)
+				)
+				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/27bf897c-e7c4-42f0-a892-9a5ce92b0666"
+					(reference "C46")
+					(unit 1)
+				)
+				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/7f9ef015-2204-4ce0-87cb-ceb865f14cf5"
+					(reference "C38")
+					(unit 1)
+				)
+				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/b67cf318-8f26-4075-8130-210e83bda6ef"
+					(reference "C50")
+					(unit 1)
+				)
+				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/c054f78e-e93e-4508-aa3c-98e78e922ef3"
+					(reference "C54")
+					(unit 1)
+				)
+				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/f1fb0698-e95b-4af0-8838-756e58475d83"
+					(reference "C34")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Basic_Capacitors_Resistors__C:0402CG300J500NT")
+		(at 110.49 88.9 90)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp yes)
+		(fields_autoplaced yes)
+		(uuid "b9b3b473-f196-4941-85c7-6007b43f1fb3")
+		(property "Reference" "C33"
+			(at 114.3 88.8998 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Value" "0402CG300J500NT"
+			(at 113.03 88.9 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
+			(at 120.65 88.9 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+					(italic yes)
+				)
+			)
+		)
+		(property "Datasheet" "https://item.szlcsc.com/15869.html"
+			(at 110.363 91.186 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Description" "30pF ±5% 50V Ceramic Capacitor C0G 0402"
+			(at 110.49 88.9 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C1570"
+			(at 110.49 88.9 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "2"
+			(uuid "a985af44-92e7-4fa9-bd6f-6d35f15ffa22")
+		)
+		(pin "1"
+			(uuid "565029c6-430a-4b23-a560-1c70e415cf80")
+		)
+		(instances
+			(project "TMR2615F_osu_pad"
+				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/1c908246-f45e-479b-81f5-310842a674b3"
+					(reference "C41")
+					(unit 1)
+				)
+				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/27bf897c-e7c4-42f0-a892-9a5ce92b0666"
+					(reference "C45")
+					(unit 1)
+				)
+				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/7f9ef015-2204-4ce0-87cb-ceb865f14cf5"
+					(reference "C37")
+					(unit 1)
+				)
+				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/b67cf318-8f26-4075-8130-210e83bda6ef"
+					(reference "C49")
+					(unit 1)
+				)
+				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/c054f78e-e93e-4508-aa3c-98e78e922ef3"
+					(reference "C53")
+					(unit 1)
+				)
+				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/f1fb0698-e95b-4af0-8838-756e58475d83"
+					(reference "C33")
 					(unit 1)
 				)
 			)
@@ -2588,23 +3243,23 @@
 		(instances
 			(project "TMR2615F_osu_pad"
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/1c908246-f45e-479b-81f5-310842a674b3"
-					(reference "#PWR0107")
+					(reference "#PWR0123")
 					(unit 1)
 				)
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/27bf897c-e7c4-42f0-a892-9a5ce92b0666"
-					(reference "#PWR0111")
+					(reference "#PWR0132")
 					(unit 1)
 				)
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/7f9ef015-2204-4ce0-87cb-ceb865f14cf5"
-					(reference "#PWR0106")
+					(reference "#PWR0114")
 					(unit 1)
 				)
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/b67cf318-8f26-4075-8130-210e83bda6ef"
-					(reference "#PWR0112")
+					(reference "#PWR0141")
 					(unit 1)
 				)
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/c054f78e-e93e-4508-aa3c-98e78e922ef3"
-					(reference "#PWR0113")
+					(reference "#PWR0150")
 					(unit 1)
 				)
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/f1fb0698-e95b-4af0-8838-756e58475d83"
@@ -2615,8 +3270,8 @@
 		)
 	)
 	(symbol
-		(lib_id "Basic_Capacitors_Resistors__C:0402WGF0000TCE")
-		(at 132.08 77.47 0)
+		(lib_id "power:GND")
+		(at 236.22 105.41 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -2625,19 +3280,9 @@
 		(in_pos_files yes)
 		(dnp no)
 		(fields_autoplaced yes)
-		(uuid "d14c982b-72be-4b70-adc8-4a521a34db3d")
-		(property "Reference" "R17"
-			(at 132.08 72.39 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "0402WGF0000TCE"
-			(at 132.08 80.01 0)
+		(uuid "c1da8c15-de50-4dc7-89b1-ee975da14066")
+		(property "Reference" "#PWR0110"
+			(at 236.22 111.76 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2647,32 +3292,18 @@
 				)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:R_0402_1005Metric"
-			(at 132.08 87.63 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-					(italic yes)
-				)
-			)
-		)
-		(property "Datasheet" "https://item.szlcsc.com/323315.html"
-			(at 129.794 77.343 0)
-			(hide yes)
+		(property "Value" "GND"
+			(at 236.22 110.49 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify left)
 			)
 		)
-		(property "Description" "0Ω ±1% 62.5mW 0402 Thick Film Resistor"
-			(at 132.08 77.47 0)
+		(property "Footprint" ""
+			(at 236.22 105.41 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2682,8 +3313,8 @@
 				)
 			)
 		)
-		(property "LCSC" "C17168"
-			(at 132.08 77.47 0)
+		(property "Datasheet" ""
+			(at 236.22 105.41 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2693,8 +3324,8 @@
 				)
 			)
 		)
-		(property "Symbol Name" "0402WGF0000TCE"
-			(at 132.08 77.47 0)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 236.22 105.41 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2705,35 +3336,158 @@
 			)
 		)
 		(pin "1"
-			(uuid "616e39e3-8454-4395-83ca-b78b6a552d50")
-		)
-		(pin "2"
-			(uuid "051b8e2e-1479-4ae7-aec2-613e40d7bc7d")
+			(uuid "ee7df6cf-af9c-4fb3-b74c-ce95cc4c4400")
 		)
 		(instances
 			(project "TMR2615F_osu_pad"
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/1c908246-f45e-479b-81f5-310842a674b3"
-					(reference "R19")
+					(reference "#PWR0128")
 					(unit 1)
 				)
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/27bf897c-e7c4-42f0-a892-9a5ce92b0666"
-					(reference "R20")
+					(reference "#PWR0137")
 					(unit 1)
 				)
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/7f9ef015-2204-4ce0-87cb-ceb865f14cf5"
-					(reference "R18")
+					(reference "#PWR0119")
 					(unit 1)
 				)
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/b67cf318-8f26-4075-8130-210e83bda6ef"
-					(reference "R21")
+					(reference "#PWR0146")
 					(unit 1)
 				)
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/c054f78e-e93e-4508-aa3c-98e78e922ef3"
-					(reference "R22")
+					(reference "#PWR0155")
 					(unit 1)
 				)
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/f1fb0698-e95b-4af0-8838-756e58475d83"
-					(reference "R17")
+					(reference "#PWR0110")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Basic_Capacitors_Resistors__C:CL05B104KB54PNC")
+		(at 236.22 96.52 90)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "d16e4915-6a10-4ddb-892b-229ff3ec7b4b")
+		(property "Reference" "C36"
+			(at 240.03 96.5198 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Value" "CL05B104KB54PNC"
+			(at 238.76 96.52 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
+			(at 246.38 96.52 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+					(italic yes)
+				)
+			)
+		)
+		(property "Datasheet" "https://item.szlcsc.com/15869.html"
+			(at 236.093 98.806 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Description" "100nF ±10% 50V Ceramic Capacitor X7R 0402"
+			(at 236.22 96.52 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C307331"
+			(at 236.22 96.52 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Symbol Name" "CL05B104KB54PNC"
+			(at 236.22 96.52 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "d318c49e-34fe-40ab-8cc3-6699894d0d0c")
+		)
+		(pin "2"
+			(uuid "8341239e-7360-4ce7-8eae-65ce590af68b")
+		)
+		(instances
+			(project "TMR2615F_osu_pad"
+				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/1c908246-f45e-479b-81f5-310842a674b3"
+					(reference "C44")
+					(unit 1)
+				)
+				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/27bf897c-e7c4-42f0-a892-9a5ce92b0666"
+					(reference "C48")
+					(unit 1)
+				)
+				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/7f9ef015-2204-4ce0-87cb-ceb865f14cf5"
+					(reference "C40")
+					(unit 1)
+				)
+				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/b67cf318-8f26-4075-8130-210e83bda6ef"
+					(reference "C52")
+					(unit 1)
+				)
+				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/c054f78e-e93e-4508-aa3c-98e78e922ef3"
+					(reference "C56")
+					(unit 1)
+				)
+				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/f1fb0698-e95b-4af0-8838-756e58475d83"
+					(reference "C36")
 					(unit 1)
 				)
 			)
@@ -2751,7 +3505,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "d2e92d0d-03bf-4714-b24d-6a3f84932e51")
-		(property "Reference" "C34"
+		(property "Reference" "C35"
 			(at 81.28 90.1698 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2839,27 +3593,27 @@
 		(instances
 			(project "TMR2615F_osu_pad"
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/1c908246-f45e-479b-81f5-310842a674b3"
-					(reference "C40")
-					(unit 1)
-				)
-				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/27bf897c-e7c4-42f0-a892-9a5ce92b0666"
 					(reference "C43")
 					(unit 1)
 				)
+				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/27bf897c-e7c4-42f0-a892-9a5ce92b0666"
+					(reference "C47")
+					(unit 1)
+				)
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/7f9ef015-2204-4ce0-87cb-ceb865f14cf5"
-					(reference "C37")
+					(reference "C39")
 					(unit 1)
 				)
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/b67cf318-8f26-4075-8130-210e83bda6ef"
-					(reference "C46")
+					(reference "C51")
 					(unit 1)
 				)
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/c054f78e-e93e-4508-aa3c-98e78e922ef3"
-					(reference "C49")
+					(reference "C55")
 					(unit 1)
 				)
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/f1fb0698-e95b-4af0-8838-756e58475d83"
-					(reference "C34")
+					(reference "C35")
 					(unit 1)
 				)
 			)
@@ -2878,7 +3632,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "d83aaaf4-6ddb-41d3-b8e8-f98f8f5c3c4d")
-		(property "Reference" "#PWR0114"
+		(property "Reference" "#PWR0104"
 			(at 77.47 106.68 0)
 			(hide yes)
 			(show_name no)
@@ -2938,27 +3692,27 @@
 		(instances
 			(project "TMR2615F_osu_pad"
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/1c908246-f45e-479b-81f5-310842a674b3"
-					(reference "#PWR0119")
-					(unit 1)
-				)
-				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/27bf897c-e7c4-42f0-a892-9a5ce92b0666"
-					(reference "#PWR0120")
-					(unit 1)
-				)
-				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/7f9ef015-2204-4ce0-87cb-ceb865f14cf5"
-					(reference "#PWR0115")
-					(unit 1)
-				)
-				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/b67cf318-8f26-4075-8130-210e83bda6ef"
-					(reference "#PWR0121")
-					(unit 1)
-				)
-				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/c054f78e-e93e-4508-aa3c-98e78e922ef3"
 					(reference "#PWR0122")
 					(unit 1)
 				)
+				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/27bf897c-e7c4-42f0-a892-9a5ce92b0666"
+					(reference "#PWR0131")
+					(unit 1)
+				)
+				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/7f9ef015-2204-4ce0-87cb-ceb865f14cf5"
+					(reference "#PWR0113")
+					(unit 1)
+				)
+				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/b67cf318-8f26-4075-8130-210e83bda6ef"
+					(reference "#PWR0140")
+					(unit 1)
+				)
+				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/c054f78e-e93e-4508-aa3c-98e78e922ef3"
+					(reference "#PWR0149")
+					(unit 1)
+				)
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/f1fb0698-e95b-4af0-8838-756e58475d83"
-					(reference "#PWR0114")
+					(reference "#PWR0104")
 					(unit 1)
 				)
 			)
@@ -2966,7 +3720,7 @@
 	)
 	(symbol
 		(lib_id "HOTSWAP__C:CPG151101S11-16_C41430893")
-		(at 123.19 91.44 90)
+		(at 123.19 90.17 90)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -2976,8 +3730,8 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "e6369bad-11b1-4ed8-95e5-634676874189")
-		(property "Reference" "U11"
-			(at 124.46 88.8999 90)
+		(property "Reference" "SW3"
+			(at 124.46 87.6299 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -2988,7 +3742,7 @@
 			)
 		)
 		(property "Value" "CPG151101S11-16"
-			(at 124.46 91.4399 90)
+			(at 124.46 90.1699 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -2999,7 +3753,7 @@
 			)
 		)
 		(property "Footprint" "HOTSWAP__C:SMD_KEYBOARD-SW"
-			(at 133.35 91.44 0)
+			(at 133.35 90.17 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3011,7 +3765,7 @@
 			)
 		)
 		(property "Datasheet" "https://cn.bing.com/search?q=datasheet%3A+%20MX-KEY-INSTALLED"
-			(at 123.063 93.726 0)
+			(at 123.063 92.456 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3023,7 +3777,7 @@
 			)
 		)
 		(property "Description" "Kailh-style MX hotswap socket (CPG151101S11-16)"
-			(at 123.19 91.44 0)
+			(at 123.19 90.17 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3034,7 +3788,7 @@
 			)
 		)
 		(property "LCSC" "C41430893"
-			(at 123.19 91.44 0)
+			(at 123.19 90.17 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3053,27 +3807,27 @@
 		(instances
 			(project "TMR2615F_osu_pad"
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/1c908246-f45e-479b-81f5-310842a674b3"
-					(reference "U17")
+					(reference "SW5")
 					(unit 1)
 				)
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/27bf897c-e7c4-42f0-a892-9a5ce92b0666"
-					(reference "U20")
+					(reference "SW6")
 					(unit 1)
 				)
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/7f9ef015-2204-4ce0-87cb-ceb865f14cf5"
-					(reference "U14")
+					(reference "SW4")
 					(unit 1)
 				)
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/b67cf318-8f26-4075-8130-210e83bda6ef"
-					(reference "U23")
+					(reference "SW7")
 					(unit 1)
 				)
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/c054f78e-e93e-4508-aa3c-98e78e922ef3"
-					(reference "U26")
+					(reference "SW8")
 					(unit 1)
 				)
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/f1fb0698-e95b-4af0-8838-756e58475d83"
-					(reference "U11")
+					(reference "SW3")
 					(unit 1)
 				)
 			)
@@ -3091,7 +3845,7 @@
 		(in_pos_files yes)
 		(dnp no)
 		(uuid "f17882e7-4ef4-4c0c-a69c-02e1117bd279")
-		(property "Reference" "U12"
+		(property "Reference" "U14"
 			(at 213.36 97.79 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3176,23 +3930,23 @@
 					(unit 1)
 				)
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/27bf897c-e7c4-42f0-a892-9a5ce92b0666"
-					(reference "U21")
+					(reference "U20")
 					(unit 1)
 				)
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/7f9ef015-2204-4ce0-87cb-ceb865f14cf5"
-					(reference "U15")
+					(reference "U16")
 					(unit 1)
 				)
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/b67cf318-8f26-4075-8130-210e83bda6ef"
-					(reference "U24")
+					(reference "U22")
 					(unit 1)
 				)
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/c054f78e-e93e-4508-aa3c-98e78e922ef3"
-					(reference "U27")
+					(reference "U24")
 					(unit 1)
 				)
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/f1fb0698-e95b-4af0-8838-756e58475d83"
-					(reference "U12")
+					(reference "U14")
 					(unit 1)
 				)
 			)
@@ -3210,7 +3964,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "f417b65b-8406-437d-b256-3bd5ed11a397")
-		(property "Reference" "#PWR086"
+		(property "Reference" "#PWR0102"
 			(at 77.47 74.93 0)
 			(hide yes)
 			(show_name no)
@@ -3270,27 +4024,27 @@
 		(instances
 			(project "TMR2615F_osu_pad"
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/1c908246-f45e-479b-81f5-310842a674b3"
-					(reference "#PWR0102")
+					(reference "#PWR0120")
 					(unit 1)
 				)
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/27bf897c-e7c4-42f0-a892-9a5ce92b0666"
-					(reference "#PWR0110")
+					(reference "#PWR0129")
 					(unit 1)
 				)
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/7f9ef015-2204-4ce0-87cb-ceb865f14cf5"
-					(reference "#PWR094")
+					(reference "#PWR0111")
 					(unit 1)
 				)
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/b67cf318-8f26-4075-8130-210e83bda6ef"
-					(reference "#PWR0118")
+					(reference "#PWR0138")
 					(unit 1)
 				)
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/c054f78e-e93e-4508-aa3c-98e78e922ef3"
-					(reference "#PWR0126")
+					(reference "#PWR0147")
 					(unit 1)
 				)
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/f1fb0698-e95b-4af0-8838-756e58475d83"
-					(reference "#PWR086")
+					(reference "#PWR0102")
 					(unit 1)
 				)
 			)
@@ -3309,7 +4063,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "f4e59db3-b4b3-4f90-b1a2-76e608a03aaa")
-		(property "Reference" "#PWR096"
+		(property "Reference" "#PWR0106"
 			(at 110.49 106.68 0)
 			(hide yes)
 			(show_name no)
@@ -3369,27 +4123,27 @@
 		(instances
 			(project "TMR2615F_osu_pad"
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/1c908246-f45e-479b-81f5-310842a674b3"
-					(reference "#PWR098")
+					(reference "#PWR0124")
 					(unit 1)
 				)
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/27bf897c-e7c4-42f0-a892-9a5ce92b0666"
-					(reference "#PWR099")
+					(reference "#PWR0133")
 					(unit 1)
 				)
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/7f9ef015-2204-4ce0-87cb-ceb865f14cf5"
-					(reference "#PWR097")
+					(reference "#PWR0115")
 					(unit 1)
 				)
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/b67cf318-8f26-4075-8130-210e83bda6ef"
-					(reference "#PWR0103")
+					(reference "#PWR0142")
 					(unit 1)
 				)
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/c054f78e-e93e-4508-aa3c-98e78e922ef3"
-					(reference "#PWR0104")
+					(reference "#PWR0151")
 					(unit 1)
 				)
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/f1fb0698-e95b-4af0-8838-756e58475d83"
-					(reference "#PWR096")
+					(reference "#PWR0106")
 					(unit 1)
 				)
 			)

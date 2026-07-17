@@ -1,0 +1,11 @@
+* sensor anti-alias RC: R17..R22=330R, C28-family=47n (verified netlist topology)
+V1 in 0 DC 0 AC 1
+R1 in out 330
+C1 out 0 47n
+.control
+set units=degrees
+ac dec 500 100 10meg
+meas ac fc WHEN vdb(out)=-3
+meas ac ph FIND vp(out) WHEN vdb(out)=-3
+.endc
+.end

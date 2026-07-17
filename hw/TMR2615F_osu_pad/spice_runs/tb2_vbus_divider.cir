@@ -1,0 +1,12 @@
+* VBUS_B sense divider: R30/R31 = 10k/10k, C57=47n on tap (into mux S4A)
+V1 vbus 0 DC 5 AC 1
+R30 vbus tap 10k
+R31 tap 0 10k
+C57 tap 0 47n
+.control
+op
+print v(tap)
+ac dec 200 1 10meg
+meas ac fpole WHEN vdb(tap)=-9.0309
+.endc
+.end
