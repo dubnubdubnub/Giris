@@ -1,0 +1,14 @@
+* sacrificial LED rail: 1N4148WS from +5V, load = SK6812 at idle (1mA) vs full white (50mA)
+.model D1N4148 D(IS=4.352n RS=0.6458 N=1.906 CJO=4p TT=20n BV=100 IBV=100u)
+V5 vin 0 DC 5
+D1 vin vled D1N4148
+I1 vled 0 DC 1m
+.control
+op
+let v_idle = v(vled)
+print v_idle
+alter I1 50m
+op
+print v(vled)
+.endc
+.end

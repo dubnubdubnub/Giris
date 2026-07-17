@@ -1,0 +1,12 @@
+* half-duplex link line, open-drain release: 2 boards x 10k pull-up to 3.3V,
+* ~80pF cable+pins+ESD, starting from VOL (~0.2V incl 120R drop)
+V33 v33 0 DC 3.3
+Rpu1 v33 line 10k
+Rpu2 v33 line 10k
+Cline line 0 80p
+.ic V(line)=0.2
+.control
+tran 2n 5u uic
+meas tran t_vih WHEN v(line)=2.31 RISE=1
+.endc
+.end
