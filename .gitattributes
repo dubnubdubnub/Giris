@@ -1,2 +1,21 @@
 # Auto detect text files and perform LF normalization
 * text=auto
+
+# Fab packages from .claude/skills/fab-export are byte-exact deliverables.
+# Leave their line endings alone so a regenerated file doesn't show as modified
+# purely because git normalised CRLF on the way in.
+BOM-*.csv -text
+CPL-*.csv -text
+*.xlsx binary
+*.gbr -text
+*.gbrjob -text
+*.drl -text
+*.gtl -text
+*.gbl -text
+*.gts -text
+*.gbs -text
+*.gto -text
+*.gbo -text
+*.gtp -text
+*.gbp -text
+*.gm1 -text

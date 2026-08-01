@@ -30,6 +30,9 @@ fp-info-cache
 *.xml
 *.csv
 !import_parts.csv
+# Fab packages produced by .claude/skills/fab-export are archived deliberately
+!BOM-*.csv
+!CPL-*.csv
 
 # VS Code Local History extension
 .history/
