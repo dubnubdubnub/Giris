@@ -1050,7 +1050,7 @@
   "text_variables": {},
   "tuning_profiles": {
     "meta": {
-      "version": 0
+      "version": 1
     },
     "tuning_profiles_impedance_geometric": []
   }

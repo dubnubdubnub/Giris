@@ -1,92 +1,92 @@
 ** Drc report for TMR2615F_osu_pad.kicad_pcb **
-** Created on 2026-08-01T01:27:23 **
+** Created on 2026-08-01T02:02:06 **
 ** Report includes: Errors **
 
 ** Found 97 DRC violations **
-[hole_clearance]: Hole clearance violation (board setup constraints hole clearance 0.2540 mm; actual 0.2435 mm)
-    Rule: board setup constraints hole; error
-    @(90.9600 mm, 121.7000 mm): Track [+3.3VA] on F.Cu, length 0.9899 mm
-    @(90.2250 mm, 121.5250 mm): Via [GND] on F.Cu - B.Cu
-[hole_clearance]: Hole clearance violation (board setup constraints hole clearance 0.2540 mm; actual 0.2435 mm)
-    Rule: board setup constraints hole; error
-    @(129.0600 mm, 121.7000 mm): Track [+3.3VA] on F.Cu, length 0.9899 mm
-    @(128.3250 mm, 121.5250 mm): Via [GND] on F.Cu - B.Cu
-[hole_clearance]: Hole clearance violation (board setup constraints hole clearance 0.2540 mm; actual 0.2500 mm)
-    Rule: board setup constraints hole; error
-    @(119.8519 mm, 128.3000 mm): Track [/Key2/DOUT] on F.Cu, length 10.6769 mm
-    @(110.9500 mm, 127.7750 mm): Via [GND] on F.Cu - B.Cu
-[hole_clearance]: Hole clearance violation (board setup constraints hole clearance 0.2540 mm; actual 0.2435 mm)
-    Rule: board setup constraints hole; error
-    @(110.0100 mm, 121.7000 mm): Track [+3.3VA] on F.Cu, length 0.9899 mm
-    @(109.2750 mm, 121.5250 mm): Via [GND] on F.Cu - B.Cu
-[hole_clearance]: Hole clearance violation (board setup constraints hole clearance 0.2540 mm; actual 0.1878 mm)
-    Rule: board setup constraints hole; error
-    @(132.1139 mm, 118.5436 mm): Via [GND] on F.Cu - B.Cu
-    @(132.1500 mm, 120.9500 mm): NPTH pad of SW5
-[hole_clearance]: Hole clearance violation (board setup constraints hole clearance 0.2540 mm; actual 0.1878 mm)
-    Rule: board setup constraints hole; error
-    @(132.1139 mm, 118.5436 mm): Via [GND] on F.Cu - B.Cu
-    @(132.1500 mm, 120.9500 mm): NPTH pad of SW5
-[hole_clearance]: Hole clearance violation (board setup constraints hole clearance 0.2540 mm; actual 0.1878 mm)
-    Rule: board setup constraints hole; error
-    @(132.1139 mm, 118.5436 mm): Via [GND] on F.Cu - B.Cu
-    @(132.1500 mm, 120.9500 mm): NPTH pad of SW5
-[hole_clearance]: Hole clearance violation (board setup constraints hole clearance 0.2540 mm; actual 0.1878 mm)
-    Rule: board setup constraints hole; error
-    @(132.1139 mm, 118.5436 mm): Via [GND] on F.Cu - B.Cu
-    @(132.1500 mm, 120.9500 mm): NPTH pad of SW5
-[hole_clearance]: Hole clearance violation (board setup constraints hole clearance 0.2540 mm; actual 0.2422 mm)
-    Rule: board setup constraints hole; error
-    @(111.2428 mm, 97.9628 mm): Track (arc) [/OTGHS1_D+] on F.Cu, length 0.9245 mm
-    @(111.5500 mm, 98.5750 mm): Via [GND] on F.Cu - B.Cu
 [hole_clearance]: Hole clearance violation (board setup constraints hole clearance 0.2540 mm; actual 0.2350 mm)
     Rule: board setup constraints hole; error
     @(131.4600 mm, 103.3750 mm): Track [/TMUX_S4A] on F.Cu, length 5.6650 mm
     @(130.9250 mm, 107.4500 mm): Via [GND] on F.Cu - B.Cu
 [hole_clearance]: Hole clearance violation (board setup constraints hole clearance 0.2540 mm; actual 0.2500 mm)
     Rule: board setup constraints hole; error
-    @(124.6250 mm, 127.1915 mm): Track [/TMUX_S3B] on B.Cu, length 10.6230 mm
-    @(124.0750 mm, 117.5000 mm): Via [GND] on F.Cu - B.Cu
-[hole_clearance]: Hole clearance violation (board setup constraints hole clearance 0.2540 mm; actual 0.2435 mm)
-    Rule: board setup constraints hole; error
-    @(90.9600 mm, 140.7500 mm): Track [+3.3VA] on F.Cu, length 0.9899 mm
-    @(90.2250 mm, 140.5750 mm): Via [GND] on F.Cu - B.Cu
+    @(119.8519 mm, 128.3000 mm): Track [/Key2/DOUT] on F.Cu, length 10.6769 mm
+    @(110.9500 mm, 127.7750 mm): Via [GND] on F.Cu - B.Cu
 [hole_clearance]: Hole clearance violation (board setup constraints hole clearance 0.2540 mm; actual 0.2500 mm)
     Rule: board setup constraints hole; error
-    @(100.5550 mm, 128.5700 mm): Track [/SPI3_MOSI] on F.Cu, length 15.3950 mm
-    @(94.3000 mm, 129.0500 mm): Via [GND] on F.Cu - B.Cu
-[hole_clearance]: Hole clearance violation (board setup constraints hole clearance 0.2540 mm; actual 0.2367 mm)
-    Rule: board setup constraints hole; error
-    @(116.2161 mm, 106.5239 mm): Track [/RESET] on B.Cu, length 2.4694 mm
-    @(115.8300 mm, 107.5700 mm): Via [GND] on F.Cu - B.Cu
-[hole_clearance]: Hole clearance violation (board setup constraints hole clearance 0.2540 mm; actual 0.2435 mm)
-    Rule: board setup constraints hole; error
-    @(129.0600 mm, 140.7500 mm): Track [+3.3VA] on F.Cu, length 0.9899 mm
-    @(128.3250 mm, 140.5750 mm): Via [GND] on F.Cu - B.Cu
+    @(124.6250 mm, 127.1915 mm): Track [/TMUX_S3B] on B.Cu, length 10.6230 mm
+    @(124.0750 mm, 117.5000 mm): Via [GND] on F.Cu - B.Cu
 [hole_clearance]: Hole clearance violation (board setup constraints hole clearance 0.2540 mm; actual 0.2473 mm)
     Rule: board setup constraints hole; error
     @(86.2750 mm, 135.0750 mm): Track [/IO2] on F.Cu, length 1.5768 mm
     @(85.7750 mm, 134.9000 mm): Via [GND] on F.Cu - B.Cu
-[hole_clearance]: Hole clearance violation (board setup constraints hole clearance 0.2540 mm; actual 0.2435 mm)
+[hole_clearance]: Hole clearance violation (board setup constraints hole clearance 0.2540 mm; actual 0.2500 mm)
     Rule: board setup constraints hole; error
-    @(110.0100 mm, 140.7500 mm): Track [+3.3VA] on F.Cu, length 0.9899 mm
-    @(109.2750 mm, 140.5750 mm): Via [GND] on F.Cu - B.Cu
-[hole_clearance]: Hole clearance violation (board setup constraints hole clearance 0.2540 mm; actual 0.2441 mm)
-    Rule: board setup constraints hole; error
-    @(113.2601 mm, 96.5141 mm): Track [/OTGHS1_D+] on F.Cu, length 0.8501 mm
-    @(112.9300 mm, 96.0200 mm): Via [GND] on F.Cu - B.Cu
-[hole_clearance]: Hole clearance violation (board setup constraints hole clearance 0.2540 mm; actual 0.2421 mm)
-    Rule: board setup constraints hole; error
-    @(88.5900 mm, 101.7050 mm): Pad 2 [/SYS_SWDIO] of J9 on B.Cu
-    @(88.3400 mm, 100.9600 mm): Via [GND] on F.Cu - B.Cu
-[hole_clearance]: Hole clearance violation (board setup constraints hole clearance 0.2540 mm; actual 0.2460 mm)
-    Rule: board setup constraints hole; error
-    @(126.7625 mm, 104.7960 mm): Track [/TMUX_S1B] on B.Cu, length 1.2335 mm
-    @(127.3000 mm, 104.2500 mm): Via [GND] on F.Cu - B.Cu
+    @(100.5550 mm, 128.5700 mm): Track [/SPI3_MOSI] on F.Cu, length 15.3950 mm
+    @(94.3000 mm, 129.0500 mm): Via [GND] on F.Cu - B.Cu
 [hole_clearance]: Hole clearance violation (board setup constraints hole clearance 0.2540 mm; actual 0.2490 mm)
     Rule: board setup constraints hole; error
     @(91.1990 mm, 108.7710 mm): Track [/USART1_CK] on B.Cu, length 1.7825 mm
     @(91.4500 mm, 109.2500 mm): Via [GND] on F.Cu - B.Cu
+[hole_clearance]: Hole clearance violation (board setup constraints hole clearance 0.2540 mm; actual 0.2422 mm)
+    Rule: board setup constraints hole; error
+    @(111.2428 mm, 97.9628 mm): Track (arc) [/OTGHS1_D+] on F.Cu, length 0.9245 mm
+    @(111.5500 mm, 98.5750 mm): Via [GND] on F.Cu - B.Cu
+[hole_clearance]: Hole clearance violation (board setup constraints hole clearance 0.2540 mm; actual 0.2441 mm)
+    Rule: board setup constraints hole; error
+    @(113.2601 mm, 96.5141 mm): Track [/OTGHS1_D+] on F.Cu, length 0.8501 mm
+    @(112.9300 mm, 96.0200 mm): Via [GND] on F.Cu - B.Cu
+[hole_clearance]: Hole clearance violation (board setup constraints hole clearance 0.2540 mm; actual 0.2367 mm)
+    Rule: board setup constraints hole; error
+    @(116.2161 mm, 106.5239 mm): Track [/RESET] on B.Cu, length 2.4694 mm
+    @(115.8300 mm, 107.5700 mm): Via [GND] on F.Cu - B.Cu
+[hole_clearance]: Hole clearance violation (board setup constraints hole clearance 0.2540 mm; actual 0.2460 mm)
+    Rule: board setup constraints hole; error
+    @(126.7625 mm, 104.7960 mm): Track [/TMUX_S1B] on B.Cu, length 1.2335 mm
+    @(127.3000 mm, 104.2500 mm): Via [GND] on F.Cu - B.Cu
+[hole_clearance]: Hole clearance violation (board setup constraints hole clearance 0.2540 mm; actual 0.2435 mm)
+    Rule: board setup constraints hole; error
+    @(129.0600 mm, 140.7500 mm): Track [+3.3VA] on F.Cu, length 0.9899 mm
+    @(128.3250 mm, 140.5750 mm): Via [GND] on F.Cu - B.Cu
+[hole_clearance]: Hole clearance violation (board setup constraints hole clearance 0.2540 mm; actual 0.2435 mm)
+    Rule: board setup constraints hole; error
+    @(90.9600 mm, 140.7500 mm): Track [+3.3VA] on F.Cu, length 0.9899 mm
+    @(90.2250 mm, 140.5750 mm): Via [GND] on F.Cu - B.Cu
+[hole_clearance]: Hole clearance violation (board setup constraints hole clearance 0.2540 mm; actual 0.2435 mm)
+    Rule: board setup constraints hole; error
+    @(110.0100 mm, 121.7000 mm): Track [+3.3VA] on F.Cu, length 0.9899 mm
+    @(109.2750 mm, 121.5250 mm): Via [GND] on F.Cu - B.Cu
+[hole_clearance]: Hole clearance violation (board setup constraints hole clearance 0.2540 mm; actual 0.2435 mm)
+    Rule: board setup constraints hole; error
+    @(90.9600 mm, 121.7000 mm): Track [+3.3VA] on F.Cu, length 0.9899 mm
+    @(90.2250 mm, 121.5250 mm): Via [GND] on F.Cu - B.Cu
+[hole_clearance]: Hole clearance violation (board setup constraints hole clearance 0.2540 mm; actual 0.2435 mm)
+    Rule: board setup constraints hole; error
+    @(110.0100 mm, 140.7500 mm): Track [+3.3VA] on F.Cu, length 0.9899 mm
+    @(109.2750 mm, 140.5750 mm): Via [GND] on F.Cu - B.Cu
+[hole_clearance]: Hole clearance violation (board setup constraints hole clearance 0.2540 mm; actual 0.2435 mm)
+    Rule: board setup constraints hole; error
+    @(129.0600 mm, 121.7000 mm): Track [+3.3VA] on F.Cu, length 0.9899 mm
+    @(128.3250 mm, 121.5250 mm): Via [GND] on F.Cu - B.Cu
+[hole_clearance]: Hole clearance violation (board setup constraints hole clearance 0.2540 mm; actual 0.1878 mm)
+    Rule: board setup constraints hole; error
+    @(132.1139 mm, 118.5436 mm): Via [GND] on F.Cu - B.Cu
+    @(132.1500 mm, 120.9500 mm): NPTH pad of SW5
+[hole_clearance]: Hole clearance violation (board setup constraints hole clearance 0.2540 mm; actual 0.1878 mm)
+    Rule: board setup constraints hole; error
+    @(132.1139 mm, 118.5436 mm): Via [GND] on F.Cu - B.Cu
+    @(132.1500 mm, 120.9500 mm): NPTH pad of SW5
+[hole_clearance]: Hole clearance violation (board setup constraints hole clearance 0.2540 mm; actual 0.1878 mm)
+    Rule: board setup constraints hole; error
+    @(132.1139 mm, 118.5436 mm): Via [GND] on F.Cu - B.Cu
+    @(132.1500 mm, 120.9500 mm): NPTH pad of SW5
+[hole_clearance]: Hole clearance violation (board setup constraints hole clearance 0.2540 mm; actual 0.1878 mm)
+    Rule: board setup constraints hole; error
+    @(132.1139 mm, 118.5436 mm): Via [GND] on F.Cu - B.Cu
+    @(132.1500 mm, 120.9500 mm): NPTH pad of SW5
+[hole_clearance]: Hole clearance violation (board setup constraints hole clearance 0.2540 mm; actual 0.2421 mm)
+    Rule: board setup constraints hole; error
+    @(88.5900 mm, 101.7050 mm): Pad 2 [/SYS_SWDIO] of J9 on B.Cu
+    @(88.3400 mm, 100.9600 mm): Via [GND] on F.Cu - B.Cu
 [hole_clearance]: Hole clearance violation (board setup constraints hole clearance 0.2540 mm; actual 0.2421 mm)
     Rule: board setup constraints hole; error
     @(88.5900 mm, 101.7050 mm): Pad 2 [/SYS_SWDIO] of J9 on B.Cu
@@ -219,6 +219,10 @@
     Rule: board setup constraints edge; error
     @(130.4001 mm, 143.9298 mm): Polygon of U24 on Edge.Cuts
     @(129.4501 mm, 145.8050 mm): Pad 1 [GND] of U24 on F.Cu
+[copper_edge_clearance]: Board edge clearance violation (board setup constraints edge clearance 0.2000 mm; actual 0.0997 mm)
+    Rule: board setup constraints edge; error
+    @(130.4001 mm, 143.9298 mm): Polygon of U24 on Edge.Cuts
+    @(129.4501 mm, 144.3550 mm): Pad 2 [/Key4/DOUT] of U24 on F.Cu
 [copper_edge_clearance]: Board edge clearance violation (board setup constraints edge clearance 0.2000 mm; actual 0.1033 mm)
     Rule: board setup constraints edge; error
     @(130.4001 mm, 143.9298 mm): Polygon of U24 on Edge.Cuts
@@ -227,30 +231,30 @@
     Rule: board setup constraints edge; error
     @(130.4001 mm, 143.9298 mm): Polygon of U24 on Edge.Cuts
     @(134.8499 mm, 145.8050 mm): Pad 4 [/Key5/DOUT] of U24 on F.Cu
-[copper_edge_clearance]: Board edge clearance violation (board setup constraints edge clearance 0.2000 mm; actual 0.0997 mm)
-    Rule: board setup constraints edge; error
-    @(130.4001 mm, 143.9298 mm): Polygon of U24 on Edge.Cuts
-    @(129.4501 mm, 144.3550 mm): Pad 2 [/Key4/DOUT] of U24 on F.Cu
-[copper_edge_clearance]: Board edge clearance violation (board setup constraints edge clearance 0.2000 mm; actual 0.0992 mm)
-    Rule: board setup constraints edge; error
-    @(90.3742 mm, 93.8001 mm): Polygon of U12 on Edge.Cuts
-    @(88.4989 mm, 92.8501 mm): Pad 1 [GND] of U12 on F.Cu
 [copper_edge_clearance]: Board edge clearance violation (board setup constraints edge clearance 0.2000 mm; actual 0.1031 mm)
     Rule: board setup constraints edge; error
     @(90.3742 mm, 93.8001 mm): Polygon of U12 on Edge.Cuts
     @(89.9490 mm, 92.8501 mm): Pad 2 [Net-(U12-DIN)] of U12 on F.Cu
-[copper_edge_clearance]: Board edge clearance violation (board setup constraints edge clearance 0.2000 mm; actual 0.1001 mm)
-    Rule: board setup constraints edge; error
-    @(90.3742 mm, 93.8001 mm): Polygon of U12 on Edge.Cuts
-    @(88.4989 mm, 98.2499 mm): Pad 4 [/DIN] of U12 on F.Cu
 [copper_edge_clearance]: Board edge clearance violation (board setup constraints edge clearance 0.2000 mm; actual 0.1033 mm)
     Rule: board setup constraints edge; error
     @(90.3742 mm, 93.8001 mm): Polygon of U12 on Edge.Cuts
     @(89.9490 mm, 98.2499 mm): Pad 3 [Net-(D1-K)] of U12 on F.Cu
+[copper_edge_clearance]: Board edge clearance violation (board setup constraints edge clearance 0.2000 mm; actual 0.1001 mm)
+    Rule: board setup constraints edge; error
+    @(90.3742 mm, 93.8001 mm): Polygon of U12 on Edge.Cuts
+    @(88.4989 mm, 98.2499 mm): Pad 4 [/DIN] of U12 on F.Cu
+[copper_edge_clearance]: Board edge clearance violation (board setup constraints edge clearance 0.2000 mm; actual 0.0992 mm)
+    Rule: board setup constraints edge; error
+    @(90.3742 mm, 93.8001 mm): Polygon of U12 on Edge.Cuts
+    @(88.4989 mm, 92.8501 mm): Pad 1 [GND] of U12 on F.Cu
 [copper_edge_clearance]: Board edge clearance violation (board setup constraints edge clearance 0.2000 mm; actual 0.0992 mm)
     Rule: board setup constraints edge; error
     @(92.3001 mm, 124.8798 mm): Polygon of U14 on Edge.Cuts
     @(91.3501 mm, 126.7550 mm): Pad 1 [GND] of U14 on F.Cu
+[copper_edge_clearance]: Board edge clearance violation (board setup constraints edge clearance 0.2000 mm; actual 0.1001 mm)
+    Rule: board setup constraints edge; error
+    @(92.3001 mm, 124.8798 mm): Polygon of U14 on Edge.Cuts
+    @(96.7499 mm, 125.3050 mm): Pad 3 [+5V] of U14 on F.Cu
 [copper_edge_clearance]: Board edge clearance violation (board setup constraints edge clearance 0.2000 mm; actual 0.0997 mm)
     Rule: board setup constraints edge; error
     @(92.3001 mm, 124.8798 mm): Polygon of U14 on Edge.Cuts
@@ -259,34 +263,22 @@
     Rule: board setup constraints edge; error
     @(92.3001 mm, 124.8798 mm): Polygon of U14 on Edge.Cuts
     @(96.7499 mm, 126.7550 mm): Pad 4 [/Key/DOUT] of U14 on F.Cu
-[copper_edge_clearance]: Board edge clearance violation (board setup constraints edge clearance 0.2000 mm; actual 0.1001 mm)
-    Rule: board setup constraints edge; error
-    @(92.3001 mm, 124.8798 mm): Polygon of U14 on Edge.Cuts
-    @(96.7499 mm, 125.3050 mm): Pad 3 [+5V] of U14 on F.Cu
-[copper_edge_clearance]: Board edge clearance violation (board setup constraints edge clearance 0.2000 mm; actual 0.1491 mm)
-    Rule: board setup constraints edge; error
-    @(130.4001 mm, 124.8798 mm): Polygon of U18 on Edge.Cuts
-    @(129.4501 mm, 125.3050 mm): Pad 2 [/Key1/DOUT] of U18 on F.Cu
-[copper_edge_clearance]: Board edge clearance violation (board setup constraints edge clearance 0.2000 mm; actual 0.1492 mm)
-    Rule: board setup constraints edge; error
-    @(130.4001 mm, 124.8798 mm): Polygon of U18 on Edge.Cuts
-    @(134.8499 mm, 126.7550 mm): Pad 4 [/Key2/DOUT] of U18 on F.Cu
 [copper_edge_clearance]: Board edge clearance violation (board setup constraints edge clearance 0.2000 mm; actual 0.0992 mm)
     Rule: board setup constraints edge; error
     @(130.4001 mm, 124.8798 mm): Polygon of U18 on Edge.Cuts
     @(129.4501 mm, 126.7550 mm): Pad 1 [GND] of U18 on F.Cu
+[copper_edge_clearance]: Board edge clearance violation (board setup constraints edge clearance 0.2000 mm; actual 0.1491 mm)
+    Rule: board setup constraints edge; error
+    @(130.4001 mm, 124.8798 mm): Polygon of U18 on Edge.Cuts
+    @(129.4501 mm, 125.3050 mm): Pad 2 [/Key1/DOUT] of U18 on F.Cu
 [copper_edge_clearance]: Board edge clearance violation (board setup constraints edge clearance 0.2000 mm; actual 0.1493 mm)
     Rule: board setup constraints edge; error
     @(130.4001 mm, 124.8798 mm): Polygon of U18 on Edge.Cuts
     @(134.8499 mm, 125.3050 mm): Pad 3 [+5V] of U18 on F.Cu
-[copper_edge_clearance]: Board edge clearance violation (board setup constraints edge clearance 0.2000 mm; actual 0.1001 mm)
+[copper_edge_clearance]: Board edge clearance violation (board setup constraints edge clearance 0.2000 mm; actual 0.1492 mm)
     Rule: board setup constraints edge; error
-    @(111.3501 mm, 124.8798 mm): Polygon of U16 on Edge.Cuts
-    @(115.7999 mm, 126.7550 mm): Pad 4 [/Key1/DOUT] of U16 on F.Cu
-[copper_edge_clearance]: Board edge clearance violation (board setup constraints edge clearance 0.2000 mm; actual 0.1493 mm)
-    Rule: board setup constraints edge; error
-    @(111.3501 mm, 124.8798 mm): Polygon of U16 on Edge.Cuts
-    @(115.7999 mm, 125.3050 mm): Pad 3 [+5V] of U16 on F.Cu
+    @(130.4001 mm, 124.8798 mm): Polygon of U18 on Edge.Cuts
+    @(134.8499 mm, 126.7550 mm): Pad 4 [/Key2/DOUT] of U18 on F.Cu
 [copper_edge_clearance]: Board edge clearance violation (board setup constraints edge clearance 0.2000 mm; actual 0.1483 mm)
     Rule: board setup constraints edge; error
     @(111.3501 mm, 124.8798 mm): Polygon of U16 on Edge.Cuts
@@ -295,14 +287,26 @@
     Rule: board setup constraints edge; error
     @(111.3501 mm, 124.8798 mm): Polygon of U16 on Edge.Cuts
     @(110.4001 mm, 125.3050 mm): Pad 2 [/Key/DOUT] of U16 on F.Cu
-[copper_edge_clearance]: Board edge clearance violation (board setup constraints edge clearance 0.2000 mm; actual 0.0000 mm)
+[copper_edge_clearance]: Board edge clearance violation (board setup constraints edge clearance 0.2000 mm; actual 0.1001 mm)
     Rule: board setup constraints edge; error
-    @(125.4949 mm, 147.0500 mm): Segment on Edge.Cuts
-    @(125.4501 mm, 146.2000 mm): Pad 5 [GND] of J4 on F.Cu
+    @(111.3501 mm, 124.8798 mm): Polygon of U16 on Edge.Cuts
+    @(115.7999 mm, 126.7550 mm): Pad 4 [/Key1/DOUT] of U16 on F.Cu
+[copper_edge_clearance]: Board edge clearance violation (board setup constraints edge clearance 0.2000 mm; actual 0.1493 mm)
+    Rule: board setup constraints edge; error
+    @(111.3501 mm, 124.8798 mm): Polygon of U16 on Edge.Cuts
+    @(115.7999 mm, 125.3050 mm): Pad 3 [+5V] of U16 on F.Cu
 [copper_edge_clearance]: Board edge clearance violation (board setup constraints edge clearance 0.2000 mm; actual 0.0000 mm)
     Rule: board setup constraints edge; error
     @(119.8052 mm, 149.0501 mm): Arc on Edge.Cuts
     @(119.8499 mm, 146.2000 mm): Pad 6 [GND] of J4 on F.Cu
+[copper_edge_clearance]: Board edge clearance violation (board setup constraints edge clearance 0.2000 mm; actual 0.0000 mm)
+    Rule: board setup constraints edge; error
+    @(125.4949 mm, 147.0500 mm): Segment on Edge.Cuts
+    @(125.4501 mm, 146.2000 mm): Pad 5 [GND] of J4 on F.Cu
+[copper_edge_clearance]: Board edge clearance violation (board setup constraints edge clearance 0.2000 mm; actual 0.1022 mm)
+    Rule: board setup constraints edge; error
+    @(111.3501 mm, 143.9298 mm): Polygon of U22 on Edge.Cuts
+    @(110.4001 mm, 145.8050 mm): Pad 1 [GND] of U22 on F.Cu
 [copper_edge_clearance]: Board edge clearance violation (board setup constraints edge clearance 0.2000 mm; actual 0.1491 mm)
     Rule: board setup constraints edge; error
     @(111.3501 mm, 143.9298 mm): Polygon of U22 on Edge.Cuts
@@ -310,27 +314,23 @@
 [copper_edge_clearance]: Board edge clearance violation (board setup constraints edge clearance 0.2000 mm; actual 0.1001 mm)
     Rule: board setup constraints edge; error
     @(111.3501 mm, 143.9298 mm): Polygon of U22 on Edge.Cuts
-    @(115.7999 mm, 145.8050 mm): Pad 4 [/Key4/DOUT] of U22 on F.Cu
+    @(115.7999 mm, 144.3550 mm): Pad 3 [+5V] of U22 on F.Cu
 [copper_edge_clearance]: Board edge clearance violation (board setup constraints edge clearance 0.2000 mm; actual 0.1001 mm)
     Rule: board setup constraints edge; error
     @(111.3501 mm, 143.9298 mm): Polygon of U22 on Edge.Cuts
-    @(115.7999 mm, 144.3550 mm): Pad 3 [+5V] of U22 on F.Cu
-[copper_edge_clearance]: Board edge clearance violation (board setup constraints edge clearance 0.2000 mm; actual 0.1022 mm)
-    Rule: board setup constraints edge; error
-    @(111.3501 mm, 143.9298 mm): Polygon of U22 on Edge.Cuts
-    @(110.4001 mm, 145.8050 mm): Pad 1 [GND] of U22 on F.Cu
+    @(115.7999 mm, 145.8050 mm): Pad 4 [/Key4/DOUT] of U22 on F.Cu
 [copper_edge_clearance]: Board edge clearance violation (board setup constraints edge clearance 0.2000 mm; actual 0.1022 mm)
     Rule: board setup constraints edge; error
     @(92.3001 mm, 143.9298 mm): Polygon of U20 on Edge.Cuts
     @(91.3501 mm, 145.8050 mm): Pad 1 [GND] of U20 on F.Cu
-[copper_edge_clearance]: Board edge clearance violation (board setup constraints edge clearance 0.2000 mm; actual 0.0997 mm)
-    Rule: board setup constraints edge; error
-    @(92.3001 mm, 143.9298 mm): Polygon of U20 on Edge.Cuts
-    @(91.3501 mm, 144.3550 mm): Pad 2 [/Key2/DOUT] of U20 on F.Cu
 [copper_edge_clearance]: Board edge clearance violation (board setup constraints edge clearance 0.2000 mm; actual 0.1033 mm)
     Rule: board setup constraints edge; error
     @(92.3001 mm, 143.9298 mm): Polygon of U20 on Edge.Cuts
     @(96.7499 mm, 144.3550 mm): Pad 3 [+5V] of U20 on F.Cu
+[copper_edge_clearance]: Board edge clearance violation (board setup constraints edge clearance 0.2000 mm; actual 0.0997 mm)
+    Rule: board setup constraints edge; error
+    @(92.3001 mm, 143.9298 mm): Polygon of U20 on Edge.Cuts
+    @(91.3501 mm, 144.3550 mm): Pad 2 [/Key2/DOUT] of U20 on F.Cu
 [copper_edge_clearance]: Board edge clearance violation (board setup constraints edge clearance 0.2000 mm; actual 0.1001 mm)
     Rule: board setup constraints edge; error
     @(92.3001 mm, 143.9298 mm): Polygon of U20 on Edge.Cuts
