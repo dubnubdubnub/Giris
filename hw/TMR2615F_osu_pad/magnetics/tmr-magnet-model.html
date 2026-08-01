@@ -1,0 +1,541 @@
+<title>osu!pad magnet–sensor model</title>
+<style>
+  :root {
+    color-scheme: light;
+    --page: #f9f9f7; --surface: #fcfcfb;
+    --ink: #0b0b0b; --ink-2: #52514e; --muted: #898781;
+    --grid: #e1e0d9; --axis: #c3c2b7; --ring: rgba(11,11,11,0.10);
+    --s1: #2a78d6; --s2: #eb6834; --s3: #1baf7a; --s4: #eda100; --s5: #e87ba4;
+    --s6: #008300; --s7: #4a3aa7; --s8: #e34948;
+    --critical: #d03b3b; --good: #0ca30c; --good-text: #006300;
+    --pcb: #e4e8e0; --pcb-edge: #aab4a4; --copper: #b87333;
+    --housing: rgba(11,11,11,0.05); --magnet: #4a4a48;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:where(:not([data-theme="light"])) {
+      color-scheme: dark;
+      --page: #0d0d0d; --surface: #1a1a19;
+      --ink: #ffffff; --ink-2: #c3c2b7; --muted: #898781;
+      --grid: #2c2c2a; --axis: #383835; --ring: rgba(255,255,255,0.10);
+      --s1: #3987e5; --s2: #d95926; --s3: #199e70; --s4: #c98500; --s5: #d55181;
+      --s6: #008300; --s7: #9085e9; --s8: #e66767;
+      --critical: #d03b3b; --good: #0ca30c; --good-text: #0ca30c;
+      --pcb: #232823; --pcb-edge: #46503f; --copper: #c8874a;
+      --housing: rgba(255,255,255,0.06); --magnet: #b9b9b4;
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --page: #0d0d0d; --surface: #1a1a19;
+    --ink: #ffffff; --ink-2: #c3c2b7; --muted: #898781;
+    --grid: #2c2c2a; --axis: #383835; --ring: rgba(255,255,255,0.10);
+    --s1: #3987e5; --s2: #d95926; --s3: #199e70; --s4: #c98500; --s5: #d55181;
+    --s6: #008300; --s7: #9085e9; --s8: #e66767;
+    --critical: #d03b3b; --good: #0ca30c; --good-text: #0ca30c;
+    --pcb: #232823; --pcb-edge: #46503f; --copper: #c8874a;
+    --housing: rgba(255,255,255,0.06); --magnet: #b9b9b4;
+  }
+  :root[data-theme="light"] {
+    color-scheme: light;
+    --page: #f9f9f7; --surface: #fcfcfb;
+    --ink: #0b0b0b; --ink-2: #52514e; --muted: #898781;
+    --grid: #e1e0d9; --axis: #c3c2b7; --ring: rgba(11,11,11,0.10);
+    --s1: #2a78d6; --s2: #eb6834; --s3: #1baf7a; --s4: #eda100; --s5: #e87ba4;
+    --s6: #008300; --s7: #4a3aa7; --s8: #e34948;
+    --critical: #d03b3b; --good: #0ca30c; --good-text: #006300;
+    --pcb: #e4e8e0; --pcb-edge: #aab4a4; --copper: #b87333;
+    --housing: rgba(11,11,11,0.05); --magnet: #4a4a48;
+  }
+
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--page); color: var(--ink);
+         font: 15px/1.55 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  .wrap { max-width: 1100px; margin: 0 auto; padding: 32px 20px 64px; display: flex; flex-direction: column; gap: 20px; }
+
+  header h1 { font-size: 22px; font-weight: 650; margin: 0 0 4px; text-wrap: balance; }
+  header p { margin: 0; color: var(--ink-2); max-width: 72ch; }
+  .eyebrow { font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+
+  .panel { background: var(--surface); border: 1px solid var(--ring); border-radius: 8px; padding: 18px 20px; }
+  .panel h2 { font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-2); margin: 0 0 12px; font-weight: 600; }
+
+  .controls { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px 18px; }
+  .ctl label { display: block; font-size: 12px; color: var(--ink-2); margin-bottom: 2px; }
+  .ctl .val { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 12px; color: var(--ink); }
+  .ctl input[type=range] { width: 100%; accent-color: var(--s1); }
+  .ctl select { width: 100%; font: inherit; padding: 4px 6px; border-radius: 5px;
+                border: 1px solid var(--axis); background: var(--surface); color: var(--ink); }
+  .ctl input:focus-visible, .ctl select:focus-visible, button:focus-visible { outline: 2px solid var(--s1); outline-offset: 2px; }
+  button.reset { font: 13px system-ui, sans-serif; color: var(--ink-2); background: none;
+                 border: 1px solid var(--axis); border-radius: 5px; padding: 4px 12px; cursor: pointer; align-self: end; }
+  button.reset:hover { color: var(--ink); border-color: var(--muted); }
+
+  .xsec-grid { display: grid; grid-template-columns: minmax(300px, 460px) 1fr; gap: 20px; align-items: start; }
+  @media (max-width: 760px) { .xsec-grid { grid-template-columns: 1fr; } }
+  .readouts { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; }
+  .tile { border: 1px solid var(--ring); border-radius: 6px; padding: 10px 12px; }
+  .tile .k { font-size: 11px; letter-spacing: 0.05em; text-transform: uppercase; color: var(--muted); }
+  .tile .v { font-size: 21px; font-weight: 620; margin-top: 2px; }
+  .tile .u { font-size: 12px; color: var(--ink-2); font-weight: 400; }
+  .tile.alert .v { color: var(--critical); }
+
+  .charts { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  @media (max-width: 900px) { .charts { grid-template-columns: 1fr; } }
+  .chart-box { position: relative; }
+  .chart-box svg { display: block; width: 100%; height: auto; }
+  .legend { display: flex; flex-wrap: wrap; gap: 6px 14px; margin: 8px 0 2px; font-size: 12.5px; color: var(--ink-2); }
+  .legend .chip { display: inline-flex; align-items: center; gap: 6px; }
+  .legend .sw { width: 14px; height: 3px; border-radius: 2px; }
+  .tooltip { position: absolute; pointer-events: none; background: var(--surface); border: 1px solid var(--ring);
+             border-radius: 6px; padding: 8px 10px; font-size: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.12);
+             display: none; z-index: 5; min-width: 175px; }
+  .tooltip table { border-collapse: collapse; width: 100%; }
+  .tooltip td { padding: 1px 0; font-variant-numeric: tabular-nums; }
+  .tooltip td:last-child { text-align: right; font-family: ui-monospace, Menlo, monospace; }
+
+  .results { overflow-x: auto; }
+  table.res { border-collapse: collapse; width: 100%; font-size: 13.5px; }
+  table.res th { text-align: right; font-size: 11.5px; letter-spacing: 0.04em; text-transform: uppercase;
+                 color: var(--muted); font-weight: 600; padding: 6px 10px; border-bottom: 1px solid var(--axis); }
+  table.res th:first-child, table.res td:first-child { text-align: left; padding-left: 4px; }
+  table.res td { padding: 7px 10px; text-align: right; border-bottom: 1px solid var(--grid);
+                 font-variant-numeric: tabular-nums; font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 12.5px; }
+  table.res td:first-child { font-family: inherit; font-size: 13.5px; }
+  .swatch { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 7px; vertical-align: baseline; }
+  .verdict { font-family: inherit; font-size: 12.5px; white-space: nowrap; }
+  .verdict.ok::before { content: "✓ "; color: var(--good); }
+  .verdict.clip { color: var(--critical); }
+  .verdict.clip::before { content: "▲ "; }
+
+  .method { color: var(--ink-2); font-size: 14px; max-width: 78ch; }
+  .method ul { margin: 8px 0 0; padding-left: 20px; }
+  .method li { margin-bottom: 6px; }
+  .method code { font-family: ui-monospace, Menlo, monospace; font-size: 12.5px; background: var(--housing);
+                 padding: 1px 5px; border-radius: 4px; }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">TMR2615F osu!pad · magnetic circuit check</div>
+    <h1>Switch magnet → TMR sensor: live field model</h1>
+    <p>Every curve below is computed in this page from an axially-magnetized-cylinder field model
+       (equivalent-solenoid, elliptic integrals). Switch magnets are calibrated against
+       manufacturer-published flux specs. Drag anything; the model recomputes.</p>
+  </header>
+
+  <section class="panel">
+    <h2>Parameters</h2>
+    <div class="controls">
+      <div class="ctl">
+        <label for="preset">Switch (edit selected)</label>
+        <select id="preset"></select>
+      </div>
+      <div class="ctl"><label>Press depth <span class="val" id="v-depth"></span></label>
+        <input type="range" id="depth" min="0" max="4.1" step="0.01" value="0"></div>
+      <div class="ctl"><label>Sensor offset r <span class="val" id="v-roff"></span></label>
+        <input type="range" id="roff" min="2.0" max="5.0" step="0.01" value="3.09"></div>
+      <div class="ctl"><label>PCB thickness <span class="val" id="v-pcb"></span></label>
+        <input type="range" id="pcb" min="0.8" max="2.0" step="0.01" value="1.62"></div>
+      <div class="ctl"><label>Magnet Ø <span class="val" id="v-dia"></span></label>
+        <input type="range" id="dia" min="2.0" max="4.0" step="0.05" value="3.4"></div>
+      <div class="ctl"><label>Magnet length <span class="val" id="v-len"></span></label>
+        <input type="range" id="len" min="0.8" max="2.6" step="0.05" value="2.0"></div>
+      <div class="ctl"><label>Remanence B<sub>r</sub> <span class="val" id="v-brem"></span></label>
+        <input type="range" id="brem" min="1.10" max="1.50" step="0.01" value="1.43"></div>
+      <div class="ctl"><label>Sensitivity code <span class="val" id="v-sen"></span></label>
+        <input type="range" id="sen" min="0.5" max="7" step="0.05" value="1.5"></div>
+      <button class="reset" id="reset">Reset</button>
+    </div>
+  </section>
+
+  <section class="panel">
+    <h2>Cross-section (to scale) — switch above, sensor under the board</h2>
+    <div class="xsec-grid">
+      <div id="xsec"></div>
+      <div>
+        <div class="readouts">
+          <div class="tile"><div class="k">Magnet → die gap</div><div class="v" id="r-gap">–</div></div>
+          <div class="tile"><div class="k">|Bx| at sensor</div><div class="v" id="r-bx">–</div></div>
+          <div class="tile" id="t-vout"><div class="k">V<sub>OUT</sub> @ 3.3 V</div><div class="v" id="r-vout">–</div></div>
+          <div class="tile"><div class="k">Rail (±45 % V<sub>DD</sub>)</div><div class="v" id="r-rail">–</div></div>
+          <div class="tile"><div class="k">Position resolution</div><div class="v" id="r-res">–</div></div>
+          <div class="tile"><div class="k">Rest clearance h<sub>b</sub></div><div class="v" id="r-hb">–</div></div>
+        </div>
+        <p style="font-size:13px;color:var(--ink-2);margin:12px 0 0;max-width:52ch">
+          The die sits 0.3 mm below the board's underside (DFN3L pads-down, sensing surface
+          0.2 mm under the package top). For switches with a published engineering drawing
+          (Gateron Jade family, Apollo), magnet size and rest height are <em>measured</em> off the
+          5:2 drawing and h<sub>b</sub> is fixed; for the rest, h<sub>b</sub> is auto-fitted so the
+          model reproduces the published bottom-out flux at the vendor's own sensing plane
+          (their quoted reference PCB + die depth).</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel">
+    <h2>Field &amp; output vs press depth</h2>
+    <div class="legend" id="legend"></div>
+    <div class="charts">
+      <div class="chart-box" id="chartA"></div>
+      <div class="chart-box" id="chartB"></div>
+    </div>
+  </section>
+
+  <section class="panel results">
+    <h2>Results table (live)</h2>
+    <table class="res" id="resTable"></table>
+    <p style="font-size:13px;color:var(--ink-2);margin:10px 0 0">
+      “Rest-flux check” compares the model's on-axis flux at key-up against the vendor's published
+      rest figure — a validation of the fitted magnet, not an input.</p>
+  </section>
+
+  <section class="panel method">
+    <h2>Method &amp; assumptions</h2>
+    <ul>
+      <li><strong>Field model</strong>: axially magnetized cylinder as an equivalent solenoid — a stack of
+        current loops, each evaluated off-axis via complete elliptic integrals K, E (AGM). Verified against
+        the analytic on-axis face-field of a Ø10×10 mm, B<sub>r</sub> = 1.3 T magnet: model 0.5814 T vs analytic 0.5814 T.</li>
+      <li><strong>Board geometry</strong> (measured from <code>TMR2615F_osu_pad.kicad_pcb</code>): sensor 3.09 mm radially
+        offset from switch center; all assembly on the F side, switch inserted from the B side — so the magnet sees
+        the die through the 1.62 mm board. Sensing axis is in-plane, pointed through the switch axis (reads the radial field component).</li>
+      <li><strong>Magnet data</strong>: Gateron's dimensioned 5:2 engineering drawings (hw/refs/switches/) were rendered
+        at 600 dpi and pixel-measured (measure_switch.py), calibrated against two dimensioned base widths per view —
+        every measured Gateron switch uses the same Ø2.77 × 3.41 mm cylinder; families differ in carry height and grade
+        (implied Br 1.16–1.66 T). Remanence is solved from the published bottom-out flux; the published initial flux
+        (quoted at 0.3 mm pressed) is a held-out check, matching within 2–14 %. Switches without drawings
+        (KS-20/Lekker, KS-37B, TTC, Kailh, Akko) assume the measured magnet with Br 1.3 T and a fitted carry height —
+        treat those as ±25 %. Everglide Sticky Rice V2 (120 → 800 Gs, 3.5 mm) models like a shorter-travel KS-37B;
+        see fit_switches.py for the full 12-row table.</li>
+      <li><strong>Sensor</strong>: TMR2615F-AAC-1.500-500 — ±500 Gs magnetic linear range, 1.5 mV/V/Gs, mid-rail offset;
+        usable output 5–95 % V<sub>DD</sub> ⇒ electrical rails at ±300 Gs (ratiometric, VDD-independent).
+        Output direction depends on magnet polarity: every modern Gateron drawing states "Magnet N-pole is facing
+        down" (despite community lore calling Gateron S-down); the bipolar TMR2615F handles either, but don't mix
+        polarities on one board unless firmware calibrates sign per key.</li>
+      <li><strong>Spec provenance</strong>: Wooting publishes no flux figures — Lekker (*) is modeled as its
+        manufacturer-sibling Gateron KS-20 (community-assumed, not vendor-confirmed). Akko figures are their
+        1.6 mm-PCB spec. Kailh Flame/Mistral ("Source" series) quote a 2000 Gs "trigger flux" at an unknown
+        measurement point — unreachable through 1.9 mm by any plausible stem magnet, so they're excluded here;
+        bench-test before using them. Raesha (DrunkDeer) and Geon Raptor HE publish no flux at all.
+        KS-37B/Fox, KS-20, TTC and Kailh Magnetic God never state polarity ("n/p").</li>
+      <li><strong>What to verify on hardware</strong>: log the ADC across full travel with one real switch — one bench
+        measurement collapses all magnet-fit uncertainty.</li>
+    </ul>
+  </section>
+</div>
+
+<script>
+"use strict";
+/* ---------- physics (port of validated Python model) ---------- */
+const MU0 = 4e-7 * Math.PI;
+
+function ellipKE(m) {                       // complete elliptic integrals, parameter m = k^2
+  let a = 1, b = Math.sqrt(1 - m), c = Math.sqrt(m), s = 0.5 * m, n = 0;
+  while (Math.abs(c) > 1e-15 && n < 60) {
+    const an = (a + b) / 2, bn = Math.sqrt(a * b);
+    c = (a - b) / 2; a = an; b = bn; n++;
+    s += Math.pow(2, n - 1) * c * c;
+  }
+  const K = Math.PI / (2 * a);
+  return [K, K * (1 - s)];
+}
+function loopField(a, I, r, z) {            // circular loop radius a, current I, loop plane z=0
+  if (r < 1e-12) return [0, MU0 * I * a * a / (2 * Math.pow(a * a + z * z, 1.5))];
+  const al2 = a*a + r*r + z*z - 2*a*r, be2 = a*a + r*r + z*z + 2*a*r, be = Math.sqrt(be2);
+  const [K, E] = ellipKE(1 - al2 / be2);
+  const C = MU0 * I / Math.PI;
+  const br = C * z / (2 * al2 * be * r) * ((a*a + r*r + z*z) * E - al2 * K);
+  const bz = C / (2 * al2 * be) * ((a*a - r*r - z*z) * E + al2 * K);
+  return [br, bz];
+}
+function cylField(dia, L, Brem, z0, r, z, n = 80) {  // bottom face at z0; returns [Br,Bz] tesla
+  const a = dia / 2e3, Lm = L / 1e3, dI = (Brem / MU0) * Lm / n;
+  let br = 0, bz = 0;
+  for (let i = 0; i < n; i++) {
+    const zl = z0 / 1e3 + (i + 0.5) * Lm / n;
+    const f = loopField(a, dI, r / 1e3, z / 1e3 - zl);
+    br += f[0]; bz += f[1];
+  }
+  return [br, bz];
+}
+const G = 1e4;                              // tesla -> gauss
+const onAxisGs = (m, gap) => cylField(m.dia, m.len, m.brem, gap, 1e-9, 0)[1] * G;
+const radialGs = (m, gap, r) => Math.abs(cylField(m.dia, m.len, m.brem, gap, r, 0)[0]) * G;
+
+/* ---------- presets ----------
+   meas: magnet size + rest height measured off the vendor's 5:2 engineering drawing
+   (hw/refs/switches/, measure_switch.py); Br solved from published bottom-out flux.
+   fit: no drawing published; magnet = the measured Gateron cylinder (Ø2.77 x 3.41),
+   Br 1.3 T, rest clearance fitted to the published bottom-out flux.
+   refDie = vendor flux-spec sensing plane below PCB top (ref PCB + 0.3 mm die). */
+const PRESETS = [
+  { key:"ks20",  name:"Gateron KS-20 / Wooting Lekker*",     pol:"n/p",    color:"--s1", travel:4.1, pubRest:102, pubBot:905, dia:2.77, len:3.41, brem:1.30, refDie:1.9 },
+  { key:"ks37",  name:"Gateron KS-37B Fox / Nebula",         pol:"n/p",    color:"--s2", travel:4.0, pubRest:120, pubBot:800, dia:2.77, len:3.41, brem:1.30, refDie:1.9 },
+  { key:"jade",  name:"Gateron Jade / Jade Pro (measured)",  pol:"N-down", color:"--s3", travel:3.5, pubRest:120, pubBot:700, dia:2.76, len:3.41, brem:1.23, refDie:1.5, rest:4.31 },
+  { key:"ultra", name:"Gateron Jade Ultra (measured)",       pol:"N-down", color:"--s4", travel:3.2, pubRest:122, pubBot:550, dia:2.77, len:3.42, brem:1.48, refDie:1.5, rest:4.60 },
+  { key:"apollo",name:"Gateron x MCHOSE Apollo (measured)",  pol:"N-down", color:"--s5", travel:3.1, pubRest:120, pubBot:570, dia:2.80, len:3.42, brem:1.16, refDie:1.5, rest:4.13 },
+  { key:"ttc",   name:"TTC KoM / Kailh Aurora / AstroLink",  pol:"n/p & N",color:"--s6", travel:3.4, pubRest: 90, pubBot:480, dia:2.77, len:3.41, brem:1.30, refDie:1.9 },
+  { key:"kmg",   name:"Kailh Magnetic God / Quick Trigger",  pol:"n/p",    color:"--s7", travel:3.3, pubRest:120, pubBot:750, dia:2.77, len:3.41, brem:1.30, refDie:1.9 },
+  { key:"astro", name:"Akko AstroAim / Flash",               pol:"N-down", color:"--s8", travel:3.5, pubRest: 95, pubBot:580, dia:2.77, len:3.41, brem:1.30, refDie:1.9 },
+];
+const DEFAULTS = { roff:3.09, pcb:1.62, sen:1.5 };
+PRESETS.forEach(p => { p.meas = p.rest !== undefined; p.dia0 = p.dia; p.len0 = p.len; p.brem0 = p.brem; });
+
+function fitHb(m, pubBot) {   // clearance so on-axis flux at the vendor's sensing plane = published bottom-out
+  if (m.meas) return m.rest - m.travel;     // measured off the drawing, never refit
+  let lo = 0.05, hi = 5;
+  if (onAxisGs(m, lo + m.refDie) < pubBot) return lo;
+  for (let i = 0; i < 40; i++) {
+    const mid = (lo + hi) / 2;
+    (onAxisGs(m, mid + m.refDie) > pubBot) ? lo = mid : hi = mid;
+  }
+  return (lo + hi) / 2;
+}
+
+/* ---------- state ---------- */
+const S = { sel:0, depth:0, roff:DEFAULTS.roff, pcb:DEFAULTS.pcb, sen:DEFAULTS.sen };
+const cssVar = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const $ = id => document.getElementById(id);
+
+const dieBelowTop = () => S.pcb + 0.3;      // die plane below the B-side (switch-side) surface
+function fieldAtDepth(p, depth) {           // |Bx| (Gs) at the board's sensor for press depth (mm)
+  const h = p.hb + (p.travel - depth);      // magnet bottom above switch-side surface
+  return radialGs(p, h + dieBelowTop(), S.roff);
+}
+const railGs = () => 450 / S.sen;           // ±45 % VDD / (sen mV/V/Gs)
+const voutOf = bx => Math.min(3.135, Math.max(0.165, 1.65 + S.sen * 3.3 * bx / 1000));
+
+function recalibrate() { PRESETS.forEach(p => p.hb = fitHb(p, p.pubBot)); }
+
+/* ---------- cross-section ---------- */
+function drawXsec() {
+  const p = PRESETS[S.sel], SC = 21;        // px per mm
+  const W = 420, H = 350, cx = 210, yTop = 285;   // y of switch-side surface
+  const mm = v => v * SC;
+  const X = x => cx + mm(x), Y = y => yTop - mm(y);   // +y up, above board top
+  const stemDrop = mm(S.depth);
+  const magBotY = Y(p.hb + (p.travel - S.depth));
+  const dieY = Y(-dieBelowTop());
+  const el = [];
+  el.push(`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Cross-section of switch, PCB and sensor">`);
+  // housing (simplified MX outline, static)
+  el.push(`<path d="M ${X(-7)} ${Y(0)} L ${X(-7)} ${Y(5)} L ${X(-5.3)} ${Y(8.3)} L ${X(5.3)} ${Y(8.3)} L ${X(7)} ${Y(5)} L ${X(7)} ${Y(0)} Z"
+     fill="var(--housing)" stroke="var(--axis)" stroke-width="1"/>`);
+  // stem + cap (moves down)
+  el.push(`<g transform="translate(0 ${stemDrop})">
+    <rect x="${X(-2.6)}" y="${Y(11.5)}" width="${mm(5.2)}" height="${mm(3.2)}" rx="2" fill="var(--housing)" stroke="var(--axis)"/>
+    <rect x="${X(-2.0)}" y="${Y(8.3)}" width="${mm(4.0)}" height="${mm(4.6)}" fill="var(--housing)" stroke="var(--axis)"/></g>`);
+  // magnet (moves down): S pole faces the PCB
+  const mh = mm(p.len), mw = mm(p.dia);
+  el.push(`<rect x="${cx - mw/2}" y="${magBotY - mh}" width="${mw}" height="${mh}" fill="var(--magnet)" rx="1.5"/>`);
+  el.push(`<text x="${cx}" y="${magBotY - mh + 11}" text-anchor="middle" font-size="10" font-weight="700" fill="var(--surface)">N</text>`);
+  el.push(`<text x="${cx}" y="${magBotY - 3}" text-anchor="middle" font-size="10" font-weight="700" fill="var(--surface)">S</text>`);
+  // PCB slab with center hole (Ø4 NPTH) — copper faces
+  const pcbH = mm(S.pcb);
+  for (const [x0, x1] of [[-10, -2], [2, 10]]) {
+    el.push(`<rect x="${X(x0)}" y="${yTop}" width="${mm(x1 - x0)}" height="${pcbH}" fill="var(--pcb)" stroke="var(--pcb-edge)" stroke-width="1"/>`);
+    el.push(`<line x1="${X(x0)}" y1="${yTop + 1.2}" x2="${X(x1)}" y2="${yTop + 1.2}" stroke="var(--copper)" stroke-width="1.6"/>`);
+    el.push(`<line x1="${X(x0)}" y1="${yTop + pcbH - 1.2}" x2="${X(x1)}" y2="${yTop + pcbH - 1.2}" stroke="var(--copper)" stroke-width="1.6"/>`);
+  }
+  // sensor DFN under the board at -roff, die dot
+  const sx = X(-S.roff);
+  el.push(`<rect x="${sx - mm(0.8)}" y="${yTop + pcbH}" width="${mm(1.6)}" height="${mm(0.5)}" fill="var(--magnet)" rx="1"/>`);
+  el.push(`<circle cx="${sx}" cy="${dieY}" r="2.6" fill="var(--critical)"/>`);
+  // sensing axis arrow (in-plane, through switch axis)
+  el.push(`<line x1="${sx - 26}" y1="${dieY + 12}" x2="${sx + 26}" y2="${dieY + 12}" stroke="var(--muted)" stroke-width="1" marker-end="url(#arr)"/>`);
+  el.push(`<text x="${sx}" y="${dieY + 26}" text-anchor="middle" font-size="10" fill="var(--muted)">Bx sensing axis</text>`);
+  // dimension: r offset
+  el.push(`<line x1="${sx}" y1="${Y(2.5)}" x2="${sx}" y2="${dieY - 8}" stroke="var(--grid)" stroke-width="1" stroke-dasharray="3 3"/>`);
+  el.push(`<line x1="${cx}" y1="${Y(2.2)}" x2="${sx}" y2="${Y(2.2)}" stroke="var(--muted)" stroke-width="1"/>`);
+  el.push(`<text x="${(cx + sx) / 2}" y="${Y(2.2) - 5}" text-anchor="middle" font-size="10.5" fill="var(--ink-2)" font-family="ui-monospace,Menlo,monospace">r = ${S.roff.toFixed(2)} mm</text>`);
+  // dimension: gap magnet bottom -> die plane
+  const gx = cx + mm(4.6);
+  el.push(`<line x1="${gx}" y1="${magBotY}" x2="${gx}" y2="${dieY}" stroke="var(--muted)" stroke-width="1"/>`);
+  el.push(`<line x1="${cx + mw/2}" y1="${magBotY}" x2="${gx + 4}" y2="${magBotY}" stroke="var(--grid)" stroke-width="1" stroke-dasharray="3 3"/>`);
+  el.push(`<line x1="${sx}" y1="${dieY}" x2="${gx + 4}" y2="${dieY}" stroke="var(--grid)" stroke-width="1" stroke-dasharray="3 3"/>`);
+  const gap = p.hb + (p.travel - S.depth) + dieBelowTop();
+  el.push(`<text x="${gx + 8}" y="${(magBotY + dieY) / 2 + 4}" font-size="10.5" fill="var(--ink-2)" font-family="ui-monospace,Menlo,monospace">${gap.toFixed(2)} mm</text>`);
+  el.push(`<defs><marker id="arr" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto">
+    <path d="M0 0 L8 4 L0 8 Z" fill="var(--muted)"/></marker></defs>`);
+  el.push(`</svg>`);
+  $("xsec").innerHTML = el.join("");
+}
+
+/* ---------- charts ---------- */
+const CH = { w: 520, h: 300, ml: 46, mr: 14, mt: 14, mb: 34 };
+function scaleLin(d0, d1, r0, r1) { return v => r0 + (v - d0) / (d1 - d0) * (r1 - r0); }
+function niceMax(v) { const s = Math.pow(10, Math.floor(Math.log10(v))); return Math.ceil(v / s * 2) / 2 * s; }
+
+function buildChart(box, opts) {
+  const { w, h, ml, mr, mt, mb } = CH;
+  const xmax = Math.max(...PRESETS.map(p => p.travel));
+  const x = scaleLin(0, xmax, ml, w - mr);
+  const y = scaleLin(opts.ymin, opts.ymax, h - mb, mt);
+  const el = [`<svg viewBox="0 0 ${w} ${h}" role="img" aria-label="${opts.label}">`];
+  // grid + y ticks
+  const yt = opts.yticks;
+  for (const t of yt) {
+    el.push(`<line x1="${ml}" y1="${y(t)}" x2="${w - mr}" y2="${y(t)}" stroke="var(--grid)" stroke-width="1"/>`);
+    el.push(`<text x="${ml - 7}" y="${y(t) + 3.5}" text-anchor="end" font-size="10.5" fill="var(--muted)" font-family="ui-monospace,Menlo,monospace">${opts.yfmt(t)}</text>`);
+  }
+  for (let t = 0; t <= xmax + 1e-9; t += 1) {
+    el.push(`<text x="${x(t)}" y="${h - mb + 16}" text-anchor="middle" font-size="10.5" fill="var(--muted)" font-family="ui-monospace,Menlo,monospace">${t}</text>`);
+  }
+  el.push(`<line x1="${ml}" y1="${y(opts.ymin)}" x2="${w - mr}" y2="${y(opts.ymin)}" stroke="var(--axis)" stroke-width="1"/>`);
+  el.push(`<text x="${(ml + w - mr) / 2}" y="${h - 4}" text-anchor="middle" font-size="11" fill="var(--ink-2)">press depth (mm)</text>`);
+  el.push(`<text transform="rotate(-90 12 ${(mt + h - mb) / 2}) " x="12" y="${(mt + h - mb) / 2}" text-anchor="middle" font-size="11" fill="var(--ink-2)">${opts.ytitle}</text>`);
+  // reference (rail) lines
+  for (const rl of opts.rails) {
+    if (rl.v < opts.ymin || rl.v > opts.ymax) continue;
+    el.push(`<line x1="${ml}" y1="${y(rl.v)}" x2="${w - mr}" y2="${y(rl.v)}" stroke="var(--critical)" stroke-width="1.2" stroke-dasharray="5 4"/>`);
+    el.push(`<text x="${w - mr - 4}" y="${y(rl.v) - 5}" text-anchor="end" font-size="10.5" fill="var(--critical)">${rl.label}</text>`);
+  }
+  // series
+  const N = 90;
+  for (const p of PRESETS) {
+    const pts = [];
+    for (let i = 0; i <= N; i++) {
+      const d = p.travel * i / N;
+      pts.push(`${x(d).toFixed(1)},${y(opts.f(p, d)).toFixed(1)}`);
+    }
+    el.push(`<polyline points="${pts.join(" ")}" fill="none" stroke="var(${p.color})" stroke-width="2" stroke-linejoin="round"/>`);
+  }
+  // depth cursor + marker on selected series
+  const sel = PRESETS[S.sel], dcl = Math.min(S.depth, sel.travel);
+  el.push(`<line x1="${x(S.depth)}" y1="${mt}" x2="${x(S.depth)}" y2="${h - mb}" stroke="var(--axis)" stroke-width="1" stroke-dasharray="2 3"/>`);
+  el.push(`<circle cx="${x(dcl)}" cy="${y(opts.f(sel, dcl))}" r="4.5" fill="var(${sel.color})" stroke="var(--surface)" stroke-width="2"/>`);
+  el.push(`</svg>`);
+  box.innerHTML = el.join("") + `<div class="tooltip"></div>`;
+  attachHover(box, opts, x, xmax);
+}
+function attachHover(box, opts, x, xmax) {
+  const svg = box.querySelector("svg"), tip = box.querySelector(".tooltip");
+  svg.addEventListener("mousemove", ev => {
+    const r = svg.getBoundingClientRect();
+    const px = (ev.clientX - r.left) / r.width * CH.w;
+    const d = Math.max(0, Math.min(xmax, (px - CH.ml) / (CH.w - CH.mr - CH.ml) * xmax));
+    const rows = PRESETS
+      .map(p => ({ p, v: d <= p.travel + 1e-9 ? opts.f(p, Math.min(d, p.travel)) : null }))
+      .filter(o => o.v !== null).sort((a, b) => b.v - a.v)
+      .map(o => `<tr><td><span class="swatch" style="background:var(${o.p.color})"></span>${o.p.name}</td><td>${opts.tipfmt(o.v)}</td></tr>`);
+    tip.innerHTML = `<div style="color:var(--muted);margin-bottom:3px">depth ${d.toFixed(2)} mm</div><table>${rows.join("")}</table>`;
+    tip.style.display = "block";
+    const bw = box.clientWidth;
+    tip.style.left = Math.min(ev.clientX - r.left + 14, bw - tip.offsetWidth - 4) + "px";
+    tip.style.top = (ev.clientY - r.top + 12) + "px";
+  });
+  svg.addEventListener("mouseleave", () => tip.style.display = "none");
+}
+
+function drawCharts() {
+  const maxB = Math.max(railGs() * 1.12, ...PRESETS.map(p => fieldAtDepth(p, p.travel))) * 1.06;
+  const yA = niceMax(maxB);
+  const stepA = yA > 600 ? 200 : 100;
+  buildChart($("chartA"), {
+    label: "In-plane field at sensor vs press depth", ytitle: "|Bx| at sensor (Gs)",
+    ymin: 0, ymax: yA, yticks: Array.from({length: Math.floor(yA/stepA)+1}, (_,i)=>i*stepA),
+    yfmt: t => t, tipfmt: v => v.toFixed(0) + " Gs",
+    f: (p, d) => fieldAtDepth(p, d),
+    rails: [{ v: railGs(), label: `output rail ±${railGs().toFixed(0)} Gs @ ${S.sen.toFixed(2)} mV/V/Gs` }],
+  });
+  buildChart($("chartB"), {
+    label: "Sensor output voltage vs press depth", ytitle: "VOUT (V) — S-pole-down",
+    ymin: 0, ymax: 3.3, yticks: [0, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0],
+    yfmt: t => t.toFixed(1), tipfmt: v => v.toFixed(3) + " V",
+    f: (p, d) => voutOf(fieldAtDepth(p, d)),
+    rails: [{ v: 3.135, label: "95 % VDD rail" }, { v: 1.65, label: "" }],
+  });
+}
+
+/* ---------- legend / table / readouts ---------- */
+function drawLegend() {
+  $("legend").innerHTML = PRESETS.map((p, i) =>
+    `<span class="chip"><span class="sw" style="background:var(${p.color})"></span>${p.name}${i === S.sel ? " (selected)" : ""}</span>`).join("");
+}
+function clipDepth(p) {
+  if (fieldAtDepth(p, p.travel) <= railGs()) return null;
+  let lo = 0, hi = p.travel;
+  for (let i = 0; i < 40; i++) {
+    const mid = (lo + hi) / 2;
+    (fieldAtDepth(p, mid) < railGs()) ? lo = mid : hi = mid;
+  }
+  return (lo + hi) / 2;
+}
+function drawTable() {
+  const head = `<tr><th>Switch</th><th>Pole ↓</th><th>Pub. flux (Gs)</th><th>h_b fit</th><th>Rest-flux check</th>
+    <th>Rest</th><th>@1 mm</th><th>@2 mm</th><th>Bottom</th><th>Linear until</th></tr>`;
+  const rows = PRESETS.map(p => {
+    const rest = fieldAtDepth(p, 0), bot = fieldAtDepth(p, p.travel), cd = clipDepth(p);
+    const restChk = onAxisGs(p, p.hb + p.travel - 0.3 + p.refDie);   // initial flux is quoted at 0.3mm pressed
+    const err = (restChk / p.pubRest - 1) * 100;
+    const verdict = cd === null
+      ? `<span class="verdict ok">full travel</span>`
+      : `<span class="verdict clip">clips at ${cd.toFixed(2)} mm</span>`;
+    return `<tr><td><span class="swatch" style="background:var(${p.color})"></span>${p.name}</td>
+      <td>${p.pol}</td><td>${p.pubRest} → ${p.pubBot}</td><td>${p.hb.toFixed(2)} mm</td>
+      <td>${restChk.toFixed(0)} vs ${p.pubRest} (${err >= 0 ? "+" : ""}${err.toFixed(0)} %)</td>
+      <td>${rest.toFixed(0)}</td><td>${fieldAtDepth(p, 1).toFixed(0)}</td>
+      <td>${fieldAtDepth(p, Math.min(2, p.travel)).toFixed(0)}</td><td>${bot.toFixed(0)}</td><td>${verdict}</td></tr>`;
+  });
+  $("resTable").innerHTML = head + rows.join("");
+}
+function drawReadouts() {
+  const p = PRESETS[S.sel], d = Math.min(S.depth, p.travel);
+  const gap = p.hb + (p.travel - d) + dieBelowTop();
+  const bx = fieldAtDepth(p, d);
+  const vout = voutOf(bx);
+  const clipped = bx > railGs();
+  const dd = 0.05, grad = Math.abs(fieldAtDepth(p, Math.min(d + dd, p.travel)) - fieldAtDepth(p, Math.max(d - dd, 0))) / (2 * dd);
+  const mvmm = grad * S.sen * 3.3;
+  $("r-gap").innerHTML = gap.toFixed(2) + ' <span class="u">mm</span>';
+  $("r-bx").innerHTML = bx.toFixed(0) + ' <span class="u">Gs</span>';
+  $("r-vout").innerHTML = vout.toFixed(3) + ' <span class="u">V' + (clipped ? " · railed" : "") + "</span>";
+  $("t-vout").classList.toggle("alert", clipped);
+  $("r-rail").innerHTML = "±" + railGs().toFixed(0) + ' <span class="u">Gs</span>';
+  $("r-res").innerHTML = (clipped || mvmm < 1) ? "—" : (0.81 / mvmm * 1000).toFixed(1) + ' <span class="u">µm/LSB (12-bit)</span>';
+  $("r-hb").innerHTML = p.hb.toFixed(2) + ' <span class="u">mm</span>';
+}
+
+/* ---------- wiring ---------- */
+function syncLabels() {
+  $("v-depth").textContent = S.depth.toFixed(2) + " mm";
+  $("v-roff").textContent = S.roff.toFixed(2) + " mm";
+  $("v-pcb").textContent = S.pcb.toFixed(2) + " mm";
+  const p = PRESETS[S.sel];
+  $("v-dia").textContent = p.dia.toFixed(2) + " mm";
+  $("v-len").textContent = p.len.toFixed(2) + " mm";
+  $("v-brem").textContent = p.brem.toFixed(2) + " T";
+  $("v-sen").textContent = S.sen.toFixed(2) + " mV/V/Gs";
+}
+function redraw() { syncLabels(); drawXsec(); drawCharts(); drawLegend(); drawTable(); drawReadouts(); }
+
+$("preset").innerHTML = PRESETS.map((p, i) => `<option value="${i}">${p.name}</option>`).join("");
+$("preset").addEventListener("change", e => {
+  S.sel = +e.target.value;
+  const p = PRESETS[S.sel];
+  $("dia").value = p.dia; $("len").value = p.len; $("brem").value = p.brem;
+  $("depth").max = p.travel; S.depth = Math.min(S.depth, p.travel); $("depth").value = S.depth;
+  redraw();
+});
+const bind = (id, fn) => $(id).addEventListener("input", e => { fn(+e.target.value); redraw(); });
+bind("depth", v => S.depth = v);
+bind("roff", v => S.roff = v);
+bind("pcb", v => S.pcb = v);
+bind("sen", v => S.sen = v);
+bind("dia", v => { PRESETS[S.sel].dia = v; PRESETS[S.sel].hb = fitHb(PRESETS[S.sel], PRESETS[S.sel].pubBot); });
+bind("len", v => { PRESETS[S.sel].len = v; PRESETS[S.sel].hb = fitHb(PRESETS[S.sel], PRESETS[S.sel].pubBot); });
+bind("brem", v => { PRESETS[S.sel].brem = v; PRESETS[S.sel].hb = fitHb(PRESETS[S.sel], PRESETS[S.sel].pubBot); });
+$("reset").addEventListener("click", () => {
+  S.roff = DEFAULTS.roff; S.pcb = DEFAULTS.pcb; S.sen = DEFAULTS.sen; S.depth = 0;
+  PRESETS.forEach(p => { p.dia = p.dia0; p.len = p.len0; p.brem = p.brem0; });
+  recalibrate();
+  $("roff").value = S.roff; $("pcb").value = S.pcb; $("sen").value = S.sen; $("depth").value = 0;
+  const p = PRESETS[S.sel];
+  $("dia").value = p.dia; $("len").value = p.len; $("brem").value = p.brem;
+  redraw();
+});
+
+recalibrate();
+$("depth").max = PRESETS[0].travel;
+redraw();
+</script>
