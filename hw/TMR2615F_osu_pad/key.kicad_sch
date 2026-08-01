@@ -1265,7 +1265,7 @@
 					)
 				)
 			)
-			(property "Value" "TMR2615x"
+			(property "Value" "TMR2615F-AAC-1.500-500"
 				(at 0 -6.35 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -2260,7 +2260,7 @@
 				)
 			)
 		)
-		(property "Value" "TMR2615x"
+		(property "Value" "TMR2615F-AAC-1.500-500"
 			(at 92.71 73.66 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2303,7 +2303,7 @@
 				)
 			)
 		)
-		(property "MPN" "TMR2615F-AAC"
+		(property "MPN" "TMR2615F-AAC-1.500-500"
 			(at 0 0 0)
 			(hide yes)
 			(show_name no)
