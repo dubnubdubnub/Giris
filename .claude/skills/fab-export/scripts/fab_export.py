@@ -675,9 +675,10 @@ def grab(stats: str, label: str) -> str:
 
 
 # Per-vendor packaging. JLCPCB documents the plain KiCad output and reads the
-# X2 job file; NextPCB's uploader is fussier, so it gets the conservative
-# Protel-extension set with PTH+NPTH merged (which their own KiCad guide
-# recommends, to stop one of the two files being overlooked).
+# X2 job file. NextPCB gets the conservative Protel set with PTH+NPTH merged;
+# the merge is their own KiCad guide's recommendation, the rest is just a
+# verified-working combination -- the KiCad-native set was never shown to fail
+# there, so don't treat these as requirements.
 PROFILES = {
     "jlcpcb": {"protel": False, "separate_th": True, "gbrjob": True, "xlsx": False},
     "nextpcb": {"protel": True, "separate_th": False, "gbrjob": False, "xlsx": True},

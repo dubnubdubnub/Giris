@@ -88,10 +88,13 @@ Packaging (`PROFILES` in the script):
 | `.gbrjob` in zip | yes | **no** |
 | BOM / CPL upload format | `.csv` | `.xlsx` (plus `.csv`) |
 
-NextPCB gets the conservative set: their uploader is fussier than JLCPCB's, they
-recommend merged PTH+NPTH in their own KiCad guide so neither file gets
-overlooked, and a JSON `.gbrjob` can trip a parser that treats every archive
-member as gerber. JLCPCB documents the plain KiCad output and reads the job file.
+NextPCB gets the conservative set. The merged drill is their own KiCad guide's
+recommendation, so neither file gets overlooked. The Protel extensions and the
+dropped `.gbrjob` were originally speculative fixes for an upload failure that
+turned out to be a transient website glitch — they are kept because this
+combination is verified working on NextPCB, not because the KiCad-native set
+was ever shown to fail there. Don't cite them as required. JLCPCB documents the
+plain KiCad output and reads the job file.
 
 BOM and CPL:
 
@@ -110,16 +113,32 @@ pinned so regenerating an unchanged BOM produces identical bytes in git. The
 `.csv` twin is always written too — it is the diffable form, and `.xlsx` is a
 binary zip that git cannot merge.
 
-## If a portal still rejects the zip
+## If a portal rejects the zip
 
-Work down this list; each step is a real cause seen in the wild:
+**0. Reload the page and upload the same file again.** NextPCB has shown
+*"File parsing failed. Don't worry — you can directly select the parameters and
+add to cart."* on a package that uploaded fine minutes later, unchanged. That
+message is their auto-quote parameter extraction, not a rejection of the
+gerbers — the order can proceed either way by entering board specs by hand.
+Do this before touching the export. It cost three rounds of gerber forensics
+once already.
 
-1. Re-run — empty-layer pruning and the NextPCB profile above are already applied
-   and cover the two most common failures.
-2. `--merge-th` / `--separate-th` — try the other drill arrangement.
-3. `--protel` — force Protel extensions for the vendor that is failing.
+**Get the exact error string before changing anything.** A generic "parsing
+failed" with a reassuring second sentence is a soft/optional step; a hard
+rejection names a file or a layer.
+
+Only if a reload and a second upload genuinely fail:
+
+1. `--merge-th` / `--separate-th` — try the other drill arrangement.
+2. `--protel` — force Protel extensions for the vendor that is failing.
+3. Rename the outline plot to `.GKO`. Protel convention puts the board outline
+   there; KiCad writes Edge.Cuts to `.gm1`, and a parser hunting for `GKO` finds
+   no outline and cannot derive the board size.
 4. Check `gerbers/` for any file that is header-only (`M02*` right after the
    aperture list). That is an empty layer the heuristic missed; delete and re-zip.
+5. Bitmap-traced logo footprints can carry tens of thousands of polygon
+   vertices on one silk layer (this board: 254 regions / ~50k vertices, largest
+   6,713). Plot without that layer to test whether a parser is choking on it.
 
 ## Adding a vendor
 
