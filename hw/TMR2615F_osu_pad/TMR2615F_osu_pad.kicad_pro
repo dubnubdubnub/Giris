@@ -804,7 +804,7 @@
       "plot": "",
       "pos_files": "",
       "specctra_dsn": "",
-      "step": "",
+      "step": "TMR2615F_osu_pad.step",
       "svg": "",
       "vrml": ""
     },
@@ -816,7 +816,7 @@
       "method": 0,
       "sort_order": 1
     },
-    "bom_export_filename": "D:\\gehub\\dubIS\\data\\osupad.csv",
+    "bom_export_filename": "output/TMR2615F_osu_pad.csv",
     "bom_fmt_presets": [],
     "bom_fmt_settings": {
       "field_delimiter": ",",
@@ -944,6 +944,18 @@
           "label": "MP",
           "name": "MP",
           "show": false
+        },
+        {
+          "group_by": false,
+          "label": "MPN",
+          "name": "MPN",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "Manufacturer",
+          "name": "Manufacturer",
+          "show": false
         }
       ],
       "filter_string": "",
@@ -1002,7 +1014,7 @@
         "uuid": "0c357edf-5b81-40d5-9dd7-a7455ce1b19d"
       }
     ],
-    "used_designators": "LED1-2,FID1-3,TP1-22,U1-30,SW1-8,C1-56,#PWR1-156,D1,H1-4,R1-34,L1,X1,J1-10,#FLG1-3",
+    "used_designators": "LED1-2,FID1-3,L1,X1,TP1-22,U1-30,SW1-8,C1-56,#PWR1-156,D1,R1-34,H1-4,J1-10,#FLG1-3",
     "variants": []
   },
   "sheets": [
@@ -1038,7 +1050,7 @@
   "text_variables": {},
   "tuning_profiles": {
     "meta": {
-      "version": 1
+      "version": 0
     },
     "tuning_profiles_impedance_geometric": []
   }
