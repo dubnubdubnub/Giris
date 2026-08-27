@@ -1,0 +1,457 @@
+                                                                                                                          Datasheet
+                                                                                                                          Version 1.3.4
+
+
+
+
+  TMR2615x-AAC
+  Low Power Large Range TMR Linear Magnetic Sensor
+
+  Description                                                  Features and Benefits
+  The TMR2615x-AAC is a low-power, wide-linear-                ••Tunneling magnetoresistance (TMR) technology
+  range, programmable TMR linear sensor IC by                  ••Supply voltage: 1.71 V to 5 V
+  MultiDimension Technology. The IC integrates tunnel          ••Static current consumption < 300 μA
+  magnetoresistance (TMR) sensor, programmable                 ••Output voltage: 5% to 95% VDD
+  operational amplifier, and DAC circuits to provide a         ••Output voltage follows VDD changes
+  linear relationship between analog output voltage            ••Low noise
+  and external magnetic field.                                 ••Sensitivity with high consistency
+                                                               ••Low hysteresis
+  The IC can be widely used in various position sensing
+                                                               ••RoHS & Reach compliant
+  applications and supports customers’ demands for
+  low voltage, high resolution, high signal-to-noise
+  ratio, and wide linear range.
+
+  The sensor is either available as TMR2615D-AAC               Applications
+  in a DFN3L (2 mm × 2 mm × 0.55 mm) package or                ••Joystick controller
+  as TMR2615F-AAC in DFN3L (1.6 mm × 1.6 mm ×                  ••Magnetic keyboard
+  0.5 mm) package. The sensor complies with RoHS               ••Consumer electronics
+  standards.
+
+                                                                                   TMR2615D-AAC               TMR2615F-AAC
+                                                                      3300
+                                                                      3000
+                                                                      2700
+                                                                      2400
+                                                                      2100
+
+
+
+                                                          VOUT (mV)
+                                                                      1800
+                                                                      1500
+                                                                      1200
+                                                                       900
+                                                                       600
+             DFN3L                       DFN3L                         300
+        (1.6 × 1.6 × 0.5)             (2 × 2 × 0.55)                     0
+                                                                         -500 -400 -300 -200 -100   0   100   200   300   400   500
+                                                                                                Bx (Gs)
+
+                                                                       TMR2615x-AAC ±500 Gs Output curve
+
+
+
+
+MultiDimension Technology Co., Ltd.
+http://www.dowaytech.com/en/                                                                                                          01
+                                                                                                               TMR2615x-AAC
+                                                              Low Power Large Range TMR Linear Magnetic Sensor
+
+
+
+  Selection Guide
+                                          Supply         Linear        Operating          Static Current                          Packing
+           Part Number*                                                                                         Package
+                                          Voltage        Range        temperature         Consumption                              Form
+
+                                                                                                                DFN3L
+   TMR2615D-AAC-X.XXX-XXX 1.71 V to 5 V ±500 Gs                     -40 °C to 85 °C         < 300 μA                            Tape & Reel
+                                                                                                              (2×2×0.55)
+
+                                                                                                                DFN3L
+   TMR2615F-AAC-X.XXX-XXX 1.71 V to 5 V ±500 Gs                     -40 °C to 85 °C         < 300 μA                       Tape & Reel
+                                                                                                             (1.6×1.6×0.5)
+
+  Note: Sensitivity and offset voltage can be customized according to customer requirements.
+
+
+
+  Product Model Description
+
+       TMR2615x                               X               X           X                 X.XXX                         XXX
+
+              Package               A: Factory calibrated A: N/A         C: Consumption   Sensitivity: 0.500~7.000   Offset voltage: 300~700
+              D: DFN3L(2×2×0.55) sensitivity and offset B: Attribute 1 I: Industrial         (Unit: mV/V/Gs)               (Unit: mV/V)
+              F: DFN3L(1.6×1.6×0.5) voltage               C: Attribute 2
+                                      B: Customer progra-
+                                      mming sensitivity and
+                                      offset voltage
+
+
+  Note: A sensitivity value of 1.000 corresponds to 1.000 mV/V/Gs, please refer to the X axis output curve
+  diagram on the home page. and a zero-offset output voltage value of 500 corresponds to 500 mV/V.
+
+
+
+
+  Catalogue
+  1. Functional Block Diagram���������������������������������������������������������������������������������������������� 03
+
+  2. Operating Principle��������������������������������������������������������������������������������������������������������� 03
+
+  3. Pin Configuration������������������������������������������������������������������������������������������������������������ 03
+  4. Absolute Maximum Ratings�������������������������������������������������������������������������������������������� 04
+
+  5. Electrical Specifications�������������������������������������������������������������������������������������������������� 04
+
+  6. Output Characteristics���������������������������������������������������������������������������������������������������� 05
+
+  7. Application Circuit����������������������������������������������������������������������������������������������������������� 05
+
+  8. Dimensions��������������������������������������������������������������������������������������������������������������������� 06
+
+
+
+
+MultiDimension Technology Co., Ltd.
+http://www.dowaytech.com/en/                                                                                                                   02
+                                                                                                           TMR2615x-AAC
+                                                      Low Power Large Range TMR Linear Magnetic Sensor
+
+
+
+  1. Functional Block Diagram                                The TMR2615x-AAC output voltage varies linearly
+                                                             with the magnetic field along the sensing axis.
+                                 VDD
+                                                                                          TMR2615D-AAC               TMR2615F-AAC
+                                                                            3300
+                                                                            3000
+                                                                            2700
+                      Power
+                                             DAC
+                    Management                                              2400
+                                                                            2100
+
+
+
+                                                                VOUT (mV)
+                                                                            1800
+                                                                            1500
+
+                                        Operational   VOUT                  1200
+                                        Amplifier                            900
+                                                                             600
+               TMR Sensor                                                    300
+                                                                              0
+                                                                              -500 -400 -300 -200 -100    0    100   200   300       400   500
+                                       GND
+                                                                                                        Bx (Gs)
+
+                     Figure 1. Block Diagram                                  Figure 3. TMR2615x-AAC output curve
+
+
+
+  2. Operating Principle                                     3. Pin Configuration
+  The TMR2615x-AAC sensing axis is parallel to the                                  GND                               GND
+  package top-marking surface; the sensing axis is                                   3                                 3
+  defined from the N pole toward the S pole, as
+  indicated by the arrow in the figure below.                                      Top view                        Bottom view
+
+
+
+                                                                             1                   2             2                      1
+                                                                            VOUT                VDD           VDD                    VOUT
+                                                                                               DFN3L (2×2×0.55)
+
+                                                                                          VDD                        VDD
+                  Figure 2-1. Definition of axis
+                                                                                           3                          3
+
+
+
+                                                                                          GND                        GND
+
+                                       Bx+
+                                                                                    1               2          2                 1
+
+                                                                                   VOUT         GND           GND           VOUT
+                                                                                           DFN3L (1.6×1.6×0.5)
+
+                                                                                        Figure 4. Pin Configuration
+       Figure 2-2. Axial diagram (DFN3L(2×2) top view)
+                                                                             Pin Number
+                                                                DFN3L                      DFN3L           Name                  Function
+                                                              (2×2×0.55)                (1.6×1.6×0.5)
+
+                                       Bx+                              1                       1             VOUT         Output voltage
+
+                                                                        2                       3             VDD          Supply voltage
+
+                                                                        3                       2             GND                Ground
+     Figure 2-3. Axial diagram (DFN3L(1.6×1.6) top view)
+
+
+
+
+MultiDimension Technology Co., Ltd.
+http://www.dowaytech.com/en/                                                                                                                     03
+                                                                                                      TMR2615x-AAC
+                                                    Low Power Large Range TMR Linear Magnetic Sensor
+
+
+
+  4. Absolute Maximum Ratings
+                  Parameters                     Symbol               Min.                  Max.               Unit
+
+                Supply voltage                     VDD                -0.3                      6               V
+
+            External magnetic field                 B                  -                    4000               Gs
+
+               VOUT current drive                   -                  -                        1.5            mA
+
+            Operating temperature                   TA                -40                       85             °C
+
+             Storage temperature                   TSTG               -50                   150                °C
+
+                  ESD (HBM)                        VESD                -                    4000                V
+
+  Note: The maximum value in the limit parameter only ensures that the IC is not permanently damaged,
+  please refer to the “Electrical Performance Parameters” for normal operating conditions of the IC.
+
+
+
+  5. Electrical Specifications
+  VDD = 1.71 V to 5 V, TA = 25 °C, a 100nF capacitor connected between the power and ground
+
+           Parameter             Symbol            Condition                 Min.         Typ.          Max.        Unit
+
+        Supply voltage                VDD                 -                  1.71          3.3           5            V
+
+                                                  VDD = 1.8 V                 -           200            -            μA
+       Operating current              ICC
+                                                  VDD = 3.3 V                 -           240            -            μA
+
+           Bandwidth                  BW             -3 dB                    -             -           30          kHz
+
+        Load resistance               RL                  -                  10             -            -            kΩ
+
+      Load conductance                CL                  -                   -             -           10            nF
+
+           Sensitivity                SEN         Bx: ±500Gs                        User programmable           mV/V/Gs
+    Temperature coefficient
+                                      TCS     TA = -40 °C to 85 °C            -           1000           -      PPM/°C
+        of sensitivity
+         Offset voltage          VOFFSET                  -                         User programmable               mV/V
+    Temperature coefficient
+                                    TCO       TA = -40 °C to 85 °C            -           -0.12          -       mV/°C
+          of offset
+          Nonlinearity              NONL          Bx: ±500Gs                  -            2             -          %FS
+
+           Hysteresis                 HYS         Bx: ±500Gs                  -            2             -          %FS
+
+             Noise                    VN    VDD = 3.3 V, BW = 5 kHz           -             -           10          mVPP
+
+         Power-on time                tPO                 -                   -             -           100           μs
+
+
+
+
+MultiDimension Technology Co., Ltd.
+http://www.dowaytech.com/en/                                                                                               04
+                                                                                                     TMR2615x-AAC
+                                                          Low Power Large Range TMR Linear Magnetic Sensor
+
+
+
+  6. Output Characteristics
+  As shown in Figure 5, the output voltage of the TMR2615x-AAC IC changes with the external magnetic field
+  intensity. When there is no magnetic field, VOUT outputs 50% VDD, and when the magnetic field changes from
+  -B to B, the linear output voltage range of VOUT for TMR2615D-AAC is 5% VDD to 95% VDD, the linear output
+  voltage range of VOUT for TMR2615F-AAC is 95% VDD to 5% VDD. Customers can modify the linear range
+  through the adjustment provided by the TMR2615x-AAC.
+
+                                              Output voltage (V)
+
+                                95%VDD
+
+
+
+                                                                                            TMR2615D-AAC
+
+                                                                                             TMR2615F-AAC
+                                                  50%VDD
+
+
+
+
+                                                                                   Magnetic field (Gs)
+                                  5%VDD
+                                                     -B            0          B
+
+                                          Figure 5. Output voltage versus magnetic field
+
+
+
+
+  7. Application Circuit
+
+
+                                               VDD
+
+                          C1          0.1μF                                       VOUT
+                                                          TMR2615x-AAC
+                                                                                             CL      0.1nF
+
+                                               GND
+
+
+                                                 Figure 6. Application circuit diagram
+
+
+  Note: C1 should be as close as possible to the VDD and GND pins. For detailed pin definitions, please refer to
+  section 3 Pin Configuration.
+
+
+
+
+MultiDimension Technology Co., Ltd.
+http://www.dowaytech.com/en/                                                                                   05
+                                                                                                 TMR2615x-AAC
+                                                        Low Power Large Range TMR Linear Magnetic Sensor
+
+
+
+  8. Dimensions
+  DFN3L (2×2×0.55) Package
+
+
+
+
+                               Sensor Area
+
+
+                                                                                                     Pin 1 I.D.
+
+
+        Pin 1 I.D.
+
+
+                            TOP VIEW
+
+                                                                                    BOTTOM VIEW
+
+
+
+
+                                          Package
+                       Sensing            surface
+                       surface
+
+
+
+
+                            SIDE VIEW
+
+
+
+                                      Figure 7. Package outline of DFN3L (2×2×0.55) (unit: mm)
+
+
+
+
+MultiDimension Technology Co., Ltd.
+http://www.dowaytech.com/en/                                                                                      06
+                                                                                                     TMR2615x-AAC
+                                                                 Low Power Large Range TMR Linear Magnetic Sensor
+
+
+  DFN3L (1.6×1.6×0.5) Package
+
+
+
+
+             0.6±0.1
+                                1.6±0.05
+                            0.8±0.1
+
+                                                                                                     3
+                                                                                                    1.2
+
+
+                                Sensor Area           1.6±0.05                    0.35                        0.2
+                                                                            0.25±0.05
+                                                                                           2              1
+
+                                                                         0.175 REF                  0.2
+
+
+                                                                                                              0.28±0.05
+          Pin 1 I.D.                                                                           1±0.05
+
+
+                                TOP VIEW                                                   BOTTOM VIEW
+
+
+                 Package
+                 surface
+
+
+                                                   0.5±0.05
+                                        Sensing
+                          0.2           surface
+
+
+
+
+                0-0.015
+                                SIDE VIEW
+
+
+                                      Figure 8. Package outline of DFN3L (1.6×1.6×0.5) (unit: mm)
+
+
+
+
+MultiDimension Technology Co., Ltd.
+http://www.dowaytech.com/en/                                                                                              07
+Copyright © 2026 by MultiDimension Technology Co., Ltd.
+Information furnished herein by MultiDimension Technology Co., Ltd. (hereinafter MDT) is believed to be
+accurate and reliable. However, MDT disclaims any and all warranties and liabilities of any kind, with respect
+to any examples, hints or any performance or use of technical data as described herein and/or any information
+regarding the application of the product, including without limitation warranties of non-infringement of intellectual
+property rights of any third party. This document neither conveys nor implies any license under patent or other
+industrial or intellectual property rights. Customer or any third-party must further determine the suitability of
+the MDT products for its applications to avoid the applications default of customer or third-party. MDT accept
+no liability in this respect.
+
+MDT does not assume any liabilities of any indirect, incidental, punitive, special or consequential damages
+(including without limitation of lost profits, lost savings, business interruption, costs related to the removal or
+replacement of any products or rework charges) whether or not such damages are based on tort (including
+negligence), warranty, breach of contract or any other legal theory. Notwithstanding any damages that
+customer might incur for any reason whatsoever, MDT’s aggregate and cumulative liability towards customer
+for the products described herein shall be limited in accordance with the terms and conditions of commercial
+sale of MDT.
+
+Absolute maximum ratings are the extreme limits the device will withstand without damage to the MDT
+product. However, the electrical and mechanical characteristics are not guaranteed as the maximum limits
+(above recommended operating conditions) are approached. MDT disclaims any and all warranties and
+liabilities of the MDT product will operate at absolute maximum ratings.
+
+Specifications may change without notice.
+
+Please download latest document from our official website www.dowaytech.com/en.
+
+
+
+Recycling
+The product(s) in this document need to be handed over to a qualified solid waste management services
+company for recycling in accordance with relevant regulations on waste classification after the end of the
+product(s) life.
+
+
+
+
+No.2 Guangdong Road, Zhangjiagang Free Trade Zone, Jiangsu, China
+Web：www.dowaytech.com/en            E-mail：info@dowaytech.com
+
