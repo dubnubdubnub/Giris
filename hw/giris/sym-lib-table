@@ -41,6 +41,8 @@
 	(lib (name "Isolator__C") (type "KiCad") (uri "${KIPRJMOD}/../library/symbols/Isolator__C.kicad_symdir") (options "") (descr ""))
 	(lib (name "Connector_Pogo__C") (type "KiCad") (uri "${KIPRJMOD}/../library/symbols/Connector_Pogo__C.kicad_symdir") (options "") (descr ""))
 	(lib (name "Power_Switch__C") (type "KiCad") (uri "${KIPRJMOD}/../library/symbols/Power_Switch__C.kicad_symdir") (options "") (descr ""))
+	(lib (name "Extended_Capacitors_Resistors__C") (type "KiCad") (uri "${KIPRJMOD}/../library/symbols/Extended_Capacitors_Resistors__C.kicad_symdir") (options "") (descr ""))
+	(lib (name "Power__C") (type "KiCad") (uri "${KIPRJMOD}/../library/symbols/Power__C.kicad_symdir") (options "") (descr ""))
 	(lib (name "marbastlib-he") (type "KiCad") (uri "${KIPRJMOD}/../marbastlib/symbols/marbastlib-he.kicad_sym") (options "") (descr ""))
 	(lib (name "marbastlib-mx") (type "KiCad") (uri "${KIPRJMOD}/../marbastlib/symbols/marbastlib-mx.kicad_sym") (options "") (descr ""))
 )
