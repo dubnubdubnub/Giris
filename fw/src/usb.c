@@ -1,0 +1,350 @@
+/*
+ * usb.c — OTG_HS device bring-up and the raw-HID telemetry protocol.
+ *
+ * The two things TinyUSB's AT32 port does NOT do for you, and which look like
+ * dead silicon if you miss them:
+ *
+ *  1. CRM gating. dwc2_clock_init() is an empty stub, so board code must enable
+ *     CRM_OTGHS_PERIPH_CLOCK and CRM_OTGHSPHY_PERIPH_CLOCK and select the PHY's
+ *     12 MHz reference.
+ *  2. GCCFG.VBUSIG. This board does not wire PB13 as a VBUS sense, so with VBUS
+ *     sensing left enabled the core decides VBUS is absent and never pulls up
+ *     D+. The device simply never appears, with no error anywhere.
+ */
+#include <string.h>
+
+#include "tusb.h"
+#include "adc.h"
+#include "board.h"
+#include "clock.h"
+#include "protocol.h"
+#include "usb.h"
+
+/* OTG_HS global registers. GCCFG lives at OTGHS_BASE + 0x38. */
+#define OTGHS_BASE_ADDR    0x40040000UL
+#define OTGHS_GCCFG        (*(volatile uint32_t *)(OTGHS_BASE_ADDR + 0x38UL))
+#define GCCFG_PWRDOWN      (1u << 16)
+#define GCCFG_VBUSIG       (1u << 21)
+
+#define BUILD_ID           0x00000101u
+
+/* Artery's ROM bootloader. Jumping here from the application is what makes this
+ * the LAST time anyone has to hold BOOT0 and tap NRST to reflash. */
+#define ROM_BOOTLOADER_ADDR  0x1FFFA400UL
+
+/* ------------------------------------------------------------- tx ring */
+#define TX_RING_LEN  8
+
+static uint8_t  tx_ring[TX_RING_LEN][PROTO_REPORT_SIZE];
+static volatile uint8_t tx_head, tx_tail;
+static uint16_t in_seq;
+static uint32_t tx_dropped;
+
+static bool tx_ring_full(void) { return (uint8_t)(tx_head - tx_tail) >= TX_RING_LEN; }
+
+/* Claim the next slot, pre-filled with the common header. */
+static uint8_t *tx_begin(uint8_t msg, uint8_t tag)
+{
+  if (tx_ring_full()) {
+    tx_tail++;            /* drop the OLDEST — stale telemetry is worthless */
+    tx_dropped++;
+  }
+  uint8_t *p = tx_ring[tx_head % TX_RING_LEN];
+  memset(p, 0, PROTO_REPORT_SIZE);
+  p[0] = msg;
+  p[1] = tag;
+  p[2] = (uint8_t)(in_seq & 0xFF);
+  p[3] = (uint8_t)(in_seq >> 8);
+  in_seq++;
+  return p;
+}
+
+static void tx_commit(void) { tx_head++; }
+
+/* Hand the endpoint the next queued report if it is free. tud_hid_n_report()
+ * does not queue — it returns false when the endpoint is still busy — so the
+ * ring plus this pump is what keeps a skipped microframe from losing data. */
+static void tx_pump(void)
+{
+  if (tx_head == tx_tail) return;
+  if (!tud_hid_ready()) return;
+
+  const uint8_t *p = tx_ring[tx_tail % TX_RING_LEN];
+  if (tud_hid_report(0, p, PROTO_REPORT_SIZE)) tx_tail++;
+}
+
+void tud_hid_report_complete_cb(uint8_t instance, const uint8_t *report, uint16_t len)
+{
+  (void)instance; (void)report; (void)len;
+  tx_pump();
+}
+
+/* ------------------------------------------------------------ streaming */
+static bool     stream_on;
+static uint8_t  stream_decim = 8;      /* 8 kHz / 8 = 1 kHz frames by default */
+static uint32_t last_streamed;
+static bool     stream_gap;
+
+static void stream_service(void)
+{
+  if (!stream_on) return;
+  if (tx_ring_full()) return;
+
+  uint8_t *p = NULL;
+  uint8_t  n = 0;
+
+  for (n = 0; n < PROTO_FRAMES_PER_RPT; n++) {
+    adc_frame_t f;
+    if (!adc_read_frame(&f)) break;
+    if (f.frame == last_streamed) break;
+    if (last_streamed && (f.frame - last_streamed) < stream_decim) break;
+    if (last_streamed && (f.frame - last_streamed) > stream_decim) stream_gap = true;
+    last_streamed = f.frame;
+
+    if (!p) p = tx_begin(RSP_STREAM, 0);
+
+    uint8_t *e = p + PROTO_STREAM_HDR + n * PROTO_FRAME_BYTES;
+    memcpy(e, &f.frame, 4);
+    const uint8_t *map = adc_slot_map();
+    for (int s = 0; s < PROTO_NUM_SLOTS; s++) {
+      if (map[s] < PROTO_NUM_KEYS) memcpy(e + 4 + 2 * map[s], &f.slot[s], 2);
+    }
+  }
+
+  if (!p) return;
+
+  p[4] = n;
+  p[5] = (uint8_t)(stream_gap ? 1 : 0);
+  p[6] = stream_decim;
+  stream_gap = false;
+  tx_commit();
+  tx_pump();
+}
+
+/* -------------------------------------------------------------- burst */
+static uint16_t burst_buf[PROTO_BURST_MAX];
+static volatile uint8_t  burst_state;      /* 0 idle, 1 running, 2 done */
+static uint16_t burst_count, burst_want;
+static uint8_t  burst_slot;
+
+/* v1 captures by polling frames rather than reconfiguring the ADC — it costs
+ * scan-rate resolution but cannot disturb the live scan engine, which matters
+ * while this is the only way to see the board. */
+static void burst_service(void)
+{
+  if (burst_state != 1) return;
+
+  adc_frame_t f;
+  if (!adc_read_frame(&f)) return;
+  static uint32_t last;
+  if (f.frame == last) return;
+  last = f.frame;
+
+  burst_buf[burst_count++] = f.slot[burst_slot];
+  if (burst_count >= burst_want) burst_state = 2;
+}
+
+/* ------------------------------------------------------------ dispatch */
+static void send_info(uint8_t tag)
+{
+  uint8_t *p = tx_begin(RSP_INFO, tag);
+  p[4] = PROTO_VERSION;
+  p[5] = PROTO_NUM_KEYS;
+  p[6] = PROTO_NUM_SLOTS;
+  p[7] = 12;
+  const uint16_t hz = ADC_SCAN_HZ;
+  memcpy(&p[8], &hz, 2);
+  memcpy(&p[10], adc_slot_map(), PROTO_NUM_SLOTS);
+  const uint32_t cpg_q8 = 1573;               /* 6.144 counts/Gs * 256 */
+  memcpy(&p[18], &cpg_q8, 4);
+  const uint32_t build = BUILD_ID;
+  memcpy(&p[22], &build, 4);
+  tx_commit();
+}
+
+static void send_snapshot(uint8_t tag)
+{
+  adc_frame_t f;
+  if (!adc_read_frame(&f)) return;
+  uint8_t *p = tx_begin(RSP_SNAPSHOT, tag);
+  memcpy(&p[4], &f.frame, 4);
+  memcpy(&p[8], f.slot, 2 * PROTO_NUM_SLOTS);
+  const uint32_t pe = adc_phase_errors();
+  memcpy(&p[24], &pe, 4);
+  memcpy(&p[28], &tx_dropped, 4);
+  tx_commit();
+}
+
+static void send_burst_status(uint8_t tag)
+{
+  uint8_t *p = tx_begin(RSP_BURST_STATUS, tag);
+  p[4] = burst_state;
+  p[5] = burst_slot;
+  memcpy(&p[6], &burst_count, 2);
+  const uint32_t period_ns = 1000000000u / ADC_SCAN_HZ;
+  memcpy(&p[8], &period_ns, 4);
+  tx_commit();
+}
+
+static void send_burst_data(uint8_t tag, uint16_t off)
+{
+  uint8_t *p = tx_begin(RSP_BURST_DATA, tag);
+  uint16_t n = 0;
+  if (off < burst_count) {
+    n = burst_count - off;
+    if (n > PROTO_BURST_PER_RPT) n = PROTO_BURST_PER_RPT;
+    memcpy(&p[7], &burst_buf[off], 2u * n);
+  }
+  memcpy(&p[4], &off, 2);
+  p[6] = (uint8_t)n;
+  tx_commit();
+}
+
+void tud_hid_set_report_cb(uint8_t instance, uint8_t report_id,
+                           hid_report_type_t report_type,
+                           const uint8_t *buffer, uint16_t bufsize)
+{
+  (void)instance; (void)report_id; (void)report_type;
+  if (bufsize < 2) return;
+
+  const uint8_t cmd = buffer[0];
+  const uint8_t tag = buffer[1];
+
+  switch (cmd) {
+    case CMD_INFO:
+      send_info(tag);
+      break;
+
+    case CMD_STREAM_SET:
+      stream_on    = buffer[2] != 0;
+      stream_decim = buffer[3] ? buffer[3] : 1;
+      last_streamed = 0;
+      stream_gap    = false;
+      send_info(tag);
+      break;
+
+    case CMD_SNAPSHOT:
+      send_snapshot(tag);
+      break;
+
+    case CMD_BURST_START: {
+      burst_slot  = buffer[2] < PROTO_NUM_SLOTS ? buffer[2] : 0;
+      uint16_t want;
+      memcpy(&want, &buffer[3], 2);
+      if (want == 0 || want > PROTO_BURST_MAX) want = PROTO_BURST_MAX;
+      burst_want  = want;
+      burst_count = 0;
+      burst_state = 1;
+      send_burst_status(tag);
+      break;
+    }
+
+    case CMD_BURST_STATUS:
+      send_burst_status(tag);
+      break;
+
+    case CMD_BURST_READ: {
+      uint16_t off;
+      memcpy(&off, &buffer[2], 2);
+      send_burst_data(tag, off);
+      break;
+    }
+
+    case CMD_BOOTLOADER: {
+      /* Acknowledge first — the host will never see anything after the jump. */
+      uint8_t *p = tx_begin(RSP_INFO, tag);
+      p[4] = PROTO_VERSION;
+      tx_commit();
+      tx_pump();
+      for (volatile int i = 0; i < 2000000; i++) {
+      }
+      usb_jump_to_bootloader();
+      break;
+    }
+
+    case CMD_BURST_ABORT:
+      burst_state = 0;
+      burst_count = 0;
+      send_burst_status(tag);
+      break;
+
+    default: {
+      uint8_t *p = tx_begin(RSP_ERROR, tag);
+      p[4] = cmd;
+      tx_commit();
+      break;
+    }
+  }
+  tx_pump();
+}
+
+uint16_t tud_hid_get_report_cb(uint8_t instance, uint8_t report_id,
+                               hid_report_type_t report_type,
+                               uint8_t *buffer, uint16_t reqlen)
+{
+  (void)instance; (void)report_id; (void)report_type; (void)buffer; (void)reqlen;
+  return 0;
+}
+
+void usb_jump_to_bootloader(void)
+{
+  __disable_irq();
+
+  /* Detach cleanly so the host tears the device down rather than waiting on a
+   * port that has simply gone quiet. */
+  OTGHS_GCCFG &= ~(GCCFG_PWRDOWN);
+
+  /* Undo enough of our setup that the ROM code starts from something sane. */
+  tmr_counter_enable(TMR2, FALSE);
+  dma_channel_enable(DMA1_CHANNEL1, FALSE);
+  adc_enable(ADC1, FALSE);
+
+  for (uint32_t i = 0; i < 8; i++) {
+    NVIC->ICER[i] = 0xFFFFFFFFu;
+    NVIC->ICPR[i] = 0xFFFFFFFFu;
+  }
+
+  SysTick->CTRL = 0;
+
+  const uint32_t sp = *(volatile uint32_t *)ROM_BOOTLOADER_ADDR;
+  const uint32_t pc = *(volatile uint32_t *)(ROM_BOOTLOADER_ADDR + 4u);
+
+  __set_MSP(sp);
+  ((void (*)(void))pc)();
+
+  for (;;) {
+  }
+}
+
+/* ----------------------------------------------------------------- init */
+void usb_init(void)
+{
+  crm_periph_clock_enable(CRM_OTGHS_PERIPH_CLOCK, TRUE);
+  crm_periph_clock_enable(CRM_OTGHSPHY_PERIPH_CLOCK, TRUE);
+
+  /* The PHY's 12 MHz reference can only come from HEXT — the enum has exactly
+   * one legal value, which is why the crystal must be 12 MHz +-50 ppm. */
+  crm_usb_phy12_clock_select(CRM_USB_PHY12_CLOCK_HEXT_DIV_1);
+
+  /* Leave power-down, and ignore VBUS. The RM wants ~1 ms after the PHY clock
+   * is stable before going further. */
+  OTGHS_GCCFG |= GCCFG_PWRDOWN | GCCFG_VBUSIG;
+  board_delay_us(1000);
+
+  nvic_irq_enable(OTGHS_IRQn, 2, 0);
+
+  tud_init(BOARD_TUD_RHPORT);
+}
+
+void usb_task(void)
+{
+  tud_task();
+  burst_service();
+  stream_service();
+  tx_pump();
+}
+
+void OTGHS_IRQHandler(void)
+{
+  tud_int_handler(BOARD_TUD_RHPORT);
+}
