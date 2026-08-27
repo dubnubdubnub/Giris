@@ -67,18 +67,46 @@ of flash — a BSP bug. `ld/at32f405rbt7.ld` is that file with the length correc
 
 ## What the firmware does today
 
-Phase 1 of the bring-up plan, and nothing more:
-
 - clocks to **216 MHz** from the 12 MHz crystal (PLL MS=1, NS=72, FP /4; PLLU /18 for OTG_FS),
-- drives the 7-pixel SK6812 chain on **PB9** with a slow dim rainbow — pixel 0 is the sacrificial
-  level-shifter and is kept dark,
-- pulses **PD2** (`/IO1`, J6 pin 17) high for 100 µs every ~20 ms as a scope reference.
+- runs the **ADC/mux scan engine at 8 kHz** — ADC1 converts PA3/PA2/PA1/PA0 on every TMR2 TRGO,
+  DMA1_CH1 lands them in a circular 8-slot ring, and the half/full-transfer interrupts flip the
+  TMUX1574 SEL line so bank A and bank B interleave,
+- enumerates on **J3 as a USB high-speed raw-HID device** and streams the readings to the browser
+  viewer,
+- drives the SK6812 chain as a status indicator.
 
-**Proof of life:** the six key LEDs cycle colour. **Scope check:** the PD2 pulse should measure 100 µs.
-If it measures ~2.2× that, the PLL did not engage and the core is running off HICK.
+There is deliberately **no keyboard interface yet**. With no keyboard usages in the descriptor, macOS
+does not demand Input Monitoring permission, so the viewer just works.
 
-If nothing happens, BOOT0 + NRST always gets you back to DFU — the ROM bootloader runs before user code,
-so you cannot brick the board this way.
+### The viewer
+
+```bash
+./tools/viewer/serve.sh          # http://localhost:8000, Chrome or Edge
+```
+
+WebHID needs a secure context and `http://localhost` qualifies, so there is no TLS and no build step.
+Live traces for all six keys, per-key readouts in counts and Gauss, CSV recording, a raw-slot debug
+table, and a burst capture that dumps a few thousand samples for an in-page FFT.
+
+That FFT is the point of the whole exercise: **a flat spectrum means white noise and narrowing the
+analog filter is worth it; a −1/2 amplitude slope means 1/f and narrowing buys ~5 % for a 103 µs
+transport delay.** That measurement decides the filter respin.
+
+### Checking the USB side
+
+```bash
+python3 tools/usb-check.py
+```
+
+Reads descriptors only — no interface claim — so it works while the browser has the device open. It
+should report high speed (480 Mb/s) and `bInterval=1` on the interrupt endpoints.
+
+### Reflashing without touching the board
+
+The viewer's **DFU** button issues `CMD_BOOTLOADER`, which jumps to the ROM bootloader at
+`0x1FFFA400`. The device disappears from J3 and reappears as `2e3c:df11` on J2, ready for
+`tools/flash.sh`. BOOT0 + NRST remains the recovery path if the firmware ever stops answering — the
+ROM bootloader runs before user code, so you cannot brick the board this way.
 
 ## Deliberately not done yet
 
