@@ -37,3 +37,9 @@ fp-info-cache
 # VS Code Local History extension
 .history/
 .history_trim/
+
+# macOS Finder metadata
+.DS_Store
+
+# Transient tool logs (analyzer/exporter stderr captures)
+*.err
