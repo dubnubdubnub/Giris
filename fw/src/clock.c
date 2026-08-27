@@ -14,25 +14,34 @@
 #include "board.h"
 #include "clock.h"
 
-void board_clock_init(void)
+bool board_clock_try_hext(void)
+{
+  crm_clock_source_enable(CRM_CLOCK_SOURCE_HEXT, TRUE);
+
+  /* Bounded. An unbounded spin here is invisible from outside: no console, no
+   * USB, no LEDs — the board just looks dead. */
+  uint32_t guard = 4000000;
+  while (crm_flag_get(CRM_HEXT_STABLE_FLAG) != SET && guard) guard--;
+  return guard != 0;
+}
+
+bool board_clock_init(void)
 {
   /* 216 MHz needs the LDO at 1.3 V and six flash wait states, and both must be
    * in place BEFORE the switch to PLL. */
   pwc_ldo_output_voltage_set(PWC_LDO_OUTPUT_1V3);
   flash_psr_set(FLASH_WAIT_CYCLE_6);
 
-  crm_reset();
-
-  crm_clock_source_enable(CRM_CLOCK_SOURCE_HEXT, TRUE);
-  while (crm_flag_get(CRM_HEXT_STABLE_FLAG) != SET) {
-    /* A hang here means the 12 MHz crystal or its load caps are wrong. */
-  }
+  if (!board_clock_try_hext()) return FALSE;
 
   crm_pll_config(CRM_PLL_SOURCE_HEXT, 72, 1, CRM_PLL_FP_4);
   crm_pllu_div_set(CRM_PLL_FU_18);            /* 864 / 18 = 48 MHz for OTG_FS */
 
   crm_clock_source_enable(CRM_CLOCK_SOURCE_PLL, TRUE);
-  while (crm_flag_get(CRM_PLL_STABLE_FLAG) != SET) {
+  {
+    uint32_t guard = 4000000;
+    while (crm_flag_get(CRM_PLL_STABLE_FLAG) != SET && guard) guard--;
+    if (!guard) return FALSE;
   }
 
   /* AHB /1 = 216 MHz.  APB2 /1 = 216 MHz (so USART6 and the ADC clock come off
@@ -44,11 +53,15 @@ void board_clock_init(void)
   /* Auto-step is required across a large sysclk jump and must be turned back off. */
   crm_auto_step_mode_enable(CRM_AUTO_STEP_MODE_ENABLE);
   crm_sysclk_switch(CRM_SCLK_PLL);
-  while (crm_sysclk_switch_status_get() != CRM_SCLK_PLL) {
+  {
+    uint32_t guard = 4000000;
+    while (crm_sysclk_switch_status_get() != CRM_SCLK_PLL && guard) guard--;
+    if (!guard) return FALSE;
   }
   crm_auto_step_mode_enable(CRM_AUTO_STEP_MODE_DISABLE);
 
   system_core_clock_update();
+  return TRUE;
 }
 
 void board_delay_cycles_init(void)

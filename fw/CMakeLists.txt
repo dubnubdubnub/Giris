@@ -10,6 +10,7 @@ set(CMAKE_C_STANDARD_REQUIRED ON)
 set(BSP     ${CMAKE_SOURCE_DIR}/vendor/at32f402_405)
 set(CMSIS   ${BSP}/libraries/cmsis/cm4)
 set(DRIVERS ${BSP}/libraries/drivers)
+set(TUSB    ${CMAKE_SOURCE_DIR}/vendor/tinyusb)
 
 if(NOT EXISTS ${BSP})
   message(FATAL_ERROR "vendor/ is empty — run tools/fetch-deps.sh first")
@@ -28,12 +29,26 @@ add_executable(giris.elf
   src/main.c
   src/clock.c
   src/sk6812.c
+  src/adc.c
+  src/usb.c
+  src/usb_descriptors.c
+  src/console.c
+  ${TUSB}/src/tusb.c
+  ${TUSB}/src/common/tusb_fifo.c
+  ${TUSB}/src/device/usbd.c
+  ${TUSB}/src/class/hid/hid_device.c
+  ${TUSB}/src/portable/synopsys/dwc2/dcd_dwc2.c
+  ${TUSB}/src/portable/synopsys/dwc2/dwc2_common.c
   ${CMSIS}/device_support/system_at32f402_405.c
   ${DRIVERS}/src/at32f402_405_crm.c
   ${DRIVERS}/src/at32f402_405_gpio.c
   ${DRIVERS}/src/at32f402_405_misc.c
   ${DRIVERS}/src/at32f402_405_pwc.c
   ${DRIVERS}/src/at32f402_405_flash.c
+  ${DRIVERS}/src/at32f402_405_adc.c
+  ${DRIVERS}/src/at32f402_405_dma.c
+  ${DRIVERS}/src/at32f402_405_tmr.c
+  ${DRIVERS}/src/at32f402_405_usart.c
 )
 
 target_include_directories(giris.elf PRIVATE
@@ -41,12 +56,14 @@ target_include_directories(giris.elf PRIVATE
   ${CMSIS}/core_support
   ${CMSIS}/device_support
   ${DRIVERS}/inc
+  ${TUSB}/src
 )
 
 target_compile_definitions(giris.elf PRIVATE
   ${PART}
   USE_STDPERIPH_DRIVER
   HEXT_VALUE=12000000U     # 12 MHz crystal — the OTG_HS PHY's only legal reference
+  CFG_TUSB_MCU=OPT_MCU_AT32F402_405
 )
 
 target_compile_options(giris.elf PRIVATE

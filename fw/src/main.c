@@ -1,16 +1,22 @@
 /*
  * main.c — Giris firmware, first light.
  *
- * What this does today: clock to 216 MHz, prove the SK6812 chain works, and put a
- * square wave on the scope pin so the clock tree can be checked against a probe.
- * That is deliberately all of it — this is the bring-up skeleton the architecture
- * doc calls Phase 1, not the keyboard.
+ * Today: clock to 216 MHz, run the ADC/mux scan engine at 8 kHz, and expose the
+ * readings over a raw-HID interface on the USB HS port (J3) so the browser viewer
+ * can plot and log them. The SK6812 chain doubles as a status indicator.
+ *
+ * Still no keyboard interface, deliberately — with no keyboard usages in the
+ * descriptor, macOS does not demand Input Monitoring to open the device.
  *
  * See ../../hw/TMR2615F_osu_pad/firmware_architecture.md for what comes next.
  */
 #include "board.h"
 #include "clock.h"
 #include "sk6812.h"
+#include "adc.h"
+#include "usb.h"
+#include "console.h"
+#include "tusb.h"
 
 static uint32_t leds[LED_COUNT];
 
@@ -53,33 +59,99 @@ static void scope_pin_init(void)
 
 int main(void)
 {
-  board_clock_init();
+  /* Boot on the reset-default internal oscillator so the console exists BEFORE
+   * anything that can hang. The previous build initialised the PLL first and
+   * spun forever waiting on HEXT — from outside that is indistinguishable from
+   * a dead board. */
+  system_core_clock_update();
   board_delay_cycles_init();
+  console_init();
+
+  console_puts("\n\n=== Giris fw (safe boot) ===\nboot sclk ");
+  console_dec(system_core_clock);
+  console_puts(" Hz (HICK)\n");
+
+  console_stage("probing HEXT - the 12 MHz crystal");
+  const bool hext_ok = board_clock_try_hext();
+  if (!hext_ok) {
+    console_puts("!! HEXT NEVER STABILISED.\n");
+    console_puts("!! USB HS cannot work: that crystal is the HS PHY's only legal reference.\n");
+    console_puts("!! Check Y1, its load caps, and that OTGHS1_R has its 12k 1%.\n");
+  } else {
+    console_stage("HEXT stable - switching to 216 MHz PLL");
+    if (board_clock_init()) {
+      console_init();                 /* re-init: the baud divisor changed */
+      console_puts("sclk now ");
+      console_dec(system_core_clock);
+      console_puts(" Hz\n");
+    } else {
+      console_puts("!! PLL or sysclk switch timed out; still on HICK\n");
+    }
+  }
 
   /* PC13 (AP22653 enable) is deliberately left untouched. It is Hi-Z at reset and
-   * R27's 10k pulldown holds the 5 V source OFF. Driving it before link
-   * arbitration would push VBUS out of J1 into whatever is plugged in. */
+   * R27's 10k pulldown holds the 5 V source OFF. */
 
+  console_stage("scope pin");
   scope_pin_init();
+
+  console_stage("sk6812");
   sk6812_init();
 
-  uint8_t phase = 0;
+  console_stage("usb (OTG_HS on J3)");
+  if (hext_ok) {
+    usb_init();
+  } else {
+    console_puts("   skipped - no crystal\n");
+  }
+
+  console_stage("adc scan engine");
+  adc_scan_init();
+  if (adc_calibration_failed()) console_puts("!! ADC calibration timed out\n");
+
+  console_stage("running");
+
+  uint32_t last_blink = 0;
+  uint32_t last_report = 0;
+  uint8_t  phase      = 0;
 
   for (;;) {
-    /* Pixel 0 is the level shifter — keep it dark. */
-    leds[0] = 0;
-    for (uint32_t i = LED_FIRST_KEY_PIXEL; i < LED_COUNT; i++) {
-      leds[i] = hue((uint8_t)(phase + i * 36u), 24);   /* low value: 6 LEDs, any port */
+    usb_task();
+
+    /* Once a second, say what is actually happening. Cheap, and it is the
+     * difference between "the board is dead" and "USB never enumerated". */
+    adc_frame_t hb;
+    adc_read_frame(&hb);
+    if (++last_report > 150000u) {
+      last_report = 0;
+      console_puts("frame ");
+      console_dec(hb.frame);
+      console_puts("  slots");
+      for (int i = 0; i < PROTO_NUM_SLOTS; i++) {
+        console_puts(" ");
+        console_dec(hb.slot[i]);
+      }
+      console_puts("  usb=");
+      console_puts(tud_mounted() ? "mounted" : "down");
+      console_puts("\n");
     }
-    sk6812_write(leds, LED_COUNT);
 
-    /* Heartbeat on PD2 (J6 pin 17): one pulse per frame. Scope it to confirm the
-     * 216 MHz clock tree — the pulse should be 100 us wide, not 100 us * (216/f). */
-    SCOPE_PORT->scr = SCOPE_PIN;
-    board_delay_us(100);
-    SCOPE_PORT->clr = SCOPE_PIN;
+    /* Status pixels, refreshed slowly so the blocking bit-bang stays out of the
+     * way of USB. Pixel 0 is the level shifter and stays dark. */
+    adc_frame_t f;
+    if (adc_read_frame(&f) && (f.frame - last_blink) > (ADC_SCAN_HZ / 20u)) {
+      last_blink = f.frame;
 
-    board_delay_us(20000);
-    phase++;
+      leds[0] = 0;
+      for (uint32_t i = LED_FIRST_KEY_PIXEL; i < LED_COUNT; i++) {
+        leds[i] = hue((uint8_t)(phase + i * 36u), 12);
+      }
+      sk6812_write(leds, LED_COUNT);
+      phase++;
+
+      SCOPE_PORT->scr = SCOPE_PIN;
+      board_delay_us(20);
+      SCOPE_PORT->clr = SCOPE_PIN;
+    }
   }
 }
