@@ -1,0 +1,807 @@
+<title>SC4011 on the osu!pad — Z-axis swap model</title>
+<style>
+  :root {
+    color-scheme: light;
+    --page: #f9f9f7; --surface: #fcfcfb;
+    --ink: #0b0b0b; --ink-2: #52514e; --muted: #898781;
+    --grid: #e1e0d9; --axis: #c3c2b7; --ring: rgba(11,11,11,0.10);
+    --s1: #2a78d6; --s2: #eb6834; --s3: #1baf7a; --s4: #eda100; --s5: #e87ba4;
+    --s6: #008300; --s7: #4a3aa7; --s8: #e34948;
+    --critical: #d03b3b; --warn: #b06d00; --good: #0ca30c; --good-text: #006300;
+    --chip-ok-bg: rgba(12,163,12,0.10); --chip-warn-bg: rgba(176,109,0,0.12); --chip-bad-bg: rgba(208,59,59,0.10);
+    --pcb: #e4e8e0; --pcb-edge: #aab4a4; --copper: #b87333;
+    --housing: rgba(11,11,11,0.05); --magnet: #4a4a48;
+    --band: rgba(42,120,214,0.14);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:where(:not([data-theme="light"])) {
+      color-scheme: dark;
+      --page: #0d0d0d; --surface: #1a1a19;
+      --ink: #ffffff; --ink-2: #c3c2b7; --muted: #898781;
+      --grid: #2c2c2a; --axis: #383835; --ring: rgba(255,255,255,0.10);
+      --s1: #3987e5; --s2: #d95926; --s3: #199e70; --s4: #c98500; --s5: #d55181;
+      --s6: #008300; --s7: #9085e9; --s8: #e66767;
+      --critical: #e05555; --warn: #d99a2b; --good: #0ca30c; --good-text: #33ba33;
+      --chip-ok-bg: rgba(12,163,12,0.16); --chip-warn-bg: rgba(217,154,43,0.16); --chip-bad-bg: rgba(224,85,85,0.14);
+      --pcb: #232823; --pcb-edge: #46503f; --copper: #c8874a;
+      --housing: rgba(255,255,255,0.06); --magnet: #b9b9b4;
+      --band: rgba(57,135,229,0.20);
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --page: #0d0d0d; --surface: #1a1a19;
+    --ink: #ffffff; --ink-2: #c3c2b7; --muted: #898781;
+    --grid: #2c2c2a; --axis: #383835; --ring: rgba(255,255,255,0.10);
+    --s1: #3987e5; --s2: #d95926; --s3: #199e70; --s4: #c98500; --s5: #d55181;
+    --s6: #008300; --s7: #9085e9; --s8: #e66767;
+    --critical: #e05555; --warn: #d99a2b; --good: #0ca30c; --good-text: #33ba33;
+    --chip-ok-bg: rgba(12,163,12,0.16); --chip-warn-bg: rgba(217,154,43,0.16); --chip-bad-bg: rgba(224,85,85,0.14);
+    --pcb: #232823; --pcb-edge: #46503f; --copper: #c8874a;
+    --housing: rgba(255,255,255,0.06); --magnet: #b9b9b4;
+    --band: rgba(57,135,229,0.20);
+  }
+  :root[data-theme="light"] {
+    color-scheme: light;
+    --page: #f9f9f7; --surface: #fcfcfb;
+    --ink: #0b0b0b; --ink-2: #52514e; --muted: #898781;
+    --grid: #e1e0d9; --axis: #c3c2b7; --ring: rgba(11,11,11,0.10);
+    --s1: #2a78d6; --s2: #eb6834; --s3: #1baf7a; --s4: #eda100; --s5: #e87ba4;
+    --s6: #008300; --s7: #4a3aa7; --s8: #e34948;
+    --critical: #d03b3b; --warn: #b06d00; --good: #0ca30c; --good-text: #006300;
+    --chip-ok-bg: rgba(12,163,12,0.10); --chip-warn-bg: rgba(176,109,0,0.12); --chip-bad-bg: rgba(208,59,59,0.10);
+    --pcb: #e4e8e0; --pcb-edge: #aab4a4; --copper: #b87333;
+    --housing: rgba(11,11,11,0.05); --magnet: #4a4a48;
+    --band: rgba(42,120,214,0.14);
+  }
+
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--page); color: var(--ink);
+         font: 15px/1.55 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  .wrap { max-width: 1100px; margin: 0 auto; padding: 32px 20px 64px; display: flex; flex-direction: column; gap: 20px; }
+
+  header h1 { font-size: 22px; font-weight: 650; margin: 0 0 4px; text-wrap: balance; }
+  header p { margin: 0; color: var(--ink-2); max-width: 72ch; }
+  .eyebrow { font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+
+  .panel { background: var(--surface); border: 1px solid var(--ring); border-radius: 8px; padding: 18px 20px; }
+  .panel h2 { font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-2); margin: 0 0 12px; font-weight: 600; }
+
+  /* verdict strip */
+  .verdict-strip { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
+  .vcard { background: var(--surface); border: 1px solid var(--ring); border-radius: 8px; padding: 14px 16px;
+           display: flex; flex-direction: column; gap: 4px; }
+  .vcard .k { font-size: 11px; letter-spacing: 0.05em; text-transform: uppercase; color: var(--muted); }
+  .vcard .v { font-size: 19px; font-weight: 620; line-height: 1.25; }
+  .vcard .n { font-size: 12.5px; color: var(--ink-2); }
+  .chip { display: inline-flex; align-items: center; gap: 5px; font-size: 11.5px; font-weight: 600;
+          padding: 2px 8px; border-radius: 100px; letter-spacing: 0.02em; width: fit-content; }
+  .chip.ok { background: var(--chip-ok-bg); color: var(--good-text); }
+  .chip.warn { background: var(--chip-warn-bg); color: var(--warn); }
+  .chip.bad { background: var(--chip-bad-bg); color: var(--critical); }
+
+  .controls { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px 18px; }
+  .ctl label { display: block; font-size: 12px; color: var(--ink-2); margin-bottom: 2px; }
+  .ctl .val { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 12px; color: var(--ink); }
+  .ctl input[type=range] { width: 100%; accent-color: var(--s2); }
+  .ctl select { width: 100%; font: inherit; padding: 4px 6px; border-radius: 5px;
+                border: 1px solid var(--axis); background: var(--surface); color: var(--ink); }
+  .ctl input:focus-visible, .ctl select:focus-visible, button:focus-visible { outline: 2px solid var(--s2); outline-offset: 2px; }
+  button.reset { font: 13px system-ui, sans-serif; color: var(--ink-2); background: none;
+                 border: 1px solid var(--axis); border-radius: 5px; padding: 4px 12px; cursor: pointer; align-self: end; }
+  button.reset:hover { color: var(--ink); border-color: var(--muted); }
+
+  .xsec-grid { display: grid; grid-template-columns: minmax(300px, 460px) 1fr; gap: 20px; align-items: start; }
+  @media (max-width: 760px) { .xsec-grid { grid-template-columns: 1fr; } }
+  .readouts { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; }
+  .tile { border: 1px solid var(--ring); border-radius: 6px; padding: 10px 12px; }
+  .tile .k { font-size: 11px; letter-spacing: 0.05em; text-transform: uppercase; color: var(--muted); }
+  .tile .v { font-size: 21px; font-weight: 620; margin-top: 2px; }
+  .tile .u { font-size: 12px; color: var(--ink-2); font-weight: 400; }
+  .tile.alert .v { color: var(--critical); }
+  .tile.caution .v { color: var(--warn); }
+
+  .charts { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  @media (max-width: 900px) { .charts { grid-template-columns: 1fr; } }
+  .chart-box { position: relative; }
+  .chart-box svg { display: block; width: 100%; height: auto; }
+  .legend { display: flex; flex-wrap: wrap; gap: 6px 14px; margin: 8px 0 2px; font-size: 12.5px; color: var(--ink-2); }
+  .legend .lchip { display: inline-flex; align-items: center; gap: 6px; }
+  .legend .sw { width: 14px; height: 3px; border-radius: 2px; }
+  .tooltip { position: absolute; pointer-events: none; background: var(--surface); border: 1px solid var(--ring);
+             border-radius: 6px; padding: 8px 10px; font-size: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.12);
+             display: none; z-index: 5; min-width: 175px; }
+  .tooltip table { border-collapse: collapse; width: 100%; }
+  .tooltip td { padding: 1px 0; font-variant-numeric: tabular-nums; }
+  .tooltip td:last-child { text-align: right; font-family: ui-monospace, Menlo, monospace; }
+
+  .scroller { overflow-x: auto; }
+  table.res { border-collapse: collapse; width: 100%; font-size: 13.5px; }
+  table.res th { text-align: right; font-size: 11.5px; letter-spacing: 0.04em; text-transform: uppercase;
+                 color: var(--muted); font-weight: 600; padding: 6px 10px; border-bottom: 1px solid var(--axis); white-space: nowrap; }
+  table.res th:first-child, table.res td:first-child { text-align: left; padding-left: 4px; }
+  table.res td { padding: 7px 10px; text-align: right; border-bottom: 1px solid var(--grid);
+                 font-variant-numeric: tabular-nums; font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 12.5px; }
+  table.res td:first-child { font-family: inherit; font-size: 13.5px; }
+  .swatch { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 7px; vertical-align: baseline; }
+
+  /* audit + pinmap tables */
+  table.audit { border-collapse: collapse; width: 100%; font-size: 13.5px; }
+  table.audit th { text-align: left; font-size: 11.5px; letter-spacing: 0.04em; text-transform: uppercase;
+                   color: var(--muted); font-weight: 600; padding: 6px 10px 6px 0; border-bottom: 1px solid var(--axis); }
+  table.audit td { padding: 9px 10px 9px 0; border-bottom: 1px solid var(--grid); vertical-align: top; color: var(--ink-2); }
+  table.audit td:first-child { color: var(--ink); font-weight: 550; white-space: nowrap; }
+  table.audit td.mono, table.audit th.mono { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 12.5px;
+                                             font-variant-numeric: tabular-nums; }
+  td .chip { margin-top: 2px; }
+
+  .method { color: var(--ink-2); font-size: 14px; max-width: 78ch; }
+  .method ul { margin: 8px 0 0; padding-left: 20px; }
+  .method li { margin-bottom: 6px; }
+  .method code, .inline-code { font-family: ui-monospace, Menlo, monospace; font-size: 12.5px; background: var(--housing);
+                 padding: 1px 5px; border-radius: 4px; }
+  .note { font-size: 13px; color: var(--ink-2); margin: 10px 0 0; }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">osu!pad · sensor second-source check</div>
+    <h1>Swapping the TMR2615F for a Semiment SC4011 (DFN1616)</h1>
+    <p>The SC4011 is a planar Hall sensor: it reads <strong>B<sub>z</sub></strong>, perpendicular to the board,
+       where the TMR2615F reads <strong>B<sub>x</sub></strong> in the board plane. The sensor site doesn't move —
+       only which field component it sees. Same validated cylinder-magnet model as the TMR page, recomputed on the
+       axial component, with the SC4011's real output limits and the board's actual signal chain.</p>
+  </header>
+
+  <section class="verdict-strip" id="verdicts"></section>
+
+  <section class="panel">
+    <h2>Parameters</h2>
+    <div class="controls">
+      <div class="ctl">
+        <label for="preset">Switch (edit selected)</label>
+        <select id="preset"></select>
+      </div>
+      <div class="ctl"><label>Press depth <span class="val" id="v-depth"></span></label>
+        <input type="range" id="depth" min="0" max="4.1" step="0.01" value="0"></div>
+      <div class="ctl"><label>Sensor offset r <span class="val" id="v-roff"></span></label>
+        <input type="range" id="roff" min="2.0" max="5.0" step="0.01" value="3.09"></div>
+      <div class="ctl"><label>PCB thickness <span class="val" id="v-pcb"></span></label>
+        <input type="range" id="pcb" min="0.8" max="2.0" step="0.01" value="1.62"></div>
+      <div class="ctl"><label>Hall plate depth <span class="val" id="v-die"></span></label>
+        <input type="range" id="die" min="0.10" max="0.50" step="0.01" value="0.30"></div>
+      <div class="ctl"><label>V<sub>CC</sub> (sensor supply) <span class="val" id="v-vcc"></span></label>
+        <input type="range" id="vcc" min="2.2" max="5.5" step="0.1" value="3.3"></div>
+      <div class="ctl"><label>Magnet &Oslash; <span class="val" id="v-dia"></span></label>
+        <input type="range" id="dia" min="2.0" max="4.0" step="0.05" value="2.77"></div>
+      <div class="ctl"><label>Magnet length <span class="val" id="v-len"></span></label>
+        <input type="range" id="len" min="0.8" max="4.0" step="0.05" value="3.41"></div>
+      <div class="ctl"><label>Remanence B<sub>r</sub> <span class="val" id="v-brem"></span></label>
+        <input type="range" id="brem" min="1.10" max="1.70" step="0.01" value="1.23"></div>
+      <button class="reset" id="reset">Reset</button>
+    </div>
+    <p class="note" id="vcc-note"></p>
+  </section>
+
+  <section class="panel">
+    <h2>Cross-section (to scale) — the sensor doesn't move, the sensed axis rotates 90&deg;</h2>
+    <div class="xsec-grid">
+      <div id="xsec"></div>
+      <div>
+        <div class="readouts">
+          <div class="tile"><div class="k">Magnet &rarr; plate gap</div><div class="v" id="r-gap">–</div></div>
+          <div class="tile"><div class="k">|B<sub>z</sub>| at sensor</div><div class="v" id="r-bz">–</div></div>
+          <div class="tile"><div class="k">|B<sub>x</sub>| (TMR would see)</div><div class="v" id="r-bx">–</div></div>
+          <div class="tile" id="t-vout"><div class="k">V<sub>OUT</sub></div><div class="v" id="r-vout">–</div></div>
+          <div class="tile"><div class="k">Field headroom</div><div class="v" id="r-head">–</div></div>
+          <div class="tile" id="t-res"><div class="k">Position resolution</div><div class="v" id="r-res">–</div></div>
+        </div>
+        <p style="font-size:13px;color:var(--ink-2);margin:12px 0 0;max-width:52ch">
+          The Hall plate sits ~0.30&nbsp;mm below the board's F-side surface — the same depth as the TMR die, so the
+          magnet-to-sensor gap is unchanged. What changes is the component: at r&nbsp;=&nbsp;3.09&nbsp;mm the axial
+          field is roughly <em>half</em> the radial field's swing, and it falls off far faster with radial error.
+          Resolution is quoted against a 12-bit ADC on the 3.3&nbsp;V V<sub>DDA</sub> reference (0.806&nbsp;mV/LSB),
+          single conversion, no oversampling.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel">
+    <h2>Field &amp; output vs press depth</h2>
+    <div class="legend" id="legend"></div>
+    <div class="charts">
+      <div class="chart-box" id="chartA"></div>
+      <div class="chart-box" id="chartB"></div>
+    </div>
+    <p class="note">Left: axial field at the sensor, with the selected switch's radial field dashed for
+      comparison — that gap is the whole cost of the swap. Right: SC4011 output, shaded across the datasheet's
+      1.2&ndash;2.0&nbsp;mV/Gs sensitivity spread at 3.3&nbsp;V (&plusmn;25&nbsp;%, untrimmed).</p>
+  </section>
+
+  <section class="panel scroller">
+    <h2>Per-switch results (live)</h2>
+    <table class="res" id="resTable"></table>
+    <p class="note">&Delta;V is the full-travel output swing at typical sensitivity; LSB and &micro;m/LSB assume the
+      board's 12-bit ADC at 3.3&nbsp;V. The last column is the same figure for the TMR2615F-AAC-1.500-500 reading
+      B<sub>x</sub>, for direct comparison.</p>
+  </section>
+
+  <section class="panel scroller">
+    <h2>Signal-chain audit — against the board as built</h2>
+    <table class="audit">
+      <thead>
+        <tr><th>Item</th><th>Board as built</th><th>SC4011DN needs</th><th>Verdict</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Supply rail</td>
+          <td class="mono">+3.3VA, TPS7A4700 LDO off +5V</td>
+          <td class="mono">V<sub>CC</sub> 2.2&ndash;5.5&nbsp;V</td>
+          <td><span class="chip ok">works</span> 3.3&nbsp;V is in range; buys only 1.6&nbsp;mV/Gs instead of the
+              2.9&nbsp;mV/Gs it would give at 5&nbsp;V.</td>
+        </tr>
+        <tr>
+          <td>Ratiometry</td>
+          <td class="mono">+3.3VA feeds sensors <em>and</em>, via L1, the MCU V<sub>DDA</sub> / ADC reference</td>
+          <td class="mono">V<sub>Q</sub> = V<sub>CC</sub>/2, output &prop; V<sub>CC</sub></td>
+          <td><span class="chip ok">preserved</span> Rail drift cancels — but only on +3.3VA. Powering it from
+              +5&nbsp;V breaks this: that rail is raw VBUS through the LM66100 ideal diode and also feeds the
+              SK6812s.</td>
+        </tr>
+        <tr>
+          <td>Supply current</td>
+          <td class="mono">6 &times; 240&nbsp;&micro;A = 1.4&nbsp;mA</td>
+          <td class="mono">2.5&nbsp;mA typ, 6&nbsp;mA max each</td>
+          <td><span class="chip warn">10&ndash;25&times; more</span> 15&nbsp;mA typ / 36&nbsp;mA worst case.
+              Trivial for the LDO and for USB; it only matters if this design ever goes wireless.</td>
+        </tr>
+        <tr>
+          <td>Output loading</td>
+          <td class="mono">330&nbsp;&Omega; series &rarr; TMUX1574 &rarr; ADC; 30&nbsp;pF to GND at the source</td>
+          <td class="mono">R<sub>L</sub> &ge; 4&nbsp;k&Omega; to GND, I<sub>OUT</sub> &le; 2&nbsp;mA</td>
+          <td><span class="chip ok">works</span> The 330&nbsp;&Omega; is series, not a load; DC load is mux and ADC
+              leakage. 30&nbsp;pF is well under the 1&nbsp;nF the datasheet allows.</td>
+        </tr>
+        <tr>
+          <td>Mux &amp; ADC window</td>
+          <td class="mono">TMUX1574 on +3.3VA; ADC 0&ndash;3.3&nbsp;V</td>
+          <td class="mono">0.8&nbsp;V &hellip; V<sub>CC</sub>&minus;0.7&nbsp;V output window</td>
+          <td><span class="chip ok">works</span> At 3.3&nbsp;V the output lives in 0.8&ndash;2.6&nbsp;V, entirely
+              inside the mux rails. No level shifting, no clamp diodes needed.</td>
+        </tr>
+        <tr>
+          <td>Signal amplitude</td>
+          <td class="mono">TMR: 4.95&nbsp;mV/Gs on a 155&nbsp;Gs swing &rarr; 767&nbsp;mV</td>
+          <td class="mono">1.6&nbsp;mV/Gs on a 70&nbsp;Gs swing &rarr; 112&nbsp;mV</td>
+          <td><span class="chip bad">~7&times; less</span> The real cost. Half from the axis change, half from the
+              lower sensitivity. See the resolution column in the table above.</td>
+        </tr>
+        <tr>
+          <td>Output noise</td>
+          <td class="mono">TMR2615F: 10&nbsp;mV<sub>PP</sub> specified</td>
+          <td class="mono">not specified — only "low noise, no filtering required"</td>
+          <td><span class="chip bad">unknown</span> The single biggest risk. If the SC4011 also sits near
+              10&nbsp;mV<sub>PP</sub>, that is ~0.3&nbsp;mm of apparent travel and the swap fails outright.
+              Oversampling buys back &radic;N. <strong>Measure this before committing.</strong></td>
+        </tr>
+        <tr>
+          <td>Part-to-part spread</td>
+          <td class="mono">factory-calibrated code, "high consistency"</td>
+          <td class="mono">1.2 / 1.6 / 2.0&nbsp;mV/Gs (&plusmn;25&nbsp;%)</td>
+          <td><span class="chip warn">calibrate per key</span> You almost certainly already do; this makes it
+              mandatory rather than optional.</td>
+        </tr>
+        <tr>
+          <td>Temperature drift</td>
+          <td class="mono">TCS 1000&nbsp;ppm/&deg;C, TCO &minus;0.12&nbsp;mV/&deg;C</td>
+          <td class="mono">not specified at all</td>
+          <td><span class="chip warn">unspecified</span> Low stakes in a keyboard, but it is a real gap in the
+              datasheet, not an omission on this page.</td>
+        </tr>
+        <tr>
+          <td>Hotswap socket short</td>
+          <td class="mono">SW&lowast; pin 1 = GND, pin 2 = sensor V<sub>OUT</sub></td>
+          <td class="mono">I<sub>OUT</sub> abs max 2&nbsp;mA</td>
+          <td><span class="chip warn">pre-existing</span> Fitting a mechanical switch shorts the sensor output to
+              GND when pressed. The TMR has the same exposure (1.5&nbsp;mA abs max). Move the socket tap to the far
+              side of the 330&nbsp;&Omega; if you want it properly safe.</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="panel scroller">
+    <h2>Footprint merge — the two land patterns share a grid</h2>
+    <p class="note" style="margin:0 0 14px">
+      Both parts are 1.6&nbsp;&times;&nbsp;1.6&nbsp;mm with 0.5&nbsp;mm pad pitch in X and pin&nbsp;1 at
+      bottom-left in top view. Pad rows sit at y&nbsp;=&nbsp;&plusmn;0.62&nbsp;mm (TMR2615F) vs
+      &plusmn;0.575&nbsp;mm (SC4011) — a 0.045&nbsp;mm difference, easily absorbed by one shared land. A merged
+      6-pad pattern plus the TMR's centre bar carries both parts.</p>
+    <table class="audit">
+      <thead>
+        <tr><th class="mono">Land (top view)</th><th>TMR2615F</th><th>SC4011DN</th><th>Wiring</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="mono">(&minus;0.5, +0.60)</td><td>pad 1 &mdash; V<sub>OUT</sub></td><td>pin 1 &mdash; V<sub>CC</sub></td>
+            <td><span class="chip warn">conflict</span> Needs a 3-pad solder jumper selecting SIG or +3.3VA. This is the swap you identified.</td></tr>
+        <tr><td class="mono">(0.0, +0.60)</td><td>&mdash;</td><td>pin 2 &mdash; NC</td>
+            <td>Free pad, leave unconnected.</td></tr>
+        <tr><td class="mono">(+0.5, +0.60)</td><td>pad 2 &mdash; GND</td><td>pin 3 &mdash; GND</td>
+            <td><span class="chip ok">identical</span> Hard-wire to GND. No jumper.</td></tr>
+        <tr><td class="mono">(+0.5, &minus;0.60)</td><td>&mdash;</td><td>pin 4 &mdash; NC</td>
+            <td>Free pad, leave unconnected.</td></tr>
+        <tr><td class="mono">(0.0, &minus;0.60)</td><td>pad 3 &mdash; V<sub>DD</sub></td><td>pin 5 &mdash; NC</td>
+            <td><span class="chip warn">gate it</span> Don't hard-wire +3.3VA here: if Semiment's NC is bonded to
+                substrate you short the rail. Second jumper, or get written confirmation it's a true NC.</td></tr>
+        <tr><td class="mono">(&minus;0.5, &minus;0.60)</td><td>&mdash;</td><td>pin 6 &mdash; OUT</td>
+            <td><span class="chip warn">new pad</span> 2-pad jumper to the 330&nbsp;&Omega; / SIG node. Open in TMR mode.</td></tr>
+        <tr><td class="mono">centre bar 1.2&times;0.35</td><td>pad 4 &mdash; GND (redundant with pad 2)</td><td>no pad — bare body</td>
+            <td><span class="chip warn">reduce paste</span> Both parts stand off only ~0.13&nbsp;mm on the lead frame.
+                A full paste deposit under the SC4011's body can tilt it — use a ~50&nbsp;% aperture.</td></tr>
+      </tbody>
+    </table>
+    <p class="note">Net cost: <strong>three solder jumpers per key</strong> (VCC/SIG selector, VDD gate, OUT tap) —
+      18 for the six keys. Rotating the SC4011 doesn't help: at 180&deg; its OUT lands on the TMR's GND pad. Since
+      the SC4011 is Z-axis, its rotation about the board normal is magnetically free, so orientation is purely a
+      routing choice — unlike the TMR, which must stay aimed at the switch axis.</p>
+  </section>
+
+  <section class="panel method">
+    <h2>Method &amp; assumptions</h2>
+    <ul>
+      <li><strong>Field model</strong>: unchanged from the TMR page — axially magnetized cylinder as an equivalent
+        solenoid, stack of current loops, off-axis via complete elliptic integrals K, E (AGM), verified against the
+        analytic on-axis face field of a &Oslash;10&times;10&nbsp;mm B<sub>r</sub>&nbsp;=&nbsp;1.3&nbsp;T magnet.
+        This page simply reads the <em>axial</em> component B<sub>z</sub> out of the same solver instead of the
+        radial B<sub>x</sub>.</li>
+      <li><strong>Board geometry</strong> (measured from <code>TMR2615F_osu_pad.kicad_pcb</code>): sensor
+        3.09&nbsp;mm radially offset from the switch centre, assembly on F, switch inserted from B, magnet sees the
+        sensor through the 1.62&nbsp;mm board. The &Oslash;4&nbsp;mm centre NPTH is why the sensor is off-axis at
+        all — there is no on-axis position available for a Z-axis part.</li>
+      <li><strong>Hall plate depth</strong> is an estimate, not a datasheet figure. Semiment does not publish the
+        plate's location within the DFN1616 body. 0.30&nbsp;mm below the F-side surface assumes the die sits on the
+        0.127&nbsp;mm lead frame with the plate at the top of a ~0.17&nbsp;mm die — the same depth the TMR2615F
+        specifies. Its in-plane position is also unpublished, so the effective r carries roughly
+        &plusmn;0.2&nbsp;mm of uncertainty, which at this offset is worth about &plusmn;20&nbsp;% of B<sub>z</sub>
+        swing. Both are sliders here for that reason.</li>
+      <li><strong>SC4011 model</strong>: V<sub>Q</sub>&nbsp;=&nbsp;V<sub>CC</sub>/2; output floor 0.8&nbsp;V and
+        ceiling V<sub>CC</sub>&minus;0.7&nbsp;V per &sect;12; sensitivity interpolated linearly between the two
+        specified points (1.6&nbsp;mV/Gs at 3.3&nbsp;V, 2.9&nbsp;mV/Gs at 5.0&nbsp;V — note these are <em>not</em>
+        proportional to V<sub>CC</sub>, so this is an interpolation, not a ratiometric law). Min/max bands
+        interpolate the 1.2/2.0 and 2.3/3.5&nbsp;mV/Gs limits the same way.</li>
+      <li><strong>Polarity</strong>: for the DN package an S pole toward the marked face is the positive direction.
+        The sensor's marked face points away from the magnet on this board, so N-down Gateron switches drive the
+        output one way and S-down the other. Either fits — the part is bipolar around V<sub>Q</sub> and the field
+        never approaches the clamps. Sign is a firmware concern, not a hardware one.</li>
+      <li><strong>Placement sensitivity</strong> is the argument against this swap that the charts don't show
+        directly: near r&nbsp;=&nbsp;3.09&nbsp;mm the B<sub>x</sub> swing degrades about 3.4&nbsp;%/0.1&nbsp;mm of
+        radial error, B<sub>z</sub> about 9.8&nbsp;%/0.1&nbsp;mm, and the B<sub>z</sub> swing crosses zero entirely
+        at r&nbsp;&asymp;&nbsp;4.4&nbsp;mm. Drag the offset slider to see it.</li>
+      <li><strong>What to verify on hardware</strong>: the SC4011's unspecified output noise, measured on this
+        board through this mux at this scan rate. Everything else here is bounded by datasheet numbers; that one is
+        not, and it decides the swap.</li>
+    </ul>
+  </section>
+</div>
+
+<script>
+"use strict";
+/* ---------- physics (unchanged port of the validated Python model) ---------- */
+const MU0 = 4e-7 * Math.PI;
+
+function ellipKE(m) {
+  let a = 1, b = Math.sqrt(1 - m), c = Math.sqrt(m), s = 0.5 * m, n = 0;
+  while (Math.abs(c) > 1e-15 && n < 60) {
+    const an = (a + b) / 2, bn = Math.sqrt(a * b);
+    c = (a - b) / 2; a = an; b = bn; n++;
+    s += Math.pow(2, n - 1) * c * c;
+  }
+  const K = Math.PI / (2 * a);
+  return [K, K * (1 - s)];
+}
+function loopField(a, I, r, z) {
+  if (r < 1e-12) return [0, MU0 * I * a * a / (2 * Math.pow(a * a + z * z, 1.5))];
+  const al2 = a*a + r*r + z*z - 2*a*r, be2 = a*a + r*r + z*z + 2*a*r, be = Math.sqrt(be2);
+  const [K, E] = ellipKE(1 - al2 / be2);
+  const C = MU0 * I / Math.PI;
+  const br = C * z / (2 * al2 * be * r) * ((a*a + r*r + z*z) * E - al2 * K);
+  const bz = C / (2 * al2 * be) * ((a*a - r*r - z*z) * E + al2 * K);
+  return [br, bz];
+}
+function cylField(dia, L, Brem, z0, r, z, n = 80) {
+  const a = dia / 2e3, Lm = L / 1e3, dI = (Brem / MU0) * Lm / n;
+  let br = 0, bz = 0;
+  for (let i = 0; i < n; i++) {
+    const zl = z0 / 1e3 + (i + 0.5) * Lm / n;
+    const f = loopField(a, dI, r / 1e3, z / 1e3 - zl);
+    br += f[0]; bz += f[1];
+  }
+  return [br, bz];
+}
+const G = 1e4;
+const onAxisGs = (m, gap) => cylField(m.dia, m.len, m.brem, gap, 1e-9, 0)[1] * G;
+const radialGs = (m, gap, r) => Math.abs(cylField(m.dia, m.len, m.brem, gap, r, 0)[0]) * G;
+const axialGs  = (m, gap, r) => Math.abs(cylField(m.dia, m.len, m.brem, gap, r, 0)[1]) * G;
+
+/* ---------- presets (same calibration as the TMR page) ---------- */
+const PRESETS = [
+  { key:"ks20",  name:"Gateron KS-20 / Wooting Lekker*",     pol:"n/p",    color:"--s1", travel:4.1, pubRest:102, pubBot:905, dia:2.77, len:3.41, brem:1.30, refDie:1.9 },
+  { key:"ks37",  name:"Gateron KS-37B Fox / Nebula",         pol:"n/p",    color:"--s2", travel:4.0, pubRest:120, pubBot:800, dia:2.77, len:3.41, brem:1.30, refDie:1.9 },
+  { key:"jade",  name:"Gateron Jade / Jade Pro (measured)",  pol:"N-down", color:"--s3", travel:3.5, pubRest:120, pubBot:700, dia:2.76, len:3.41, brem:1.23, refDie:1.5, rest:4.31 },
+  { key:"ultra", name:"Gateron Jade Ultra (measured)",       pol:"N-down", color:"--s4", travel:3.2, pubRest:122, pubBot:550, dia:2.77, len:3.42, brem:1.48, refDie:1.5, rest:4.60 },
+  { key:"apollo",name:"Gateron x MCHOSE Apollo (measured)",  pol:"N-down", color:"--s5", travel:3.1, pubRest:120, pubBot:570, dia:2.80, len:3.42, brem:1.16, refDie:1.5, rest:4.13 },
+  { key:"ttc",   name:"TTC KoM / Kailh Aurora / AstroLink",  pol:"n/p & N",color:"--s6", travel:3.4, pubRest: 90, pubBot:480, dia:2.77, len:3.41, brem:1.30, refDie:1.9 },
+  { key:"kmg",   name:"Kailh Magnetic God / Quick Trigger",  pol:"n/p",    color:"--s7", travel:3.3, pubRest:120, pubBot:750, dia:2.77, len:3.41, brem:1.30, refDie:1.9 },
+  { key:"astro", name:"Akko AstroAim / Flash",               pol:"N-down", color:"--s8", travel:3.5, pubRest: 95, pubBot:580, dia:2.77, len:3.41, brem:1.30, refDie:1.9 },
+];
+const DEFAULTS = { roff:3.09, pcb:1.62, die:0.30, vcc:3.3 };
+PRESETS.forEach(p => { p.meas = p.rest !== undefined; p.dia0 = p.dia; p.len0 = p.len; p.brem0 = p.brem; });
+
+function fitHb(m, pubBot) {
+  if (m.meas) return m.rest - m.travel;
+  let lo = 0.05, hi = 5;
+  if (onAxisGs(m, lo + m.refDie) < pubBot) return lo;
+  for (let i = 0; i < 40; i++) {
+    const mid = (lo + hi) / 2;
+    (onAxisGs(m, mid + m.refDie) > pubBot) ? lo = mid : hi = mid;
+  }
+  return (lo + hi) / 2;
+}
+
+/* ---------- sensor models ---------- */
+/* SC4011: Vq = Vcc/2, floor 0.8 V, ceiling Vcc-0.7 V.
+   Sensitivity interpolated between the two datasheet points (3.3 V and 5.0 V). */
+const SC = {
+  sens:  v => 1.6 + (v - 3.3) * (2.9 - 1.6) / 1.7,
+  sensLo:v => 1.2 + (v - 3.3) * (2.3 - 1.2) / 1.7,
+  sensHi:v => 2.0 + (v - 3.3) * (3.5 - 2.0) / 1.7,
+  vq:    v => v / 2,
+  floor: () => 0.8,
+  ceil:  v => v - 0.7,
+};
+const ADC_VREF = 3.3, ADC_BITS = 12;
+const LSB_V = ADC_VREF / Math.pow(2, ADC_BITS);      // 0.806 mV
+const MUX_RAIL = 3.3;                                 // TMUX1574 runs on +3.3VA
+/* TMR2615F-AAC-1.500-500 baseline, for the comparison column */
+const TMR_SEN = 1.5, TMR_VDD = 3.3;
+const tmrMvPerGs = TMR_SEN * TMR_VDD / 1000 * 1000;   // 4.95 mV/Gs
+
+/* ---------- state ---------- */
+const S = { sel:2, depth:0, roff:DEFAULTS.roff, pcb:DEFAULTS.pcb, die:DEFAULTS.die, vcc:DEFAULTS.vcc };
+const $ = id => document.getElementById(id);
+
+const plateDepth = () => S.pcb + S.die;
+function gapAt(p, depth) { return p.hb + (p.travel - depth) + plateDepth(); }
+function bzAt(p, depth) { return axialGs(p, gapAt(p, depth), S.roff); }
+function bxAt(p, depth) { return radialGs(p, gapAt(p, depth), S.roff); }
+
+function voutOf(bz, sensFn) {
+  const s = (sensFn || SC.sens)(S.vcc);
+  const raw = SC.vq(S.vcc) + s * bz / 1000;
+  return Math.min(SC.ceil(S.vcc), Math.max(SC.floor(), raw));
+}
+/* usable field span before the output clamps or the mux rail, whichever bites first */
+function headroomGs() {
+  const s = SC.sens(S.vcc);
+  const top = Math.min(SC.ceil(S.vcc), MUX_RAIL);
+  return (top - SC.vq(S.vcc)) / (s / 1000);
+}
+function recalibrate() { PRESETS.forEach(p => p.hb = fitHb(p, p.pubBot)); }
+
+/* ---------- verdict strip ---------- */
+function drawVerdicts() {
+  const p = PRESETS[S.sel];
+  const bz0 = bzAt(p, 0), bz1 = bzAt(p, p.travel);
+  const bx0 = bxAt(p, 0), bx1 = bxAt(p, p.travel);
+  const dBz = Math.abs(bz1 - bz0), dBx = Math.abs(bx1 - bx0);
+  const dV = dBz * SC.sens(S.vcc);                       // mV
+  const dVtmr = dBx * tmrMvPerGs;                        // mV
+  const lsb = dV / (LSB_V * 1000);
+  const ratio = dVtmr / dV;
+  const worstV = Math.max(voutOf(bz0), voutOf(bz1));
+  const muxOk = worstV <= MUX_RAIL;
+  const ratiometric = Math.abs(S.vcc - ADC_VREF) < 0.05;
+  const icc = 6 * 2.5;
+
+  const resClass = lsb > 400 ? "ok" : lsb > 120 ? "warn" : "bad";
+  const resLabel = lsb > 400 ? "comfortable" : lsb > 120 ? "workable" : "too coarse";
+
+  const cards = [
+    { k: "Electrical fit",
+      v: muxOk ? "Drops in" : "Out of range",
+      chip: muxOk ? ["ok", "no chain changes"] : ["bad", "exceeds mux rail"],
+      n: `Output ${voutOf(bz0).toFixed(2)}–${voutOf(bz1).toFixed(2)} V, inside the 0.8–${SC.ceil(S.vcc).toFixed(2)} V window and the ${MUX_RAIL} V mux rail.` },
+    { k: "Signal vs TMR2615F",
+      v: `${ratio.toFixed(1)}× weaker`,
+      chip: [resClass, resLabel],
+      n: `${dV.toFixed(0)} mV over full travel (${lsb.toFixed(0)} LSB) against the TMR's ${dVtmr.toFixed(0)} mV.` },
+    { k: "Supply current",
+      v: `${icc.toFixed(0)} mA typ`,
+      chip: ["warn", `${(icc / 1.44).toFixed(0)}× the TMR`],
+      n: "Six sensors at 2.5 mA. Fine on USB and well inside the TPS7A4700; only matters if this goes wireless." },
+    { k: "Ratiometric with ADC",
+      v: ratiometric ? "Yes" : "No",
+      chip: ratiometric ? ["ok", "rail drift cancels"] : ["bad", "VCC ≠ VREF"],
+      n: ratiometric
+         ? "Sensor and ADC reference share +3.3VA, so LDO drift cancels out of the reading."
+         : `Sensor on ${S.vcc.toFixed(1)} V but the ADC references 3.3 V — supply drift now shows up as position error.` },
+  ];
+  $("verdicts").innerHTML = cards.map(c => `
+    <div class="vcard">
+      <div class="k">${c.k}</div>
+      <div class="v">${c.v}</div>
+      <span class="chip ${c.chip[0]}">${c.chip[1]}</span>
+      <div class="n">${c.n}</div>
+    </div>`).join("");
+}
+
+/* ---------- cross-section ---------- */
+function drawXsec() {
+  const p = PRESETS[S.sel], SC_PX = 21;
+  const W = 420, H = 350, cx = 210, yTop = 285;
+  const mm = v => v * SC_PX;
+  const X = x => cx + mm(x), Y = y => yTop - mm(y);
+  const stemDrop = mm(S.depth);
+  const magBotY = Y(p.hb + (p.travel - S.depth));
+  const dieY = Y(-plateDepth());
+  const el = [];
+  el.push(`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Cross-section of switch, PCB and SC4011 sensor">`);
+  el.push(`<path d="M ${X(-7)} ${Y(0)} L ${X(-7)} ${Y(5)} L ${X(-5.3)} ${Y(8.3)} L ${X(5.3)} ${Y(8.3)} L ${X(7)} ${Y(5)} L ${X(7)} ${Y(0)} Z"
+     fill="var(--housing)" stroke="var(--axis)" stroke-width="1"/>`);
+  el.push(`<g transform="translate(0 ${stemDrop})">
+    <rect x="${X(-2.6)}" y="${Y(11.5)}" width="${mm(5.2)}" height="${mm(3.2)}" rx="2" fill="var(--housing)" stroke="var(--axis)"/>
+    <rect x="${X(-2.0)}" y="${Y(8.3)}" width="${mm(4.0)}" height="${mm(4.6)}" fill="var(--housing)" stroke="var(--axis)"/></g>`);
+  const mh = mm(p.len), mw = mm(p.dia);
+  el.push(`<rect x="${cx - mw/2}" y="${magBotY - mh}" width="${mw}" height="${mh}" fill="var(--magnet)" rx="1.5"/>`);
+  el.push(`<text x="${cx}" y="${magBotY - mh + 11}" text-anchor="middle" font-size="10" font-weight="700" fill="var(--surface)">N</text>`);
+  el.push(`<text x="${cx}" y="${magBotY - 3}" text-anchor="middle" font-size="10" font-weight="700" fill="var(--surface)">S</text>`);
+  const pcbH = mm(S.pcb);
+  for (const [x0, x1] of [[-10, -2], [2, 10]]) {
+    el.push(`<rect x="${X(x0)}" y="${yTop}" width="${mm(x1 - x0)}" height="${pcbH}" fill="var(--pcb)" stroke="var(--pcb-edge)" stroke-width="1"/>`);
+    el.push(`<line x1="${X(x0)}" y1="${yTop + 1.2}" x2="${X(x1)}" y2="${yTop + 1.2}" stroke="var(--copper)" stroke-width="1.6"/>`);
+    el.push(`<line x1="${X(x0)}" y1="${yTop + pcbH - 1.2}" x2="${X(x1)}" y2="${yTop + pcbH - 1.2}" stroke="var(--copper)" stroke-width="1.6"/>`);
+  }
+  const sx = X(-S.roff);
+  el.push(`<rect x="${sx - mm(0.8)}" y="${yTop + pcbH}" width="${mm(1.6)}" height="${mm(0.4)}" fill="var(--magnet)" rx="1"/>`);
+  el.push(`<circle cx="${sx}" cy="${dieY}" r="2.6" fill="var(--s2)"/>`);
+  /* Bz sensing axis: vertical, through the plate */
+  el.push(`<line x1="${sx - 34}" y1="${dieY + 6}" x2="${sx - 34}" y2="${dieY - 26}" stroke="var(--muted)" stroke-width="1" marker-end="url(#arr)"/>`);
+  el.push(`<text x="${sx - 30}" y="${dieY - 16}" font-size="10" fill="var(--muted)">B<tspan baseline-shift="sub" font-size="7">z</tspan> sensing axis</text>`);
+  el.push(`<line x1="${sx}" y1="${Y(2.5)}" x2="${sx}" y2="${dieY - 8}" stroke="var(--grid)" stroke-width="1" stroke-dasharray="3 3"/>`);
+  el.push(`<line x1="${cx}" y1="${Y(2.2)}" x2="${sx}" y2="${Y(2.2)}" stroke="var(--muted)" stroke-width="1"/>`);
+  el.push(`<text x="${(cx + sx) / 2}" y="${Y(2.2) - 5}" text-anchor="middle" font-size="10.5" fill="var(--ink-2)" font-family="ui-monospace,Menlo,monospace">r = ${S.roff.toFixed(2)} mm</text>`);
+  const gx = cx + mm(4.6);
+  el.push(`<line x1="${gx}" y1="${magBotY}" x2="${gx}" y2="${dieY}" stroke="var(--muted)" stroke-width="1"/>`);
+  el.push(`<line x1="${cx + mw/2}" y1="${magBotY}" x2="${gx + 4}" y2="${magBotY}" stroke="var(--grid)" stroke-width="1" stroke-dasharray="3 3"/>`);
+  el.push(`<line x1="${sx}" y1="${dieY}" x2="${gx + 4}" y2="${dieY}" stroke="var(--grid)" stroke-width="1" stroke-dasharray="3 3"/>`);
+  el.push(`<text x="${gx + 8}" y="${(magBotY + dieY) / 2 + 4}" font-size="10.5" fill="var(--ink-2)" font-family="ui-monospace,Menlo,monospace">${gapAt(p, Math.min(S.depth, p.travel)).toFixed(2)} mm</text>`);
+  el.push(`<defs><marker id="arr" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto">
+    <path d="M0 0 L8 4 L0 8 Z" fill="var(--muted)"/></marker></defs>`);
+  el.push(`</svg>`);
+  $("xsec").innerHTML = el.join("");
+}
+
+/* ---------- charts ---------- */
+const CH = { w: 520, h: 300, ml: 46, mr: 14, mt: 14, mb: 34 };
+function scaleLin(d0, d1, r0, r1) { return v => r0 + (v - d0) / (d1 - d0) * (r1 - r0); }
+function niceMax(v) { const s = Math.pow(10, Math.floor(Math.log10(v))); return Math.ceil(v / s * 2) / 2 * s; }
+
+function buildChart(box, opts) {
+  const { w, h, ml, mr, mt, mb } = CH;
+  const xmax = Math.max(...PRESETS.map(p => p.travel));
+  const x = scaleLin(0, xmax, ml, w - mr);
+  const y = scaleLin(opts.ymin, opts.ymax, h - mb, mt);
+  const el = [`<svg viewBox="0 0 ${w} ${h}" role="img" aria-label="${opts.label}">`];
+  for (const t of opts.yticks) {
+    el.push(`<line x1="${ml}" y1="${y(t)}" x2="${w - mr}" y2="${y(t)}" stroke="var(--grid)" stroke-width="1"/>`);
+    el.push(`<text x="${ml - 7}" y="${y(t) + 3.5}" text-anchor="end" font-size="10.5" fill="var(--muted)" font-family="ui-monospace,Menlo,monospace">${opts.yfmt(t)}</text>`);
+  }
+  for (let t = 0; t <= xmax + 1e-9; t += 1) {
+    el.push(`<text x="${x(t)}" y="${h - mb + 16}" text-anchor="middle" font-size="10.5" fill="var(--muted)" font-family="ui-monospace,Menlo,monospace">${t}</text>`);
+  }
+  el.push(`<line x1="${ml}" y1="${y(opts.ymin)}" x2="${w - mr}" y2="${y(opts.ymin)}" stroke="var(--axis)" stroke-width="1"/>`);
+  el.push(`<text x="${(ml + w - mr) / 2}" y="${h - 4}" text-anchor="middle" font-size="11" fill="var(--ink-2)">press depth (mm)</text>`);
+  el.push(`<text transform="rotate(-90 12 ${(mt + h - mb) / 2}) " x="12" y="${(mt + h - mb) / 2}" text-anchor="middle" font-size="11" fill="var(--ink-2)">${opts.ytitle}</text>`);
+
+  const sel = PRESETS[S.sel];
+  const N = 90;
+  /* optional shaded band for the selected switch */
+  if (opts.band) {
+    const up = [], dn = [];
+    for (let i = 0; i <= N; i++) {
+      const d = sel.travel * i / N;
+      const [lo, hi] = opts.band(sel, d);
+      up.push(`${x(d).toFixed(1)},${y(hi).toFixed(1)}`);
+      dn.unshift(`${x(d).toFixed(1)},${y(lo).toFixed(1)}`);
+    }
+    el.push(`<polygon points="${up.concat(dn).join(" ")}" fill="var(--band)" stroke="none"/>`);
+  }
+  /* optional dashed reference curve for the selected switch */
+  if (opts.ref) {
+    const pts = [];
+    for (let i = 0; i <= N; i++) {
+      const d = sel.travel * i / N;
+      pts.push(`${x(d).toFixed(1)},${y(opts.ref(sel, d)).toFixed(1)}`);
+    }
+    el.push(`<polyline points="${pts.join(" ")}" fill="none" stroke="var(--muted)" stroke-width="1.6" stroke-dasharray="5 4"/>`);
+  }
+  for (const rl of opts.rails || []) {
+    if (rl.v < opts.ymin || rl.v > opts.ymax) continue;
+    el.push(`<line x1="${ml}" y1="${y(rl.v)}" x2="${w - mr}" y2="${y(rl.v)}" stroke="var(--critical)" stroke-width="1.2" stroke-dasharray="5 4"/>`);
+    el.push(`<text x="${w - mr - 4}" y="${y(rl.v) - 5}" text-anchor="end" font-size="10.5" fill="var(--critical)">${rl.label}</text>`);
+  }
+  for (const p of PRESETS) {
+    const pts = [];
+    for (let i = 0; i <= N; i++) {
+      const d = p.travel * i / N;
+      pts.push(`${x(d).toFixed(1)},${y(opts.f(p, d)).toFixed(1)}`);
+    }
+    el.push(`<polyline points="${pts.join(" ")}" fill="none" stroke="var(${p.color})" stroke-width="2" stroke-linejoin="round"/>`);
+  }
+  const dcl = Math.min(S.depth, sel.travel);
+  el.push(`<line x1="${x(S.depth)}" y1="${mt}" x2="${x(S.depth)}" y2="${h - mb}" stroke="var(--axis)" stroke-width="1" stroke-dasharray="2 3"/>`);
+  el.push(`<circle cx="${x(dcl)}" cy="${y(opts.f(sel, dcl))}" r="4.5" fill="var(${sel.color})" stroke="var(--surface)" stroke-width="2"/>`);
+  el.push(`</svg>`);
+  box.innerHTML = el.join("") + `<div class="tooltip"></div>`;
+  attachHover(box, opts, x, xmax);
+}
+function attachHover(box, opts, x, xmax) {
+  const svg = box.querySelector("svg"), tip = box.querySelector(".tooltip");
+  svg.addEventListener("mousemove", ev => {
+    const r = svg.getBoundingClientRect();
+    const px = (ev.clientX - r.left) / r.width * CH.w;
+    const d = Math.max(0, Math.min(xmax, (px - CH.ml) / (CH.w - CH.mr - CH.ml) * xmax));
+    const rows = PRESETS
+      .map(p => ({ p, v: d <= p.travel + 1e-9 ? opts.f(p, Math.min(d, p.travel)) : null }))
+      .filter(o => o.v !== null).sort((a, b) => b.v - a.v)
+      .map(o => `<tr><td><span class="swatch" style="background:var(${o.p.color})"></span>${o.p.name}</td><td>${opts.tipfmt(o.v)}</td></tr>`);
+    tip.innerHTML = `<div style="color:var(--muted);margin-bottom:3px">depth ${d.toFixed(2)} mm</div><table>${rows.join("")}</table>`;
+    tip.style.display = "block";
+    tip.style.left = Math.min(ev.clientX - r.left + 14, box.clientWidth - tip.offsetWidth - 4) + "px";
+    tip.style.top = (ev.clientY - r.top + 12) + "px";
+  });
+  svg.addEventListener("mouseleave", () => tip.style.display = "none");
+}
+
+function drawCharts() {
+  const maxB = Math.max(...PRESETS.map(p => Math.max(bzAt(p, p.travel), bxAt(p, p.travel)))) * 1.06;
+  const yA = niceMax(maxB);
+  const stepA = yA > 600 ? 200 : 100;
+  buildChart($("chartA"), {
+    label: "Axial field at sensor vs press depth", ytitle: "|Bz| at sensor (Gs)",
+    ymin: 0, ymax: yA, yticks: Array.from({length: Math.floor(yA/stepA)+1}, (_,i)=>i*stepA),
+    yfmt: t => t, tipfmt: v => v.toFixed(0) + " Gs",
+    f: (p, d) => bzAt(p, d),
+    ref: (p, d) => bxAt(p, d),
+    rails: headroomGs() < yA ? [{ v: headroomGs(), label: `output/mux clip ±${headroomGs().toFixed(0)} Gs` }] : [],
+  });
+  const vTop = Math.max(3.3, SC.ceil(S.vcc) + 0.2);
+  buildChart($("chartB"), {
+    label: "SC4011 output voltage vs press depth", ytitle: "VOUT (V)",
+    ymin: 0, ymax: vTop, yticks: Array.from({length: Math.floor(vTop / 0.5) + 1}, (_, i) => i * 0.5),
+    yfmt: t => t.toFixed(1), tipfmt: v => v.toFixed(3) + " V",
+    f: (p, d) => voutOf(bzAt(p, d)),
+    band: (p, d) => {
+      const bz = bzAt(p, d);
+      return [voutOf(bz, SC.sensLo), voutOf(bz, SC.sensHi)];
+    },
+    rails: [
+      { v: SC.ceil(S.vcc), label: `output ceiling VCC−0.7` },
+      { v: SC.floor(), label: "output floor 0.8 V" },
+      ...(SC.ceil(S.vcc) > MUX_RAIL ? [{ v: MUX_RAIL, label: "3.3 V mux rail" }] : []),
+    ],
+  });
+}
+
+/* ---------- legend / table / readouts ---------- */
+function drawLegend() {
+  const chips = PRESETS.map((p, i) =>
+    `<span class="lchip"><span class="sw" style="background:var(${p.color})"></span>${p.name}${i === S.sel ? " (selected)" : ""}</span>`);
+  chips.push(`<span class="lchip"><span class="sw" style="background:var(--muted)"></span>|Bx| of selected switch — what the TMR2615F reads</span>`);
+  $("legend").innerHTML = chips.join("");
+}
+function drawTable() {
+  const head = `<tr><th>Switch</th><th>Pole ↓</th><th>Bz rest</th><th>Bz bottom</th><th>ΔBz</th>
+    <th>ΔV typ</th><th>ΔV @1.2 mV/Gs</th><th>LSB (12-bit)</th><th>µm/LSB</th><th>TMR µm/LSB</th></tr>`;
+  const rows = PRESETS.map(p => {
+    const bz0 = bzAt(p, 0), bz1 = bzAt(p, p.travel), dBz = Math.abs(bz1 - bz0);
+    const dBx = Math.abs(bxAt(p, p.travel) - bxAt(p, 0));
+    const dV = dBz * SC.sens(S.vcc), dVlo = dBz * SC.sensLo(S.vcc);
+    const lsb = dV / (LSB_V * 1000);
+    const um = lsb > 0 ? p.travel * 1000 / lsb : Infinity;
+    const lsbTmr = dBx * tmrMvPerGs / (LSB_V * 1000);
+    const umTmr = p.travel * 1000 / lsbTmr;
+    return `<tr><td><span class="swatch" style="background:var(${p.color})"></span>${p.name}</td>
+      <td>${p.pol}</td><td>${bz0.toFixed(0)}</td><td>${bz1.toFixed(0)}</td><td>${dBz.toFixed(0)}</td>
+      <td>${dV.toFixed(0)} mV</td><td>${dVlo.toFixed(0)} mV</td><td>${lsb.toFixed(0)}</td>
+      <td>${um.toFixed(1)}</td><td>${umTmr.toFixed(1)}</td></tr>`;
+  });
+  $("resTable").innerHTML = head + rows.join("");
+}
+function drawReadouts() {
+  const p = PRESETS[S.sel], d = Math.min(S.depth, p.travel);
+  const bz = bzAt(p, d), bx = bxAt(p, d);
+  const vout = voutOf(bz);
+  const clamped = vout >= SC.ceil(S.vcc) - 1e-6 || vout <= SC.floor() + 1e-6;
+  const overMux = vout > MUX_RAIL;
+  const dd = 0.05;
+  const grad = Math.abs(bzAt(p, Math.min(d + dd, p.travel)) - bzAt(p, Math.max(d - dd, 0))) / (2 * dd);
+  const mvmm = grad * SC.sens(S.vcc);
+  const um = (clamped || mvmm < 0.01) ? null : LSB_V * 1000 / mvmm * 1000;
+
+  $("r-gap").innerHTML = gapAt(p, d).toFixed(2) + ' <span class="u">mm</span>';
+  $("r-bz").innerHTML = bz.toFixed(0) + ' <span class="u">Gs</span>';
+  $("r-bx").innerHTML = bx.toFixed(0) + ' <span class="u">Gs</span>';
+  $("r-vout").innerHTML = vout.toFixed(3) + ' <span class="u">V' + (overMux ? " · over mux rail" : clamped ? " · clamped" : "") + "</span>";
+  $("t-vout").classList.toggle("alert", overMux || clamped);
+  $("r-head").innerHTML = "±" + headroomGs().toFixed(0) + ' <span class="u">Gs</span>';
+  $("r-res").innerHTML = um === null ? "—" : um.toFixed(1) + ' <span class="u">µm/LSB</span>';
+  $("t-res").classList.toggle("caution", um !== null && um > 15);
+  $("t-res").classList.toggle("alert", um !== null && um > 40);
+}
+function drawVccNote() {
+  const s = SC.sens(S.vcc);
+  let msg = `Sensitivity ${s.toFixed(2)} mV/Gs (${SC.sensLo(S.vcc).toFixed(2)}–${SC.sensHi(S.vcc).toFixed(2)} across the spread), quiescent ${SC.vq(S.vcc).toFixed(2)} V, output window ${SC.floor().toFixed(2)}–${SC.ceil(S.vcc).toFixed(2)} V. `;
+  if (Math.abs(S.vcc - 3.3) < 0.05) {
+    msg += "This is the board's +3.3VA rail — sensor and ADC reference match, so the reading is ratiometric.";
+  } else if (S.vcc > 4.5) {
+    msg += "Powering from +5 V raises sensitivity, but that rail is raw VBUS through the LM66100 ideal diode and also drives the SK6812s — VBUS ripple lands directly on the reading, since the ADC still references 3.3 V.";
+  } else {
+    msg += "Off the board's +3.3VA rail the reading is no longer ratiometric with the 3.3 V ADC reference.";
+  }
+  $("vcc-note").textContent = msg;
+}
+
+/* ---------- wiring ---------- */
+function syncLabels() {
+  const p = PRESETS[S.sel];
+  $("v-depth").textContent = S.depth.toFixed(2) + " mm";
+  $("v-roff").textContent = S.roff.toFixed(2) + " mm";
+  $("v-pcb").textContent = S.pcb.toFixed(2) + " mm";
+  $("v-die").textContent = S.die.toFixed(2) + " mm";
+  $("v-vcc").textContent = S.vcc.toFixed(1) + " V";
+  $("v-dia").textContent = p.dia.toFixed(2) + " mm";
+  $("v-len").textContent = p.len.toFixed(2) + " mm";
+  $("v-brem").textContent = p.brem.toFixed(2) + " T";
+}
+function redraw() {
+  syncLabels(); drawVerdicts(); drawVccNote(); drawXsec();
+  drawCharts(); drawLegend(); drawTable(); drawReadouts();
+}
+
+$("preset").innerHTML = PRESETS.map((p, i) => `<option value="${i}"${i === S.sel ? " selected" : ""}>${p.name}</option>`).join("");
+$("preset").addEventListener("change", e => {
+  S.sel = +e.target.value;
+  const p = PRESETS[S.sel];
+  $("dia").value = p.dia; $("len").value = p.len; $("brem").value = p.brem;
+  $("depth").max = p.travel; S.depth = Math.min(S.depth, p.travel); $("depth").value = S.depth;
+  redraw();
+});
+const bind = (id, fn) => $(id).addEventListener("input", e => { fn(+e.target.value); redraw(); });
+bind("depth", v => S.depth = v);
+bind("roff", v => S.roff = v);
+bind("pcb", v => S.pcb = v);
+bind("die", v => S.die = v);
+bind("vcc", v => S.vcc = v);
+bind("dia", v => { PRESETS[S.sel].dia = v; PRESETS[S.sel].hb = fitHb(PRESETS[S.sel], PRESETS[S.sel].pubBot); });
+bind("len", v => { PRESETS[S.sel].len = v; PRESETS[S.sel].hb = fitHb(PRESETS[S.sel], PRESETS[S.sel].pubBot); });
+bind("brem", v => { PRESETS[S.sel].brem = v; PRESETS[S.sel].hb = fitHb(PRESETS[S.sel], PRESETS[S.sel].pubBot); });
+$("reset").addEventListener("click", () => {
+  S.roff = DEFAULTS.roff; S.pcb = DEFAULTS.pcb; S.die = DEFAULTS.die; S.vcc = DEFAULTS.vcc; S.depth = 0;
+  PRESETS.forEach(p => { p.dia = p.dia0; p.len = p.len0; p.brem = p.brem0; });
+  recalibrate();
+  $("roff").value = S.roff; $("pcb").value = S.pcb; $("die").value = S.die;
+  $("vcc").value = S.vcc; $("depth").value = 0;
+  const p = PRESETS[S.sel];
+  $("dia").value = p.dia; $("len").value = p.len; $("brem").value = p.brem;
+  redraw();
+});
+
+recalibrate();
+$("depth").max = PRESETS[S.sel].travel;
+$("dia").value = PRESETS[S.sel].dia;
+$("len").value = PRESETS[S.sel].len;
+$("brem").value = PRESETS[S.sel].brem;
+redraw();
+</script>
