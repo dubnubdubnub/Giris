@@ -1,6 +1,6 @@
 # TMR2615F_osu_pad — jlcpcb fabrication package
 
-Generated 2026-08-01 02:02 from `TMR2615F_osu_pad.kicad_pcb` by `.claude/skills/fab-export`.
+Generated 2026-08-04 04:05 from `TMR2615F_osu_pad.kicad_pcb` by `.claude/skills/fab-export`.
 
 ## Board
 
@@ -10,9 +10,9 @@ Generated 2026-08-01 02:02 from `TMR2615F_osu_pad.kicad_pcb` by `.claude/skills/
 | Copper layers | 4 (F.Cu, In1.Cu, In2.Cu, B.Cu) |
 | Finished thickness | 1.6167 mm |
 | Min track width | 0.1600 mm |
-| Min clearance | 0.1599 mm |
+| Min clearance | 0.1600 mm |
 | Min drill | 0.3000 mm |
-| Through vias | 644 |
+| Through vias | 636 |
 | NPTH pads | 27 |
 
 ## Stackup as designed
@@ -38,8 +38,8 @@ B.SilkS | Bottom Silk Screen
 ## Files
 
 - `TMR2615F_osu_pad-gerbers-jlcpcb.zip` — 13 files, flat zip: gerbers (KiCad `.gbr` extensions), Excellon drill (PTH/NPTH separate, mm, absolute origin), `.gbrjob`
-- `BOM-TMR2615F_osu_pad-jlcpcb.csv` — 32 line items
-- `CPL-TMR2615F_osu_pad-jlcpcb.csv` — 150 placements (127 top / 23 bottom)
+- `BOM-TMR2615F_osu_pad-jlcpcb.csv` — 34 line items
+- `CPL-TMR2615F_osu_pad-jlcpcb.csv` — 151 placements (128 top / 23 bottom)
 - `gerbers/` — the same plot files, unzipped, for review
 - `docs/` — drill maps, board statistics, DRC report
 
@@ -52,9 +52,9 @@ Rows with an empty `LCSC Part #` must be matched by hand in their part selector
 
 ## Checks
 
-- DRC: **97 error-severity violations, 0 unconnected** — see `docs/drc.rpt`
-- 3/32 BOM lines have no LCSC part number: TP1, U2, U4
-- 1/32 BOM lines have **neither MPN nor LCSC** — these cannot be sourced automatically
+- DRC: **96 error-severity violations, 0 unconnected** — see `docs/drc.rpt`
+- 1/34 BOM lines have no LCSC part number: TP1
+- 1/34 BOM lines have **neither MPN nor LCSC** — these cannot be sourced automatically
 - Dropped 1 empty layer(s) — nothing to plot, and empty gerbers make some portals report a parse failure: TMR2615F_osu_pad-B_Paste.gbr
 - DNP parts excluded from both BOM and CPL
 - Schematic part-number fields detected: lcsc→LCSC, mpn→MPN, mfr→Manufacturer
