@@ -217,6 +217,7 @@
       "footprint_filter": "ignore",
       "footprint_link_issues": "warning",
       "four_way_junction": "ignore",
+      "global_label_dangling": "warning",
       "ground_pin_not_ground": "warning",
       "hier_label_mismatch": "error",
       "isolated_pin_label": "warning",
@@ -232,11 +233,16 @@
       "net_not_bus_member": "warning",
       "no_connect_connected": "warning",
       "no_connect_dangling": "warning",
+      "pin_map_bad_pad": "error",
+      "pin_map_duplicate_pad": "error",
+      "pin_map_stale_pin": "warning",
+      "pin_map_unmapped_pin": "warning",
       "pin_not_connected": "error",
       "pin_not_driven": "error",
-      "pin_to_pin": "warning",
+      "pin_to_pin": "error",
       "power_pin_not_driven": "error",
       "same_local_global_label": "warning",
+      "same_local_global_power": "warning",
       "similar_label_and_power": "warning",
       "similar_labels": "warning",
       "similar_power": "warning",
@@ -263,7 +269,7 @@
     "classes": [
       {
         "bus_width": 12,
-        "clearance": 0.2,
+        "clearance": 0.16,
         "diff_pair_gap": 0.25,
         "diff_pair_via_gap": 0.25,
         "diff_pair_width": 0.2,
@@ -279,21 +285,353 @@
         "via_diameter": 0.6,
         "via_drill": 0.3,
         "wire_width": 6
+      },
+      {
+        "bus_width": 16,
+        "name": "3V3",
+        "pcb_color": "rgb(255, 191, 195)",
+        "priority": 1,
+        "schematic_color": "rgb(255, 191, 195)",
+        "tuning_profile": "",
+        "wire_width": 8
+      },
+      {
+        "bus_width": 20,
+        "name": "5V",
+        "pcb_color": "rgb(255, 155, 166)",
+        "priority": 2,
+        "schematic_color": "rgb(255, 155, 166)",
+        "tuning_profile": "",
+        "wire_width": 10
+      },
+      {
+        "bus_width": 12,
+        "name": "ADC",
+        "pcb_color": "rgb(255, 200, 87)",
+        "priority": 11,
+        "schematic_color": "rgb(255, 200, 87)",
+        "tuning_profile": "",
+        "wire_width": 6
+      },
+      {
+        "bus_width": 12,
+        "name": "ADC_A",
+        "pcb_color": "rgb(255, 222, 120)",
+        "priority": 7,
+        "schematic_color": "rgb(255, 222, 120)",
+        "tuning_profile": "",
+        "wire_width": 6
+      },
+      {
+        "bus_width": 12,
+        "name": "ADC_B",
+        "pcb_color": "rgb(255, 201, 84)",
+        "priority": 8,
+        "schematic_color": "rgb(255, 201, 84)",
+        "tuning_profile": "",
+        "wire_width": 6
+      },
+      {
+        "bus_width": 12,
+        "name": "ADC_C",
+        "pcb_color": "rgb(240, 178, 58)",
+        "priority": 9,
+        "schematic_color": "rgb(240, 178, 58)",
+        "tuning_profile": "",
+        "wire_width": 6
+      },
+      {
+        "bus_width": 12,
+        "name": "ADC_D",
+        "pcb_color": "rgb(222, 155, 38)",
+        "priority": 10,
+        "schematic_color": "rgb(222, 155, 38)",
+        "tuning_profile": "",
+        "wire_width": 6
+      },
+      {
+        "bus_width": 24,
+        "name": "GND",
+        "pcb_color": "rgb(188, 188, 188)",
+        "priority": 0,
+        "schematic_color": "rgb(188, 188, 188)",
+        "tuning_profile": "",
+        "wire_width": 12
+      },
+      {
+        "bus_width": 24,
+        "clearance": 0.2,
+        "name": "H_PWR",
+        "pcb_color": "rgb(255, 3, 10)",
+        "priority": 3,
+        "schematic_color": "rgb(255, 3, 10)",
+        "tuning_profile": "",
+        "wire_width": 12
+      },
+      {
+        "bus_width": 12,
+        "name": "I2C",
+        "pcb_color": "rgb(46, 204, 113)",
+        "priority": 13,
+        "schematic_color": "rgb(46, 204, 113)",
+        "tuning_profile": "",
+        "wire_width": 6
+      },
+      {
+        "bus_width": 12,
+        "name": "LED_DATA",
+        "pcb_color": "rgb(0, 148, 133)",
+        "priority": 16,
+        "schematic_color": "rgb(0, 148, 133)",
+        "tuning_profile": "",
+        "wire_width": 6
+      },
+      {
+        "bus_width": 12,
+        "name": "PWR_CTRL",
+        "pcb_color": "rgb(243, 104, 224)",
+        "priority": 15,
+        "schematic_color": "rgb(243, 104, 224)",
+        "tuning_profile": "",
+        "wire_width": 6
+      },
+      {
+        "bus_width": 12,
+        "name": "SPI",
+        "pcb_color": "rgb(155, 89, 182)",
+        "priority": 14,
+        "schematic_color": "rgb(155, 89, 182)",
+        "tuning_profile": "",
+        "wire_width": 6
+      },
+      {
+        "bus_width": 12,
+        "name": "UART",
+        "pcb_color": "rgb(84, 160, 255)",
+        "priority": 12,
+        "schematic_color": "rgb(84, 160, 255)",
+        "tuning_profile": "",
+        "wire_width": 6
+      },
+      {
+        "bus_width": 12,
+        "clearance": 0.15,
+        "diff_pair_gap": 0.13,
+        "diff_pair_width": 0.2,
+        "name": "USB_FS",
+        "pcb_color": "rgb(10, 189, 227)",
+        "priority": 5,
+        "schematic_color": "rgb(10, 189, 227)",
+        "track_width": 0.2,
+        "tuning_profile": "",
+        "via_diameter": 0.5,
+        "via_drill": 0.25,
+        "wire_width": 6
+      },
+      {
+        "bus_width": 12,
+        "clearance": 0.15,
+        "diff_pair_gap": 0.13,
+        "diff_pair_width": 0.2,
+        "name": "USB_HS",
+        "pcb_color": "rgb(72, 219, 251)",
+        "priority": 4,
+        "schematic_color": "rgb(72, 219, 251)",
+        "track_width": 0.2,
+        "tuning_profile": "",
+        "via_diameter": 0.5,
+        "via_drill": 0.25,
+        "wire_width": 6
+      },
+      {
+        "bus_width": 12,
+        "name": "VBUS",
+        "pcb_color": "rgb(255, 72, 16)",
+        "priority": 6,
+        "schematic_color": "rgb(255, 72, 16)",
+        "tuning_profile": "",
+        "wire_width": 6
       }
     ],
     "meta": {
       "version": 5
     },
+    "net_chain_classes": {},
     "net_colors": null,
     "netclass_assignments": null,
-    "netclass_patterns": []
+    "netclass_patterns": [
+      {
+        "netclass": "5V",
+        "pattern": "+5V"
+      },
+      {
+        "netclass": "5V",
+        "pattern": "/5V*"
+      },
+      {
+        "netclass": "3V3",
+        "pattern": "*3.3*"
+      },
+      {
+        "netclass": "GND",
+        "pattern": "GND*"
+      },
+      {
+        "netclass": "USB_HS",
+        "pattern": "/OTGHS1_D+"
+      },
+      {
+        "netclass": "USB_HS",
+        "pattern": "/OTGHS1_D-"
+      },
+      {
+        "netclass": "USB_FS",
+        "pattern": "/OTGFS1_D+"
+      },
+      {
+        "netclass": "USB_FS",
+        "pattern": "/OTGFS1_D-"
+      },
+      {
+        "netclass": "VBUS",
+        "pattern": "VBUS_*"
+      },
+      {
+        "netclass": "VBUS",
+        "pattern": "/VBUS_*"
+      },
+      {
+        "netclass": "ADC_A",
+        "pattern": "/TMUXA_S*"
+      },
+      {
+        "netclass": "ADC_A",
+        "pattern": "/ADC1_IN0"
+      },
+      {
+        "netclass": "ADC_A",
+        "pattern": "/ADC1_IN1"
+      },
+      {
+        "netclass": "ADC_A",
+        "pattern": "/ADC1_IN2"
+      },
+      {
+        "netclass": "ADC_A",
+        "pattern": "/ADC1_IN3"
+      },
+      {
+        "netclass": "ADC_B",
+        "pattern": "/TMUXB_S*"
+      },
+      {
+        "netclass": "ADC_B",
+        "pattern": "/ADC1_IN4"
+      },
+      {
+        "netclass": "ADC_B",
+        "pattern": "/ADC1_IN5"
+      },
+      {
+        "netclass": "ADC_B",
+        "pattern": "/ADC1_IN6"
+      },
+      {
+        "netclass": "ADC_B",
+        "pattern": "/ADC1_IN7"
+      },
+      {
+        "netclass": "ADC_C",
+        "pattern": "/TMUXC_S*"
+      },
+      {
+        "netclass": "ADC_C",
+        "pattern": "/ADC1_IN8"
+      },
+      {
+        "netclass": "ADC_C",
+        "pattern": "/ADC1_IN9"
+      },
+      {
+        "netclass": "ADC_C",
+        "pattern": "/ADC1_IN10"
+      },
+      {
+        "netclass": "ADC_C",
+        "pattern": "/ADC1_IN11"
+      },
+      {
+        "netclass": "ADC_D",
+        "pattern": "/TMUXD_S*"
+      },
+      {
+        "netclass": "ADC_D",
+        "pattern": "/ADC1_IN12"
+      },
+      {
+        "netclass": "ADC_D",
+        "pattern": "/ADC1_IN13"
+      },
+      {
+        "netclass": "ADC_D",
+        "pattern": "/ADC1_IN14"
+      },
+      {
+        "netclass": "ADC_D",
+        "pattern": "/ADC1_IN15"
+      },
+      {
+        "netclass": "ADC",
+        "pattern": "/ADC*"
+      },
+      {
+        "netclass": "UART",
+        "pattern": "/UART*"
+      },
+      {
+        "netclass": "UART",
+        "pattern": "/USART*"
+      },
+      {
+        "netclass": "I2C",
+        "pattern": "/I2C*"
+      },
+      {
+        "netclass": "SPI",
+        "pattern": "/SPI*"
+      },
+      {
+        "netclass": "PWR_CTRL",
+        "pattern": "/PW_PSTRH"
+      },
+      {
+        "netclass": "PWR_CTRL",
+        "pattern": "/AP_FAULT"
+      },
+      {
+        "netclass": "PWR_CTRL",
+        "pattern": "/LM_ST"
+      },
+      {
+        "netclass": "LED_DATA",
+        "pattern": "/DIN"
+      },
+      {
+        "netclass": "LED_DATA",
+        "pattern": "*/DOUT"
+      }
+    ]
   },
   "pcbnew": {
+    "find_by_properties": {
+      "recent_queries": []
+    },
     "last_paths": {
       "idf": "",
       "netlist": "",
       "plot": "",
       "specctra_dsn": "",
+      "step": "",
       "vrml": ""
     },
     "page_layout_descr_file": ""
@@ -302,9 +640,9 @@
     "annotate_start_num": 0,
     "annotation": {
       "method": 0,
-      "sort_order": 0
+      "sort_order": 1
     },
-    "bom_export_filename": "${PROJECTNAME}.csv",
+    "bom_export_filename": "output/TMR2615F_osu_pad.csv",
     "bom_fmt_presets": [],
     "bom_fmt_settings": {
       "field_delimiter": ",",
@@ -366,12 +704,90 @@
           "label": "Datasheet",
           "name": "Datasheet",
           "show": true
+        },
+        {
+          "group_by": false,
+          "label": "Sim.Device",
+          "name": "Sim.Device",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "Sim.Pins",
+          "name": "Sim.Pins",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "Symbol Name",
+          "name": "Symbol Name",
+          "show": false
+        },
+        {
+          "group_by": true,
+          "label": "LCSC",
+          "name": "LCSC",
+          "show": true
+        },
+        {
+          "group_by": false,
+          "label": "Description",
+          "name": "Description",
+          "show": true
+        },
+        {
+          "group_by": false,
+          "label": "#",
+          "name": "${ITEM_NUMBER}",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "LCSC ID",
+          "name": "LCSC ID",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "MF",
+          "name": "MF",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "Description_1",
+          "name": "Description_1",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "Package",
+          "name": "Package",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "MP",
+          "name": "MP",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "MPN",
+          "name": "MPN",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "Manufacturer",
+          "name": "Manufacturer",
+          "show": false
         }
       ],
       "filter_string": "",
       "group_symbols": true,
       "include_excluded_from_bom": true,
-      "name": "Default Editing",
+      "name": "",
       "sort_asc": true,
       "sort_field": "Reference"
     },
@@ -383,7 +799,7 @@
       "default_line_thickness": 6.0,
       "default_text_size": 50.0,
       "field_names": [],
-      "hop_over_size_choice": 0,
+      "hop_over_size_choice": 2,
       "intersheets_ref_own_page": false,
       "intersheets_ref_prefix": "",
       "intersheets_ref_short": false,
@@ -404,20 +820,167 @@
     "meta": {
       "version": 1
     },
+    "net_format_name": "",
     "page_layout_descr_file": "",
     "plot_directory": "",
     "reuse_designators": true,
+    "space_save_all_events": true,
+    "spice_current_sheet_as_root": false,
+    "spice_external_command": "spice \"%I\"",
+    "spice_model_current_sheet_as_root": true,
+    "spice_save_all_currents": false,
+    "spice_save_all_dissipations": false,
+    "spice_save_all_voltages": false,
     "subpart_first_id": 65,
     "subpart_id_separator": 0,
-    "top_level_sheets": [],
-    "used_designators": "",
+    "top_level_sheets": [
+      {
+        "filename": "giris.kicad_sch",
+        "name": "giris",
+        "uuid": "0c357edf-5b81-40d5-9dd7-a7455ce1b19d"
+      }
+    ],
+    "used_designators": "LED1-2,FID1-3,L1,X1,TP1-48,U1-81,SW1-34,C1-163,#PWR1-403,D1,R1-60,H1-4,J1-10,#FLG1-3",
     "variants": []
   },
-  "sheets": [],
+  "sheets": [
+    [
+      "0c357edf-5b81-40d5-9dd7-a7455ce1b19d",
+      "giris"
+    ],
+    [
+      "f1fb0698-e95b-4af0-8838-756e58475d83",
+      "Key"
+    ],
+    [
+      "7f9ef015-2204-4ce0-87cb-ceb865f14cf5",
+      "Key1"
+    ],
+    [
+      "1c908246-f45e-479b-81f5-310842a674b3",
+      "Key2"
+    ],
+    [
+      "27bf897c-e7c4-42f0-a892-9a5ce92b0666",
+      "Key3"
+    ],
+    [
+      "b67cf318-8f26-4075-8130-210e83bda6ef",
+      "Key4"
+    ],
+    [
+      "c054f78e-e93e-4508-aa3c-98e78e922ef3",
+      "Key5"
+    ],
+    [
+      "2396e9cf-174f-4b9f-9783-8af3290530f2",
+      "Key6"
+    ],
+    [
+      "def623b5-d31a-4fe7-b91c-04ca7f10191c",
+      "Key7"
+    ],
+    [
+      "5dcb7a95-182a-45be-896b-bcfb83073168",
+      "Key8"
+    ],
+    [
+      "1ab2d170-c0dd-4c6a-9880-29205c17557b",
+      "Key9"
+    ],
+    [
+      "7f99540c-636d-4759-a44a-09c256348990",
+      "Key10"
+    ],
+    [
+      "e5067d76-e1b3-4765-93d7-39b7fd6f65ab",
+      "Key11"
+    ],
+    [
+      "1ba9b711-ab2f-410c-8aeb-729ece2370c5",
+      "Key12"
+    ],
+    [
+      "fcbf405a-5be8-4d51-a85a-95185ca6de4f",
+      "Key13"
+    ],
+    [
+      "8f09fe94-5691-4d33-bc80-4bdc6d6b537b",
+      "Key14"
+    ],
+    [
+      "60f3be65-ae5a-4e8d-a3d0-e90e7976de46",
+      "Key15"
+    ],
+    [
+      "7cb44c9b-ee5e-4996-bcca-0c94a5fd4dc8",
+      "Key16"
+    ],
+    [
+      "f46e6ae3-3281-462a-a56b-329021e37a5c",
+      "Key17"
+    ],
+    [
+      "5a8e0817-eaf2-47a7-aa8d-c39f919c02ea",
+      "Key18"
+    ],
+    [
+      "cf83759f-54a1-4a92-a320-4bb3634d4600",
+      "Key19"
+    ],
+    [
+      "dcb7ee93-519c-4f9b-a171-a0c64bb3ef95",
+      "Key20"
+    ],
+    [
+      "eefe8530-b4da-4626-b27b-6c13764491e6",
+      "Key21"
+    ],
+    [
+      "db8d14e7-a068-4761-b802-1e264bcc4464",
+      "Key22"
+    ],
+    [
+      "2c35a551-7fdb-4270-8fc0-c3bbd846d604",
+      "Key23"
+    ],
+    [
+      "0bdde943-b93a-40d7-a7d5-8fb6afbed467",
+      "Key24"
+    ],
+    [
+      "9d13cbc6-ad0e-4d46-b945-5bffc20a498a",
+      "Key25"
+    ],
+    [
+      "2ec1a396-ec5a-4caf-b695-cee0c644c238",
+      "Key26"
+    ],
+    [
+      "d45c3533-dd67-4e45-ad62-a3e96974e9ca",
+      "Key27"
+    ],
+    [
+      "05d4ba4b-2511-4167-8bf1-01e03056c9c4",
+      "Key28"
+    ],
+    [
+      "288515bb-cd75-4d04-9461-111d0f8d5f2a",
+      "Key29"
+    ],
+    [
+      "1309c206-7249-48c1-a2f8-bedc2d81d896",
+      "Key30"
+    ],
+    [
+      "396b667c-e8aa-4578-be5d-0f61d00e21b6",
+      "Key31"
+    ]
+  ],
   "text_variables": {},
   "tuning_profiles": {
     "meta": {
-      "version": 0
+      "version": 1
     },
     "tuning_profiles_impedance_geometric": []
   }
