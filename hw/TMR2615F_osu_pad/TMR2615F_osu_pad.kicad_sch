@@ -1009,6 +1009,169 @@
 			)
 			(embedded_fonts no)
 		)
+		(symbol "Basic_Capacitors_Resistors__C:0402WGF3301TCE"
+			(pin_numbers
+				(hide yes)
+			)
+			(pin_names
+				(hide yes)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(in_pos_files yes)
+			(duplicate_pin_numbers_are_jumpers no)
+			(property "Reference" "R"
+				(at 0 1.27 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "0402WGF3301TCE"
+				(at 0 -2.54 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" "Resistor_SMD:R_0402_1005Metric"
+				(at 0 -10.16 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+						(italic yes)
+					)
+				)
+			)
+			(property "Datasheet" "https://www.lcsc.com/product-detail/C25890.html"
+				(at -2.286 0.127 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(property "Description" "3.3kΩ ±1% 62.5mW 0402 Thick Film Resistor"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "LCSC" "C25890"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Symbol Name" "0402WGF3301TCE"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_keywords" "C25890"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(symbol "0402WGF3301TCE_0_1"
+				(rectangle
+					(start -2.54 1.016)
+					(end 2.54 -1.016)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type background)
+					)
+				)
+				(pin passive line
+					(at -5.08 0 0)
+					(length 2.54)
+					(name "1"
+						(effects
+							(font
+								(size 1 1)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1 1)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 5.08 0 180)
+					(length 2.54)
+					(name "2"
+						(effects
+							(font
+								(size 1 1)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1 1)
+							)
+						)
+					)
+				)
+			)
+			(symbol "0402WGF3301TCE_1_1"
+				(text "3.3k"
+					(at 0 2.032 0)
+					(effects
+						(font
+							(size 1.27 1.27)
+							(color 163 59 255 1)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
 		(symbol "Basic_Capacitors_Resistors__C:0402WGF5101TCE"
 			(pin_numbers
 				(hide yes)
@@ -1772,7 +1935,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "Basic_Capacitors_Resistors__C:CL10B473KB8NNNC"
+		(symbol "Basic_Capacitors_Resistors__C:CL10B332KB8NNNC"
 			(pin_numbers
 				(hide yes)
 			)
@@ -1794,7 +1957,7 @@
 					)
 				)
 			)
-			(property "Value" "CL10B473KB8NNNC"
+			(property "Value" "CL10B332KB8NNNC"
 				(at 0 -2.54 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -1829,7 +1992,7 @@
 					(justify left)
 				)
 			)
-			(property "Description" "47nF ±10% 50V Ceramic Capacitor X7R 0603"
+			(property "Description" "3.3nF ±10% 50V Ceramic Capacitor X7R 0603"
 				(at -2.794 -9.652 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -1840,7 +2003,7 @@
 					)
 				)
 			)
-			(property "LCSC" "C1622"
+			(property "LCSC" "C1613"
 				(at 0 0 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -1851,7 +2014,7 @@
 					)
 				)
 			)
-			(property "Symbol Name" "CL10B473KB8NNNC"
+			(property "Symbol Name" "CL10B332KB8NNNC"
 				(at -1.778 -5.334 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -1862,7 +2025,7 @@
 					)
 				)
 			)
-			(property "ki_keywords" "C1622"
+			(property "ki_keywords" "C1613"
 				(at 0 0 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -1873,7 +2036,7 @@
 					)
 				)
 			)
-			(symbol "CL10B473KB8NNNC_0_1"
+			(symbol "CL10B332KB8NNNC_0_1"
 				(polyline
 					(pts
 						(xy -1.27 0) (xy -0.508 0)
@@ -1959,8 +2122,8 @@
 					)
 				)
 			)
-			(symbol "CL10B473KB8NNNC_1_1"
-				(text "47nF/50V/X7R"
+			(symbol "CL10B332KB8NNNC_1_1"
+				(text "3.3nF/50V/X7R"
 					(at 0 3.048 0)
 					(effects
 						(font
@@ -5436,6 +5599,206 @@
 			)
 			(symbol "1N4148WS_T4_1_1"
 				(text "1N4148WS"
+					(at 0 3.556 0)
+					(effects
+						(font
+							(size 1.27 1.27)
+							(color 163 59 255 1)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+		(symbol "Diode__C:PESD5V0R1BSFYL"
+			(pin_numbers
+				(hide yes)
+			)
+			(pin_names
+				(hide yes)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(in_pos_files yes)
+			(duplicate_pin_numbers_are_jumpers no)
+			(property "Reference" "U"
+				(at 0 1.27 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "PESD5V0R1BSFYL"
+				(at 0 -2.54 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" "Diode__C:SOD-962_L0.6-W0.3-BI"
+				(at 0 -10.16 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+						(italic yes)
+					)
+				)
+			)
+			(property "Datasheet" "https://assets.nexperia.com/documents/data-sheet/PESD5V0R1BSF.pdf"
+				(at -2.286 0.127 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(property "Description" "Bidirectional ESD, 5V VRWM, 0.15pF max line capacitance (TrEOS), IEC 61000-4-2 ±8kV contact, SOD-962/DSN0603-2"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "LCSC" "C461221"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_keywords" "C461221"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(symbol "PESD5V0R1BSFYL_0_1"
+				(polyline
+					(pts
+						(xy -2.54 1.524) (xy 0 0) (xy -2.54 -1.524) (xy -2.54 1.524)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type background)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 1.524) (xy -0.508 2.032) (xy 0 1.524)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 -1.524) (xy 0 1.524)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 -1.524) (xy 0.508 -2.032) (xy 0 -1.524)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 2.54 1.524) (xy 0 0) (xy 2.54 -1.524) (xy 2.54 1.524)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type background)
+					)
+				)
+				(pin passive line
+					(at -5.08 0 0)
+					(length 2.54)
+					(name "1"
+						(effects
+							(font
+								(size 1 1)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1 1)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 5.08 0 180)
+					(length 2.54)
+					(name "2"
+						(effects
+							(font
+								(size 1 1)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1 1)
+							)
+						)
+					)
+				)
+			)
+			(symbol "PESD5V0R1BSFYL_1_1"
+				(text "5V 0.15pF ESD/TVS"
 					(at 0 3.556 0)
 					(effects
 						(font
@@ -10174,10 +10537,10 @@
 						)
 					)
 				)
-				(pin power_in line
-					(at -10.16 0 0)
+				(pin power_out line
+					(at 10.16 5.08 180)
 					(length 5.08)
-					(name "Vin"
+					(name "Vout"
 						(effects
 							(font
 								(size 1 1)
@@ -10192,10 +10555,10 @@
 						)
 					)
 				)
-				(pin power_out line
-					(at 10.16 5.08 180)
+				(pin power_in line
+					(at -10.16 0 0)
 					(length 5.08)
-					(name "Vout"
+					(name "Vin"
 						(effects
 							(font
 								(size 1 1)
@@ -11325,6 +11688,26 @@
 		)
 		(uuid "8c6119a8-01e5-4d35-96a2-62f01380b3bc")
 	)
+	(text_box "If assembly is an issue, the 0201 sized TVS diodes (PESD5V0R1BSFYL) can be omitted or 0402 sized TVS diodes can be placed on the DNP C17 and C18 pads. Please select <3pF class diodes."
+		(exclude_from_sim no)
+		(at 66.04 81.28 0)
+		(size 38.1 17.78)
+		(margins 0.9525 0.9525 0.9525 0.9525)
+		(stroke
+			(width 0)
+			(type dot)
+		)
+		(fill
+			(type none)
+		)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left top)
+		)
+		(uuid "a68ca0fd-f397-4539-a5b8-db53f1705c32")
+	)
 	(text_box "Port B (UART over USB-C, inter-keyboard)"
 		(exclude_from_sim no)
 		(at 13.97 13.97 0)
@@ -11506,6 +11889,12 @@
 		(uuid "131f54f2-3201-4aee-a5a3-c6bc37c71b6e")
 	)
 	(junction
+		(at 105.41 177.8)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "138e6602-1e47-423c-b1c0-603502db8506")
+	)
+	(junction
 		(at 45.72 33.02)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -11566,6 +11955,12 @@
 		(uuid "27e33451-67ca-444b-a3c3-76b0a6c45c78")
 	)
 	(junction
+		(at 233.68 41.91)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "29544efb-ae64-4c6f-8a14-425d3e35d5f1")
+	)
+	(junction
 		(at 356.87 34.29)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -11620,12 +12015,6 @@
 		(uuid "3c96acd2-7746-485a-a8b4-50137b20a81c")
 	)
 	(junction
-		(at 262.89 326.39)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "3ca95bdd-8ad0-45cc-a50b-6b62b2e06fee")
-	)
-	(junction
 		(at 388.62 365.76)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -11656,12 +12045,6 @@
 		(uuid "47273229-14fb-43a1-8a4e-da29a60ec13a")
 	)
 	(junction
-		(at 256.54 284.48)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "4a214e07-4fb2-48b4-aa57-b67c4a11fc5d")
-	)
-	(junction
 		(at 562.61 59.69)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -11684,12 +12067,6 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "58614d6f-86a1-48f0-b340-1b4e9a02236c")
-	)
-	(junction
-		(at 233.68 41.91)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "595ff56e-d757-4926-a126-be653ab47b7a")
 	)
 	(junction
 		(at 420.37 289.56)
@@ -11762,6 +12139,12 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "761c99c0-d981-4163-a503-aab2a11489d0")
+	)
+	(junction
+		(at 256.54 284.48)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "7ac1a755-7f9f-4063-bd4f-8f40529187c0")
 	)
 	(junction
 		(at 27.94 118.11)
@@ -11860,6 +12243,12 @@
 		(uuid "9b8f623f-e5a2-497b-9bb1-34202a8fbc63")
 	)
 	(junction
+		(at 113.03 185.42)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "9c210765-74ff-4e3d-ae1b-68831d9b7877")
+	)
+	(junction
 		(at 416.56 365.76)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -11918,12 +12307,6 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "b83191c9-c2cf-4757-8e0b-b0bd0a31b7dc")
-	)
-	(junction
-		(at 105.41 198.12)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "bcdaee51-f28d-40e4-970e-f4d5805d2ef6")
 	)
 	(junction
 		(at 259.08 326.39)
@@ -12100,6 +12483,12 @@
 		(uuid "f296ed31-2303-4184-9ede-04a8131b682e")
 	)
 	(junction
+		(at 262.89 326.39)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "f378ce0f-b828-495f-9273-5be6ac00e1f7")
+	)
+	(junction
 		(at 45.72 102.87)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -12205,7 +12594,7 @@
 	)
 	(wire
 		(pts
-			(xy 262.89 326.39) (xy 265.43 326.39)
+			(xy 262.89 326.39) (xy 267.97 326.39)
 		)
 		(stroke
 			(width 0)
@@ -12265,7 +12654,7 @@
 	)
 	(wire
 		(pts
-			(xy 92.71 185.42) (xy 102.87 185.42)
+			(xy 92.71 185.42) (xy 113.03 185.42)
 		)
 		(stroke
 			(width 0)
@@ -12355,7 +12744,7 @@
 	)
 	(wire
 		(pts
-			(xy 82.55 107.95) (xy 81.28 107.95)
+			(xy 81.28 107.95) (xy 93.98 107.95)
 		)
 		(stroke
 			(width 0)
@@ -12555,7 +12944,7 @@
 	)
 	(wire
 		(pts
-			(xy 113.03 175.26) (xy 113.03 228.6)
+			(xy 113.03 175.26) (xy 113.03 185.42)
 		)
 		(stroke
 			(width 0)
@@ -13245,6 +13634,16 @@
 	)
 	(wire
 		(pts
+			(xy 102.87 137.16) (xy 102.87 119.38)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "46d68819-a4e8-4c8c-b298-ed91d01e5816")
+	)
+	(wire
+		(pts
 			(xy 21.59 33.02) (xy 25.4 33.02)
 		)
 		(stroke
@@ -13265,13 +13664,13 @@
 	)
 	(wire
 		(pts
-			(xy 105.41 198.12) (xy 134.62 198.12)
+			(xy 93.98 107.95) (xy 93.98 121.92)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "4ad5fd81-9e39-4206-bbe6-f1aa3a6b5ac6")
+		(uuid "4ad4be01-baad-4c1a-9ad7-94d74fc73090")
 	)
 	(wire
 		(pts
@@ -13342,16 +13741,6 @@
 			(type default)
 		)
 		(uuid "4f5842ff-6217-423e-bdfb-f66aba0d220d")
-	)
-	(wire
-		(pts
-			(xy 105.41 198.12) (xy 105.41 208.28)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "4f5fa86e-4397-4ba8-900a-5946f9a19d35")
 	)
 	(wire
 		(pts
@@ -13655,6 +14044,16 @@
 	)
 	(wire
 		(pts
+			(xy 93.98 137.16) (xy 93.98 132.08)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "64c937e8-e752-4dd0-94a6-1b370027699c")
+	)
+	(wire
+		(pts
 			(xy 220.98 45.72) (xy 220.98 41.91)
 		)
 		(stroke
@@ -13895,16 +14294,6 @@
 	)
 	(wire
 		(pts
-			(xy 95.25 137.16) (xy 95.25 118.11)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "74701c89-3d79-4d67-ba16-cafcf552820f")
-	)
-	(wire
-		(pts
 			(xy 372.11 251.46) (xy 387.35 251.46)
 		)
 		(stroke
@@ -14112,6 +14501,16 @@
 			(type default)
 		)
 		(uuid "839266c2-db25-4d60-9aa3-10fa6c4dd307")
+	)
+	(wire
+		(pts
+			(xy 105.41 177.8) (xy 134.62 177.8)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "83ad0f03-083c-4a73-ba05-de631f2a2b83")
 	)
 	(wire
 		(pts
@@ -14705,6 +15104,16 @@
 	)
 	(wire
 		(pts
+			(xy 113.03 185.42) (xy 113.03 228.6)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "aee1558a-663a-4985-95bf-25e01e59946b")
+	)
+	(wire
+		(pts
 			(xy 546.1 115.57) (xy 546.1 113.03)
 		)
 		(stroke
@@ -14955,6 +15364,16 @@
 	)
 	(wire
 		(pts
+			(xy 233.68 41.91) (xy 237.49 41.91)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c05d2879-aa74-4518-8fec-28e50ac88bd7")
+	)
+	(wire
+		(pts
 			(xy 406.4 124.46) (xy 412.75 124.46)
 		)
 		(stroke
@@ -15115,16 +15534,6 @@
 	)
 	(wire
 		(pts
-			(xy 95.25 88.9) (xy 95.25 92.71)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "c71e1c20-0135-48b8-95b4-b65e819234c8")
-	)
-	(wire
-		(pts
 			(xy 372.11 246.38) (xy 387.35 246.38)
 		)
 		(stroke
@@ -15185,7 +15594,7 @@
 	)
 	(wire
 		(pts
-			(xy 226.06 41.91) (xy 237.49 41.91)
+			(xy 226.06 41.91) (xy 233.68 41.91)
 		)
 		(stroke
 			(width 0)
@@ -15225,23 +15634,13 @@
 	)
 	(wire
 		(pts
-			(xy 105.41 180.34) (xy 105.41 198.12)
+			(xy 105.41 180.34) (xy 105.41 208.28)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
 		(uuid "cf4faea4-f317-489f-8417-bda8413a1417")
-	)
-	(wire
-		(pts
-			(xy 256.54 284.48) (xy 259.08 284.48)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "d0ec0ce9-a003-407b-85f7-6ec28b8ede94")
 	)
 	(wire
 		(pts
@@ -15645,6 +16044,16 @@
 	)
 	(wire
 		(pts
+			(xy 102.87 102.87) (xy 102.87 109.22)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e3ec21c2-a71a-41b4-a3cb-39e0e6613523")
+	)
+	(wire
+		(pts
 			(xy 556.26 215.9) (xy 549.91 215.9)
 		)
 		(stroke
@@ -15765,7 +16174,7 @@
 	)
 	(wire
 		(pts
-			(xy 82.55 102.87) (xy 68.58 102.87)
+			(xy 68.58 102.87) (xy 102.87 102.87)
 		)
 		(stroke
 			(width 0)
@@ -15852,6 +16261,16 @@
 			(type default)
 		)
 		(uuid "f12602f6-ad5f-4f2d-ab2a-b73a0833679d")
+	)
+	(wire
+		(pts
+			(xy 256.54 284.48) (xy 259.08 284.48)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f12a0fe0-611c-4b24-8ea7-0d6c7a4e64bf")
 	)
 	(wire
 		(pts
@@ -15982,16 +16401,6 @@
 			(type default)
 		)
 		(uuid "f8988610-4be0-4908-8479-70e061e1f30b")
-	)
-	(wire
-		(pts
-			(xy 102.87 175.26) (xy 102.87 185.42)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "faa508ee-1995-4f34-be82-5dc4e4ba4568")
 	)
 	(wire
 		(pts
@@ -17006,6 +17415,16 @@
 		)
 		(uuid "0b7043cd-b625-47cc-bb31-1e4f85b84600")
 	)
+	(label "ADC1_IN4"
+		(at 134.62 198.12 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "0c139fa6-99fc-4181-8bbe-a0966ddc87c7")
+	)
 	(label "SPI3_SCK"
 		(at 372.11 314.96 0)
 		(effects
@@ -17015,16 +17434,6 @@
 			(justify left bottom)
 		)
 		(uuid "0f1b723a-d8b7-466f-b209-9b8c1a83d3fc")
-	)
-	(label "OTGHS1_D+"
-		(at 107.95 107.95 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "1031f2d5-5668-4bf0-8c15-01d27e6c2c09")
 	)
 	(label "DIN"
 		(at 86.36 335.28 180)
@@ -17116,16 +17525,6 @@
 		)
 		(uuid "21866dd3-22a0-46bf-bef5-6c2c7efecfd2")
 	)
-	(label "I2C1_SDA"
-		(at 339.09 278.13 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "235e43e3-2999-4d43-945b-6c7d544627df")
-	)
 	(label "IO1"
 		(at 339.09 250.19 180)
 		(effects
@@ -17155,6 +17554,16 @@
 			(justify right bottom)
 		)
 		(uuid "25b13595-c107-4e28-a5b5-a707ca804cbf")
+	)
+	(label "ADC1_IN6"
+		(at 134.62 193.04 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "2653b8b0-578f-42c0-856f-cb6e5d5d123f")
 	)
 	(label "ADC1_IN3"
 		(at 93.98 294.64 180)
@@ -17246,6 +17655,16 @@
 		)
 		(uuid "33a60140-13c3-4ad5-be35-192665b4335c")
 	)
+	(label "I2C1_SDA"
+		(at 339.09 275.59 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "3461a6c4-9f1f-40d1-8bb0-7d60446886ab")
+	)
 	(label "I2C1_SCL"
 		(at 448.31 134.62 180)
 		(effects
@@ -17255,6 +17674,26 @@
 			(justify right bottom)
 		)
 		(uuid "3504e167-4b00-4c44-b39e-8860b868f58c")
+	)
+	(label "ADC1_IN5"
+		(at 134.62 195.58 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "383ed2e3-bbdf-4c2e-9a8f-0d6b7b9eaf8d")
+	)
+	(label "ADC1_IN8"
+		(at 134.62 187.96 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "3853642b-6f2e-4e4e-a5b6-c15431923eb2")
 	)
 	(label "I2C3_SDA"
 		(at 134.62 231.14 180)
@@ -17305,16 +17744,6 @@
 			(justify right bottom)
 		)
 		(uuid "42138553-c2e7-4e4d-a5f7-a6e01bf051c8")
-	)
-	(label "ADC1_IN8"
-		(at 134.62 185.42 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "43b0101c-db62-40f2-ba8c-b3c5e5b644be")
 	)
 	(label "I2C1_SDA"
 		(at 448.31 129.54 180)
@@ -17406,16 +17835,6 @@
 		)
 		(uuid "5155fc21-b572-42e8-ba15-f61f9295c724")
 	)
-	(label "I2C1_SCL"
-		(at 339.09 275.59 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "538bb791-efd0-41ff-8989-7e378b7c5eed")
-	)
 	(label "I2C3_SDA"
 		(at 339.09 303.53 180)
 		(effects
@@ -17435,16 +17854,6 @@
 			(justify left bottom)
 		)
 		(uuid "57350a74-9697-4dc6-b469-c7513637f20c")
-	)
-	(label "ADC1_IN9"
-		(at 134.62 182.88 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "57ca6aa6-924f-4f89-9a78-45e3f578a0a8")
 	)
 	(label "ADC1_IN9"
 		(at 339.09 295.91 180)
@@ -17485,6 +17894,16 @@
 			(justify left bottom)
 		)
 		(uuid "5d78feef-a7aa-490d-9cf9-da2012a12926")
+	)
+	(label "ADC1_IN14"
+		(at 134.62 182.88 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "61d26e3c-41a7-4a6b-8bb6-76ea7c2d704c")
 	)
 	(label "UART8_RX"
 		(at 92.71 190.5 0)
@@ -17527,7 +17946,7 @@
 		(uuid "6e5baa37-a90a-496b-a5de-acc8a4ebd9d5")
 	)
 	(label "RESET"
-		(at 265.43 326.39 0)
+		(at 267.97 326.39 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -17555,16 +17974,6 @@
 			(justify left bottom)
 		)
 		(uuid "710f76f8-bac2-4bac-bc8e-91df2b591444")
-	)
-	(label "OTGHS1_D-"
-		(at 107.95 102.87 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "7173db3a-4dea-4fc8-bf8b-cffa85bc772c")
 	)
 	(label "I2C1_SDA"
 		(at 485.14 132.08 180)
@@ -17706,6 +18115,16 @@
 		)
 		(uuid "827dcc57-b313-481b-b104-a92f76c6d7e3")
 	)
+	(label "ADC1_IN15"
+		(at 134.62 180.34 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "831c8698-511c-496d-ba9d-0df8c96c6621")
+	)
 	(label "OTGFS1_D-"
 		(at 274.32 101.6 0)
 		(effects
@@ -17775,16 +18194,6 @@
 			(justify right bottom)
 		)
 		(uuid "8d2dcfc6-2ace-42f0-8a37-37a1b638faa3")
-	)
-	(label "ADC1_IN15"
-		(at 134.62 177.8 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "8d91ee8c-badb-4654-9d41-103c6cdaf353")
 	)
 	(label "ADC1_IN13"
 		(at 134.62 213.36 180)
@@ -17916,16 +18325,6 @@
 		)
 		(uuid "9abe1245-c985-4677-9bb5-c22bcbad5c15")
 	)
-	(label "ADC1_IN7"
-		(at 134.62 187.96 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "9ad1fb1b-9b08-4417-a7b2-57f78845705e")
-	)
 	(label "I2C3_SCL"
 		(at 339.09 323.85 180)
 		(effects
@@ -17966,7 +18365,7 @@
 		)
 		(uuid "ab3c2050-5284-4a40-9269-055211383271")
 	)
-	(label "ADC1_IN6"
+	(label "ADC1_IN7"
 		(at 134.62 190.5 180)
 		(effects
 			(font
@@ -17974,7 +18373,7 @@
 			)
 			(justify right bottom)
 		)
-		(uuid "ae383c42-f949-4313-a2c0-40825aa6ec23")
+		(uuid "ac3fdde8-22cb-4052-823a-4101c586d65e")
 	)
 	(label "TMUX_S2A"
 		(at 135.89 332.74 0)
@@ -18015,6 +18414,16 @@
 			(justify right bottom)
 		)
 		(uuid "b2a92279-d2ec-497f-9121-19fa95a8e222")
+	)
+	(label "ADC1_IN9"
+		(at 134.62 185.42 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "b66da5a7-4bc7-42f9-a05c-66d26f236b25")
 	)
 	(label "SYS_SWCLK"
 		(at 266.7 374.65 0)
@@ -18085,16 +18494,6 @@
 			(justify left bottom)
 		)
 		(uuid "cf823452-a4ce-48e1-9df5-43b950d7a2d4")
-	)
-	(label "ADC1_IN4"
-		(at 134.62 195.58 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "d0653af7-98aa-4794-b781-9e6ce1cceb7c")
 	)
 	(label "TMUX_S4A"
 		(at 128.27 46.99 180)
@@ -18196,6 +18595,16 @@
 		)
 		(uuid "e7a510a5-d7a8-4ae5-9fc9-6fe78f850c2e")
 	)
+	(label "I2C1_SCL"
+		(at 339.09 278.13 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "ea8d2385-fa99-444c-b04d-69083e55bab7")
+	)
 	(label "USART1_CK"
 		(at 372.11 264.16 0)
 		(effects
@@ -18215,26 +18624,6 @@
 			(justify right bottom)
 		)
 		(uuid "ed6f8454-f97b-4d65-a3ce-ff8ce06d2a5e")
-	)
-	(label "ADC1_IN5"
-		(at 134.62 193.04 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "f020528a-95de-4eb1-8317-fd2687fa47e8")
-	)
-	(label "ADC1_IN14"
-		(at 134.62 180.34 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "f1e80233-0dc9-4148-9f3c-d657cb01303d")
 	)
 	(label "PW_PSTRH"
 		(at 248.92 54.61 0)
@@ -18591,7 +18980,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "02772874-12d5-4890-9a40-4d5c7b08acd6")
-		(property "Reference" "#PWR082"
+		(property "Reference" "#PWR083"
 			(at 402.59 266.7 0)
 			(hide yes)
 			(show_name no)
@@ -18651,7 +19040,7 @@
 		(instances
 			(project "TMR2615F_osu_pad"
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d"
-					(reference "#PWR082")
+					(reference "#PWR083")
 					(unit 1)
 				)
 			)
@@ -18775,7 +19164,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "06151997-0eed-4333-b24f-486570eb7c16")
-		(property "Reference" "#PWR088"
+		(property "Reference" "#PWR089"
 			(at 292.1 307.34 0)
 			(hide yes)
 			(show_name no)
@@ -18835,7 +19224,7 @@
 		(instances
 			(project "TMR2615F_osu_pad"
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d"
-					(reference "#PWR088")
+					(reference "#PWR089")
 					(unit 1)
 				)
 			)
@@ -18932,7 +19321,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "084d24df-587a-4107-b963-e6a92b8bd705")
-		(property "Reference" "#PWR085"
+		(property "Reference" "#PWR086"
 			(at 124.46 290.83 0)
 			(hide yes)
 			(show_name no)
@@ -18992,7 +19381,7 @@
 		(instances
 			(project "TMR2615F_osu_pad"
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d"
-					(reference "#PWR085")
+					(reference "#PWR086")
 					(unit 1)
 				)
 			)
@@ -19227,6 +19616,17 @@
 		)
 		(property "Description" "Ideal Diode With Input Polarity Protection 1.5 - 5.5V  Input Voltage, 1.5A Output Current, Ron 141 mOhm, SC-70-6"
 			(at 146.05 124.714 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C2869734"
+			(at 146.05 106.68 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -20468,134 +20868,6 @@
 		)
 	)
 	(symbol
-		(lib_id "Basic_Capacitors_Resistors__C:0402WGF1002TCE")
-		(at 256.54 289.56 90)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "14648058-ea38-4a98-b2e7-4e1525c65bc8")
-		(property "Reference" "R26"
-			(at 259.08 289.5599 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Value" "0402WGF1002TCE"
-			(at 259.08 289.56 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "Resistor_SMD:R_0402_1005Metric"
-			(at 266.7 289.56 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-					(italic yes)
-				)
-			)
-		)
-		(property "Datasheet" "https://item.szlcsc.com/323315.html"
-			(at 256.413 291.846 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Description" "10kΩ ±1% 62.5mW 0402 Thick Film Resistor"
-			(at 256.54 289.56 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "LCSC" "C25744"
-			(at 256.54 289.56 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Symbol Name" "0402WGF1002TCE"
-			(at 256.54 289.56 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Sim.Device" ""
-			(at 256.54 289.56 90)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Sim.Pins" ""
-			(at 256.54 289.56 90)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "2"
-			(uuid "b6288ec1-a3b9-490f-a627-05e80197fcdd")
-		)
-		(pin "1"
-			(uuid "fefb10e4-572c-4ab4-a362-613d473e25ab")
-		)
-		(instances
-			(project "TMR2615F_osu_pad"
-				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d"
-					(reference "R26")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "power:GND")
 		(at 549.91 219.71 0)
 		(unit 1)
@@ -20607,7 +20879,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "157b649e-38ef-43e6-a9ee-01f9295e5fd0")
-		(property "Reference" "#PWR0156"
+		(property "Reference" "#PWR077"
 			(at 549.91 226.06 0)
 			(hide yes)
 			(show_name no)
@@ -20667,7 +20939,7 @@
 		(instances
 			(project "TMR2615F_osu_pad"
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d"
-					(reference "#PWR0156")
+					(reference "#PWR077")
 					(unit 1)
 				)
 			)
@@ -20812,7 +21084,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "17f6e0d7-05f4-4cac-86a9-feaaa8396331")
-		(property "Reference" "#PWR090"
+		(property "Reference" "#PWR091"
 			(at 256.54 318.77 0)
 			(hide yes)
 			(show_name no)
@@ -20872,7 +21144,7 @@
 		(instances
 			(project "TMR2615F_osu_pad"
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d"
-					(reference "#PWR090")
+					(reference "#PWR091")
 					(unit 1)
 				)
 			)
@@ -21321,6 +21593,101 @@
 			(project "TMR2615F_osu_pad"
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d"
 					(reference "TP1")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Diode__C:PESD5V0R1BSFYL")
+		(at 93.98 127 90)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "1dc20468-3b98-4f20-9947-b546de733a0c")
+		(property "Reference" "U26"
+			(at 97.79 125.7298 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Value" "PESD5V0R1BSFYL"
+			(at 97.79 128.2698 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Footprint" "Diode__C:SOD-962_L0.6-W0.3-BI"
+			(at 104.14 127 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+					(italic yes)
+				)
+			)
+		)
+		(property "Datasheet" "https://assets.nexperia.com/documents/data-sheet/PESD5V0R1BSF.pdf"
+			(at 93.853 129.286 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Description" "Bidirectional ESD, 5V VRWM, 0.15pF max line capacitance (TrEOS), IEC 61000-4-2 ±8kV contact, SOD-962/DSN0603-2"
+			(at 93.98 127 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C461221"
+			(at 93.98 127 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "2"
+			(uuid "0a3f5d39-eaad-447c-b5a3-54001834bdc1")
+		)
+		(pin "1"
+			(uuid "31c6d085-de00-4bcd-a0b8-ddf3a1c5c8f6")
+		)
+		(instances
+			(project "TMR2615F_osu_pad"
+				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d"
+					(reference "U26")
 					(unit 1)
 				)
 			)
@@ -22905,7 +23272,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "3341cf8b-21d8-4a53-bf33-fb279d7ff8b9")
-		(property "Reference" "#PWR099"
+		(property "Reference" "#PWR0100"
 			(at 373.38 365.76 0)
 			(hide yes)
 			(show_name no)
@@ -22966,7 +23333,7 @@
 		(instances
 			(project "TMR2615F_osu_pad"
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d"
-					(reference "#PWR099")
+					(reference "#PWR0100")
 					(unit 1)
 				)
 			)
@@ -22985,7 +23352,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "35868e79-de6f-4879-aba1-ae9582b21f2c")
-		(property "Reference" "#PWR0101"
+		(property "Reference" "#PWR0102"
 			(at 242.57 393.7 0)
 			(hide yes)
 			(show_name no)
@@ -23045,7 +23412,7 @@
 		(instances
 			(project "TMR2615F_osu_pad"
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d"
-					(reference "#PWR0101")
+					(reference "#PWR0102")
 					(unit 1)
 				)
 			)
@@ -23469,6 +23836,84 @@
 		)
 	)
 	(symbol
+		(lib_id "power:GND")
+		(at 93.98 137.16 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "3e4d8d81-c555-439d-93ea-ac60eab79865")
+		(property "Reference" "#PWR065"
+			(at 93.98 143.51 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "GND"
+			(at 93.98 142.24 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 93.98 137.16 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 93.98 137.16 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 93.98 137.16 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "fe0e1bb4-d35b-4755-a300-61538d8c2323")
+		)
+		(instances
+			(project "TMR2615F_osu_pad"
+				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d"
+					(reference "#PWR065")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Connector:TestPoint")
 		(at 21.59 33.02 0)
 		(unit 1)
@@ -23742,7 +24187,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "41a46a56-b083-477c-836c-d5c847b1517e")
-		(property "Reference" "#PWR084"
+		(property "Reference" "#PWR085"
 			(at 317.5 278.13 0)
 			(hide yes)
 			(show_name no)
@@ -23802,7 +24247,7 @@
 		(instances
 			(project "TMR2615F_osu_pad"
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d"
-					(reference "#PWR084")
+					(reference "#PWR085")
 					(unit 1)
 				)
 			)
@@ -23820,7 +24265,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "4304f585-b3c6-47ae-8a99-942155bd1e3e")
-		(property "Reference" "#PWR079"
+		(property "Reference" "#PWR080"
 			(at 274.32 243.84 0)
 			(hide yes)
 			(show_name no)
@@ -23880,7 +24325,7 @@
 		(instances
 			(project "TMR2615F_osu_pad"
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d"
-					(reference "#PWR079")
+					(reference "#PWR080")
 					(unit 1)
 				)
 			)
@@ -23987,6 +24432,101 @@
 			(project "TMR2615F_osu_pad"
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d"
 					(reference "C5")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Diode__C:PESD5V0R1BSFYL")
+		(at 102.87 114.3 90)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "4606297c-8312-4ae2-b31b-4b654ca459f3")
+		(property "Reference" "U25"
+			(at 106.68 113.0298 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Value" "PESD5V0R1BSFYL"
+			(at 106.68 115.5698 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Footprint" "Diode__C:SOD-962_L0.6-W0.3-BI"
+			(at 113.03 114.3 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+					(italic yes)
+				)
+			)
+		)
+		(property "Datasheet" "https://assets.nexperia.com/documents/data-sheet/PESD5V0R1BSF.pdf"
+			(at 102.743 116.586 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Description" "Bidirectional ESD, 5V VRWM, 0.15pF max line capacitance (TrEOS), IEC 61000-4-2 ±8kV contact, SOD-962/DSN0603-2"
+			(at 102.87 114.3 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C461221"
+			(at 102.87 114.3 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "2"
+			(uuid "372db9d0-fe67-4493-87dc-af1e047aed60")
+		)
+		(pin "1"
+			(uuid "ca049123-6158-4151-b3ff-5b0fdbb3423d")
+		)
+		(instances
+			(project "TMR2615F_osu_pad"
+				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d"
+					(reference "U25")
 					(unit 1)
 				)
 			)
@@ -24140,7 +24680,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "47e9a38b-86d2-4c0c-a43f-3a6abba6dfcf")
-		(property "Reference" "#PWR087"
+		(property "Reference" "#PWR088"
 			(at 256.54 302.26 0)
 			(hide yes)
 			(show_name no)
@@ -24200,7 +24740,7 @@
 		(instances
 			(project "TMR2615F_osu_pad"
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d"
-					(reference "#PWR087")
+					(reference "#PWR088")
 					(unit 1)
 				)
 			)
@@ -24306,84 +24846,6 @@
 			(project "TMR2615F_osu_pad"
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d"
 					(reference "C23")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:+5V")
-		(at 95.25 88.9 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "4bb0f672-ad32-499a-8d46-43aff1c1b429")
-		(property "Reference" "#PWR042"
-			(at 95.25 92.71 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "+5V"
-			(at 95.25 83.82 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 95.25 88.9 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 95.25 88.9 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"+5V\""
-			(at 95.25 88.9 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "692964e9-ec7e-4595-9c0d-99fa4ba4b536")
-		)
-		(instances
-			(project "TMR2615F_osu_pad"
-				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d"
-					(reference "#PWR042")
 					(unit 1)
 				)
 			)
@@ -24530,7 +24992,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "4d20ebf7-22c8-419d-8522-f165ffcb798c")
-		(property "Reference" "#PWR096"
+		(property "Reference" "#PWR097"
 			(at 246.38 347.98 0)
 			(hide yes)
 			(show_name no)
@@ -24590,7 +25052,7 @@
 		(instances
 			(project "TMR2615F_osu_pad"
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d"
-					(reference "#PWR096")
+					(reference "#PWR097")
 					(unit 1)
 				)
 			)
@@ -24715,7 +25177,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "4f7b073e-284d-4dda-b4d8-32dea6b1b059")
-		(property "Reference" "#PWR095"
+		(property "Reference" "#PWR096"
 			(at 322.58 341.63 0)
 			(hide yes)
 			(show_name no)
@@ -24775,14 +25237,14 @@
 		(instances
 			(project "TMR2615F_osu_pad"
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d"
-					(reference "#PWR095")
+					(reference "#PWR096")
 					(unit 1)
 				)
 			)
 		)
 	)
 	(symbol
-		(lib_id "Basic_Capacitors_Resistors__C:0402WGF3300TCE")
+		(lib_id "Basic_Capacitors_Resistors__C:0402WGF5101TCE")
 		(at 139.7 46.99 0)
 		(unit 1)
 		(body_style 1)
@@ -24803,7 +25265,7 @@
 				)
 			)
 		)
-		(property "Value" "0402WGF3300TCE"
+		(property "Value" "0402WGF5101TCE"
 			(at 139.7 49.53 0)
 			(hide yes)
 			(show_name no)
@@ -24838,7 +25300,7 @@
 				(justify left)
 			)
 		)
-		(property "Description" "RES 330Ω ±1% 62.5mW 0402"
+		(property "Description" "5.1kΩ ±1% 62.5mW 0402 Thick Film Resistor"
 			(at 139.7 46.99 0)
 			(hide yes)
 			(show_name no)
@@ -24849,7 +25311,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C25104"
+		(property "LCSC" "C25905"
 			(at 139.7 46.99 0)
 			(hide yes)
 			(show_name no)
@@ -24860,7 +25322,7 @@
 				)
 			)
 		)
-		(property "Symbol Name" "0402WGF3300TCE"
+		(property "Symbol Name" "0402WGF5101TCE"
 			(at 139.7 46.99 0)
 			(hide yes)
 			(show_name no)
@@ -25698,7 +26160,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "5cb3136d-3907-4098-b8df-159808707e7e")
-		(property "Reference" "#PWR078"
+		(property "Reference" "#PWR079"
 			(at 346.71 229.87 0)
 			(hide yes)
 			(show_name no)
@@ -25758,7 +26220,7 @@
 		(instances
 			(project "TMR2615F_osu_pad"
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d"
-					(reference "#PWR078")
+					(reference "#PWR079")
 					(unit 1)
 				)
 			)
@@ -26056,7 +26518,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "5f92a091-d3c1-4c01-9417-a73583c9ea26")
-		(property "Reference" "#PWR086"
+		(property "Reference" "#PWR087"
 			(at 246.38 302.26 0)
 			(hide yes)
 			(show_name no)
@@ -26116,7 +26578,7 @@
 		(instances
 			(project "TMR2615F_osu_pad"
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d"
-					(reference "#PWR086")
+					(reference "#PWR087")
 					(unit 1)
 				)
 			)
@@ -26416,7 +26878,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "62a2df17-116c-43f9-bcdb-194c7645be7d")
-		(property "Reference" "#PWR083"
+		(property "Reference" "#PWR084"
 			(at 256.54 274.32 0)
 			(hide yes)
 			(show_name no)
@@ -26476,7 +26938,7 @@
 		(instances
 			(project "TMR2615F_osu_pad"
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d"
-					(reference "#PWR083")
+					(reference "#PWR084")
 					(unit 1)
 				)
 			)
@@ -26643,6 +27105,17 @@
 		)
 		(property "Description" "Ideal Diode With Input Polarity Protection 1.5 - 5.5V  Input Voltage, 1.5A Output Current, Ron 141 mOhm, SC-70-6"
 			(at 187.96 61.214 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C2869734"
+			(at 187.96 43.18 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -27002,7 +27475,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "70d1dd08-16e5-4fae-a580-804a42dfab23")
-		(property "Reference" "#PWR0100"
+		(property "Reference" "#PWR0101"
 			(at 429.26 373.38 0)
 			(hide yes)
 			(show_name no)
@@ -27063,7 +27536,7 @@
 		(instances
 			(project "TMR2615F_osu_pad"
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d"
-					(reference "#PWR0100")
+					(reference "#PWR0101")
 					(unit 1)
 				)
 			)
@@ -27082,7 +27555,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "7159d3e9-8d45-452c-a347-5b8bee965ec9")
-		(property "Reference" "#PWR092"
+		(property "Reference" "#PWR093"
 			(at 123.19 323.85 0)
 			(hide yes)
 			(show_name no)
@@ -27142,7 +27615,7 @@
 		(instances
 			(project "TMR2615F_osu_pad"
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d"
-					(reference "#PWR092")
+					(reference "#PWR093")
 					(unit 1)
 				)
 			)
@@ -28405,7 +28878,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "7d52bb5a-764d-405f-a540-e8215611f93b")
-		(property "Reference" "#PWR081"
+		(property "Reference" "#PWR082"
 			(at 419.1 250.19 0)
 			(hide yes)
 			(show_name no)
@@ -28465,7 +28938,7 @@
 		(instances
 			(project "TMR2615F_osu_pad"
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d"
-					(reference "#PWR081")
+					(reference "#PWR082")
 					(unit 1)
 				)
 			)
@@ -28578,84 +29051,6 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 95.25 137.16 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "807ce2f7-a138-440c-8573-2482643f0f67")
-		(property "Reference" "#PWR065"
-			(at 95.25 143.51 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "GND"
-			(at 95.25 142.24 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 95.25 137.16 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 95.25 137.16 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 95.25 137.16 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "780bd574-6650-4c03-8f2e-cb9b53ee63d6")
-		)
-		(instances
-			(project "TMR2615F_osu_pad"
-				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d"
-					(reference "#PWR065")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:GND")
 		(at 105.41 240.03 0)
 		(unit 1)
 		(body_style 1)
@@ -28666,7 +29061,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "80d26687-638f-4f16-b421-c2d2a8a15a8a")
-		(property "Reference" "#PWR080"
+		(property "Reference" "#PWR081"
 			(at 105.41 246.38 0)
 			(hide yes)
 			(show_name no)
@@ -28726,7 +29121,7 @@
 		(instances
 			(project "TMR2615F_osu_pad"
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d"
-					(reference "#PWR080")
+					(reference "#PWR081")
 					(unit 1)
 				)
 			)
@@ -28744,7 +29139,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "8536baf4-2022-4562-b1c4-3aa22dfd90d7")
-		(property "Reference" "#PWR098"
+		(property "Reference" "#PWR099"
 			(at 345.44 354.33 0)
 			(hide yes)
 			(show_name no)
@@ -28804,7 +29199,7 @@
 		(instances
 			(project "TMR2615F_osu_pad"
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d"
-					(reference "#PWR098")
+					(reference "#PWR099")
 					(unit 1)
 				)
 			)
@@ -30555,6 +30950,84 @@
 		)
 	)
 	(symbol
+		(lib_id "power:GND")
+		(at 102.87 137.16 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "9a6499ca-929d-4544-829f-257216e11e59")
+		(property "Reference" "#PWR0157"
+			(at 102.87 143.51 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "GND"
+			(at 102.87 142.24 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 102.87 137.16 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 102.87 137.16 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 102.87 137.16 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "677241c7-1e1a-47ec-8906-5e1b4483307b")
+		)
+		(instances
+			(project "TMR2615F_osu_pad"
+				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d"
+					(reference "#PWR0157")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Mechanical:Fiducial")
 		(at 556.26 185.42 0)
 		(unit 1)
@@ -30642,7 +31115,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "9ece753c-d00e-49f2-986a-d34750ac7e94")
-		(property "Reference" "#PWR089"
+		(property "Reference" "#PWR090"
 			(at 420.37 313.69 0)
 			(hide yes)
 			(show_name no)
@@ -30702,7 +31175,7 @@
 		(instances
 			(project "TMR2615F_osu_pad"
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d"
-					(reference "#PWR089")
+					(reference "#PWR090")
 					(unit 1)
 				)
 			)
@@ -30956,7 +31429,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "9f596831-be4b-459e-896c-a1fe6a6ad4b2")
-		(property "Reference" "#PWR097"
+		(property "Reference" "#PWR098"
 			(at 256.54 347.98 0)
 			(hide yes)
 			(show_name no)
@@ -31016,7 +31489,7 @@
 		(instances
 			(project "TMR2615F_osu_pad"
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d"
-					(reference "#PWR097")
+					(reference "#PWR098")
 					(unit 1)
 				)
 			)
@@ -31319,7 +31792,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "a3558466-dbb4-4ba2-b295-cd1096283e1d")
-		(property "Reference" "#PWR094"
+		(property "Reference" "#PWR095"
 			(at 292.1 341.63 0)
 			(hide yes)
 			(show_name no)
@@ -31379,7 +31852,7 @@
 		(instances
 			(project "TMR2615F_osu_pad"
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d"
-					(reference "#PWR094")
+					(reference "#PWR095")
 					(unit 1)
 				)
 			)
@@ -31398,7 +31871,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "a3f6454d-8f40-4a99-a9b1-e49ea076bb46")
-		(property "Reference" "#PWR091"
+		(property "Reference" "#PWR092"
 			(at 82.55 323.85 0)
 			(hide yes)
 			(show_name no)
@@ -31458,7 +31931,7 @@
 		(instances
 			(project "TMR2615F_osu_pad"
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d"
-					(reference "#PWR091")
+					(reference "#PWR092")
 					(unit 1)
 				)
 			)
@@ -32108,6 +32581,112 @@
 			(project "TMR2615F_osu_pad"
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d"
 					(reference "C3")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Basic_Capacitors_Resistors__C:0402WGF3301TCE")
+		(at 256.54 289.56 90)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "b03bc6f4-b3f3-4d56-a220-2347e6d21426")
+		(property "Reference" "R26"
+			(at 259.08 289.5599 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Value" "0402WGF3301TCE"
+			(at 259.08 289.56 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_0402_1005Metric"
+			(at 266.7 289.56 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+					(italic yes)
+				)
+			)
+		)
+		(property "Datasheet" "https://www.lcsc.com/product-detail/C25890.html"
+			(at 256.413 291.846 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Description" "3.3kΩ ±1% 62.5mW 0402 Thick Film Resistor"
+			(at 256.54 289.56 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C25890"
+			(at 256.54 289.56 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Symbol Name" "0402WGF3301TCE"
+			(at 256.54 289.56 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "2"
+			(uuid "756efe90-f562-402e-9726-81728fc1117a")
+		)
+		(pin "1"
+			(uuid "6295f1ab-093f-4447-917f-7185c8f57e76")
+		)
+		(instances
+			(project "TMR2615F_osu_pad"
+				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d"
+					(reference "R26")
 					(unit 1)
 				)
 			)
@@ -34444,7 +35023,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Basic_Capacitors_Resistors__C:CL10B473KB8NNNC")
+		(lib_id "Basic_Capacitors_Resistors__C:CL10B332KB8NNNC")
 		(at 147.32 57.15 90)
 		(unit 1)
 		(body_style 1)
@@ -34466,7 +35045,7 @@
 				(justify right)
 			)
 		)
-		(property "Value" "CL10B473KB8NNNC"
+		(property "Value" "CL10B332KB8NNNC"
 			(at 149.86 57.15 0)
 			(hide yes)
 			(show_name no)
@@ -34501,7 +35080,7 @@
 				(justify left)
 			)
 		)
-		(property "Description" "47nF ±10% 50V Ceramic Capacitor X7R 0603"
+		(property "Description" "3.3nF ±10% 50V Ceramic Capacitor X7R 0603"
 			(at 156.972 59.944 0)
 			(hide yes)
 			(show_name no)
@@ -34512,7 +35091,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C1622"
+		(property "LCSC" "C1613"
 			(at 147.32 57.15 0)
 			(hide yes)
 			(show_name no)
@@ -34523,7 +35102,7 @@
 				)
 			)
 		)
-		(property "Symbol Name" "CL10B473KB8NNNC"
+		(property "Symbol Name" "CL10B332KB8NNNC"
 			(at 152.654 58.928 0)
 			(hide yes)
 			(show_name no)
@@ -35325,7 +35904,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "d86a0b21-e797-4e6c-8bfb-62ed14c3f147")
-		(property "Reference" "#PWR077"
+		(property "Reference" "#PWR078"
 			(at 241.3 228.6 0)
 			(hide yes)
 			(show_name no)
@@ -35385,7 +35964,7 @@
 		(instances
 			(project "TMR2615F_osu_pad"
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d"
-					(reference "#PWR077")
+					(reference "#PWR078")
 					(unit 1)
 				)
 			)
@@ -35911,111 +36490,6 @@
 		)
 	)
 	(symbol
-		(lib_id "Diode__C:SRV05-4")
-		(at 95.25 105.41 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "e35a825f-6fa4-4bd4-a67d-a6ac8a0e3253")
-		(property "Reference" "U6"
-			(at 98.3681 90.17 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "SRV05-4A"
-			(at 98.3681 92.71 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "Diode__C:SOT-23-6"
-			(at 113.03 116.84 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" "http://www.onsemi.com/pub/Collateral/SRV05-4-D.PDF"
-			(at 95.25 105.41 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "ESD Protection Diodes with Low Clamping Voltage, SOT-23-6"
-			(at 95.25 105.41 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "LCSC ID" "C20615829"
-			(at 95.25 105.41 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "3"
-			(uuid "ba01f869-f141-45a0-8c38-6805620266f9")
-		)
-		(pin "2"
-			(uuid "c7aca207-7156-4f69-a543-0f91d66d7323")
-		)
-		(pin "4"
-			(uuid "c29239d1-0d86-4501-9efb-8e8ccf94f22d")
-		)
-		(pin "6"
-			(uuid "d26b7a4d-f290-40e8-8bc6-a2385f93fe52")
-		)
-		(pin "5"
-			(uuid "dac548f0-d04c-4c04-a78c-beaf8bfe4516")
-		)
-		(pin "1"
-			(uuid "44d32cad-0c92-4e97-b8b8-741604050453")
-		)
-		(instances
-			(project "TMR2615F_osu_pad"
-				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d"
-					(reference "U6")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "Basic_Capacitors_Resistors__C:0402WGF5101TCE")
 		(at 45.72 63.5 90)
 		(unit 1)
@@ -36371,6 +36845,17 @@
 				)
 			)
 		)
+		(property "LCSC" "C28286"
+			(at 544.83 52.07 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(property "MF" "Texas Instruments"
 			(at 544.83 52.07 0)
 			(hide yes)
@@ -36631,84 +37116,6 @@
 			(project "TMR2615F_osu_pad"
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d"
 					(reference "J2")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:+3.3V")
-		(at 102.87 175.26 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "ecf299e5-018e-4f3f-ac5c-a8ef756a91d9")
-		(property "Reference" "#PWR071"
-			(at 102.87 179.07 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "+3.3V"
-			(at 102.87 170.18 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 102.87 175.26 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 102.87 175.26 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"+3.3V\""
-			(at 102.87 175.26 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "73f14e2b-ea28-442c-a162-d309c67c1c15")
-		)
-		(instances
-			(project "TMR2615F_osu_pad"
-				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d"
-					(reference "#PWR071")
 					(unit 1)
 				)
 			)
@@ -38140,7 +38547,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "fec7771b-6706-4c19-aa5b-bb49380da722")
-		(property "Reference" "#PWR093"
+		(property "Reference" "#PWR094"
 			(at 129.54 323.85 0)
 			(hide yes)
 			(show_name no)
@@ -38200,7 +38607,7 @@
 		(instances
 			(project "TMR2615F_osu_pad"
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d"
-					(reference "#PWR093")
+					(reference "#PWR094")
 					(unit 1)
 				)
 			)

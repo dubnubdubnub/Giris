@@ -194,7 +194,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "Basic_Capacitors_Resistors__C:0402WGF3300TCE"
+		(symbol "Basic_Capacitors_Resistors__C:0402WGF5101TCE"
 			(pin_numbers
 				(hide yes)
 			)
@@ -216,7 +216,7 @@
 					)
 				)
 			)
-			(property "Value" "0402WGF3300TCE"
+			(property "Value" "0402WGF5101TCE"
 				(at 0 -2.54 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -251,7 +251,7 @@
 					(justify left)
 				)
 			)
-			(property "Description" "RES 330Ω ±1% 62.5mW 0402"
+			(property "Description" "5.1kΩ ±1% 62.5mW 0402 Thick Film Resistor"
 				(at 0 0 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -262,7 +262,7 @@
 					)
 				)
 			)
-			(property "LCSC" "C25104"
+			(property "LCSC" "C25905"
 				(at 0 0 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -273,7 +273,7 @@
 					)
 				)
 			)
-			(property "Symbol Name" "0402WGF3300TCE"
+			(property "Symbol Name" "0402WGF5101TCE"
 				(at 0 0 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -284,7 +284,7 @@
 					)
 				)
 			)
-			(property "ki_keywords" "C25104"
+			(property "ki_keywords" "C25905"
 				(at 0 0 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -295,7 +295,7 @@
 					)
 				)
 			)
-			(symbol "0402WGF3300TCE_0_1"
+			(symbol "0402WGF5101TCE_0_1"
 				(rectangle
 					(start -2.54 1.016)
 					(end 2.54 -1.016)
@@ -344,8 +344,8 @@
 					)
 				)
 			)
-			(symbol "0402WGF3300TCE_1_1"
-				(text "330Ω"
+			(symbol "0402WGF5101TCE_1_1"
+				(text "5.1k"
 					(at 0 2.032 0)
 					(effects
 						(font
@@ -557,7 +557,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "Basic_Capacitors_Resistors__C:CL10B473KB8NNNC"
+		(symbol "Basic_Capacitors_Resistors__C:CL10B332KB8NNNC"
 			(pin_numbers
 				(hide yes)
 			)
@@ -579,7 +579,7 @@
 					)
 				)
 			)
-			(property "Value" "CL10B473KB8NNNC"
+			(property "Value" "CL10B332KB8NNNC"
 				(at 0 -2.54 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -614,7 +614,7 @@
 					(justify left)
 				)
 			)
-			(property "Description" "47nF ±10% 50V Ceramic Capacitor X7R 0603"
+			(property "Description" "3.3nF ±10% 50V Ceramic Capacitor X7R 0603"
 				(at -2.794 -9.652 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -625,7 +625,7 @@
 					)
 				)
 			)
-			(property "LCSC" "C1622"
+			(property "LCSC" "C1613"
 				(at 0 0 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -636,7 +636,7 @@
 					)
 				)
 			)
-			(property "Symbol Name" "CL10B473KB8NNNC"
+			(property "Symbol Name" "CL10B332KB8NNNC"
 				(at -1.778 -5.334 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -647,7 +647,7 @@
 					)
 				)
 			)
-			(property "ki_keywords" "C1622"
+			(property "ki_keywords" "C1613"
 				(at 0 0 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -658,7 +658,7 @@
 					)
 				)
 			)
-			(symbol "CL10B473KB8NNNC_0_1"
+			(symbol "CL10B332KB8NNNC_0_1"
 				(polyline
 					(pts
 						(xy -1.27 0) (xy -0.508 0)
@@ -744,8 +744,8 @@
 					)
 				)
 			)
-			(symbol "CL10B473KB8NNNC_1_1"
-				(text "47nF/50V/X7R"
+			(symbol "CL10B332KB8NNNC_1_1"
+				(text "3.3nF/50V/X7R"
 					(at 0 3.048 0)
 					(effects
 						(font
@@ -1815,13 +1815,19 @@
 		)
 	)
 	(junction
+		(at 151.13 77.47)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "13a9faab-703d-4d41-a823-1011234b381a")
+	)
+	(junction
 		(at 99.06 85.09)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "293ea07c-7702-4dbe-8aef-6ca0256b2726")
 	)
 	(junction
-		(at 148.59 77.47)
+		(at 135.89 77.47)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "32225403-c1fd-4e05-85d9-f339b2e6d905")
@@ -1836,13 +1842,7 @@
 		(at 110.49 77.47)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "6a38534b-fd00-4e82-a8d9-9d3d8ff8a664")
-	)
-	(junction
-		(at 123.19 77.47)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "82fd2134-064b-4467-81d4-c497bb870aba")
+		(uuid "8bd9c805-7f7e-4c83-9a46-8bda4f84c6f1")
 	)
 	(junction
 		(at 77.47 80.01)
@@ -1851,14 +1851,14 @@
 		(uuid "c95072cc-831b-4a00-8863-d567231ee445")
 	)
 	(junction
-		(at 143.51 77.47)
+		(at 130.81 77.47)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "e874f397-358c-44a1-addd-bffe25310411")
 	)
 	(wire
 		(pts
-			(xy 148.59 77.47) (xy 148.59 85.09)
+			(xy 135.89 77.47) (xy 135.89 85.09)
 		)
 		(stroke
 			(width 0)
@@ -1898,16 +1898,6 @@
 	)
 	(wire
 		(pts
-			(xy 123.19 77.47) (xy 123.19 83.82)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "4fea358c-5b19-443e-90bf-6c59e6d60bdd")
-	)
-	(wire
-		(pts
 			(xy 223.52 87.63) (xy 228.6 87.63)
 		)
 		(stroke
@@ -1918,7 +1908,7 @@
 	)
 	(wire
 		(pts
-			(xy 123.19 96.52) (xy 123.19 100.33)
+			(xy 151.13 96.52) (xy 151.13 100.33)
 		)
 		(stroke
 			(width 0)
@@ -1938,7 +1928,17 @@
 	)
 	(wire
 		(pts
-			(xy 148.59 92.71) (xy 148.59 100.33)
+			(xy 151.13 77.47) (xy 151.13 83.82)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "6ec118ad-49c1-475c-9c0e-36d9f646697c")
+	)
+	(wire
+		(pts
+			(xy 135.89 92.71) (xy 135.89 100.33)
 		)
 		(stroke
 			(width 0)
@@ -1978,7 +1978,7 @@
 	)
 	(wire
 		(pts
-			(xy 137.16 77.47) (xy 143.51 77.47)
+			(xy 124.46 77.47) (xy 130.81 77.47)
 		)
 		(stroke
 			(width 0)
@@ -1988,7 +1988,7 @@
 	)
 	(wire
 		(pts
-			(xy 123.19 77.47) (xy 110.49 77.47)
+			(xy 110.49 77.47) (xy 114.3 77.47)
 		)
 		(stroke
 			(width 0)
@@ -2005,16 +2005,6 @@
 			(type default)
 		)
 		(uuid "c296adcc-d65c-42e9-9b5a-4432572ccbec")
-	)
-	(wire
-		(pts
-			(xy 123.19 77.47) (xy 127 77.47)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "c2e589c4-0c22-4388-9b1f-f5bb818786cd")
 	)
 	(wire
 		(pts
@@ -2068,7 +2058,17 @@
 	)
 	(wire
 		(pts
-			(xy 143.51 77.47) (xy 148.59 77.47)
+			(xy 151.13 77.47) (xy 163.83 77.47)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "de7302c1-7e68-4e63-a530-31dfaba8b1ee")
+	)
+	(wire
+		(pts
+			(xy 130.81 77.47) (xy 135.89 77.47)
 		)
 		(stroke
 			(width 0)
@@ -2078,7 +2078,7 @@
 	)
 	(wire
 		(pts
-			(xy 148.59 77.47) (xy 163.83 77.47)
+			(xy 135.89 77.47) (xy 151.13 77.47)
 		)
 		(stroke
 			(width 0)
@@ -2141,7 +2141,7 @@
 	)
 	(symbol
 		(lib_id "Connector:TestPoint")
-		(at 143.51 77.47 0)
+		(at 130.81 77.47 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -2151,7 +2151,7 @@
 		(dnp no)
 		(uuid "05842874-a390-4b5c-be06-d201c41337b0")
 		(property "Reference" "TP17"
-			(at 141.986 72.136 0)
+			(at 129.286 72.136 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -2162,7 +2162,7 @@
 			)
 		)
 		(property "Value" "TestPoint"
-			(at 146.05 75.4379 0)
+			(at 133.35 75.4379 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2174,7 +2174,7 @@
 			)
 		)
 		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
-			(at 148.59 77.47 0)
+			(at 135.89 77.47 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2185,7 +2185,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 148.59 77.47 0)
+			(at 135.89 77.47 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2196,7 +2196,7 @@
 			)
 		)
 		(property "Description" "test point"
-			(at 143.51 77.47 0)
+			(at 130.81 77.47 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2400,7 +2400,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "50f0c3c4-12b8-4bc3-a6a6-1ce4aa78a84e")
-		(property "Reference" "#PWR0109"
+		(property "Reference" "#PWR0110"
 			(at 200.66 111.76 0)
 			(hide yes)
 			(show_name no)
@@ -2460,27 +2460,27 @@
 		(instances
 			(project "TMR2615F_osu_pad"
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/1c908246-f45e-479b-81f5-310842a674b3"
-					(reference "#PWR0127")
+					(reference "#PWR0128")
 					(unit 1)
 				)
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/27bf897c-e7c4-42f0-a892-9a5ce92b0666"
-					(reference "#PWR0136")
+					(reference "#PWR0137")
 					(unit 1)
 				)
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/7f9ef015-2204-4ce0-87cb-ceb865f14cf5"
-					(reference "#PWR0118")
+					(reference "#PWR0119")
 					(unit 1)
 				)
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/b67cf318-8f26-4075-8130-210e83bda6ef"
-					(reference "#PWR0145")
+					(reference "#PWR0146")
 					(unit 1)
 				)
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/c054f78e-e93e-4508-aa3c-98e78e922ef3"
-					(reference "#PWR0154")
+					(reference "#PWR0155")
 					(unit 1)
 				)
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/f1fb0698-e95b-4af0-8838-756e58475d83"
-					(reference "#PWR0109")
+					(reference "#PWR0110")
 					(unit 1)
 				)
 			)
@@ -2488,7 +2488,7 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 148.59 100.33 0)
+		(at 135.89 100.33 0)
 		(mirror y)
 		(unit 1)
 		(body_style 1)
@@ -2500,7 +2500,7 @@
 		(fields_autoplaced yes)
 		(uuid "59a4cb6e-8a57-486c-b3f2-fed0b17705b5")
 		(property "Reference" "#PWR0108"
-			(at 148.59 106.68 0)
+			(at 135.89 106.68 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2511,7 +2511,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 148.59 105.41 0)
+			(at 135.89 105.41 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -2521,7 +2521,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 148.59 100.33 0)
+			(at 135.89 100.33 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2532,7 +2532,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 148.59 100.33 0)
+			(at 135.89 100.33 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2543,7 +2543,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 148.59 100.33 0)
+			(at 135.89 100.33 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2587,7 +2587,7 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 123.19 100.33 0)
+		(at 151.13 100.33 0)
 		(mirror y)
 		(unit 1)
 		(body_style 1)
@@ -2598,8 +2598,8 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "5fa7380a-cfaa-4d04-bd52-e50d99b31efc")
-		(property "Reference" "#PWR0107"
-			(at 123.19 106.68 0)
+		(property "Reference" "#PWR0109"
+			(at 151.13 106.68 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2610,7 +2610,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 123.19 105.41 0)
+			(at 151.13 105.41 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -2620,7 +2620,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 123.19 100.33 0)
+			(at 151.13 100.33 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2631,7 +2631,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 123.19 100.33 0)
+			(at 151.13 100.33 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2642,7 +2642,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 123.19 100.33 0)
+			(at 151.13 100.33 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2658,35 +2658,35 @@
 		(instances
 			(project "TMR2615F_osu_pad"
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/1c908246-f45e-479b-81f5-310842a674b3"
-					(reference "#PWR0125")
+					(reference "#PWR0127")
 					(unit 1)
 				)
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/27bf897c-e7c4-42f0-a892-9a5ce92b0666"
-					(reference "#PWR0134")
+					(reference "#PWR0136")
 					(unit 1)
 				)
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/7f9ef015-2204-4ce0-87cb-ceb865f14cf5"
-					(reference "#PWR0116")
+					(reference "#PWR0118")
 					(unit 1)
 				)
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/b67cf318-8f26-4075-8130-210e83bda6ef"
-					(reference "#PWR0143")
+					(reference "#PWR0145")
 					(unit 1)
 				)
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/c054f78e-e93e-4508-aa3c-98e78e922ef3"
-					(reference "#PWR0152")
+					(reference "#PWR0154")
 					(unit 1)
 				)
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/f1fb0698-e95b-4af0-8838-756e58475d83"
-					(reference "#PWR0107")
+					(reference "#PWR0109")
 					(unit 1)
 				)
 			)
 		)
 	)
 	(symbol
-		(lib_id "Basic_Capacitors_Resistors__C:0402WGF3300TCE")
-		(at 132.08 77.47 0)
+		(lib_id "Basic_Capacitors_Resistors__C:0402WGF5101TCE")
+		(at 119.38 77.47 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -2697,7 +2697,7 @@
 		(fields_autoplaced yes)
 		(uuid "7ce4e5e0-5920-43aa-b409-ee9ddfa65712")
 		(property "Reference" "R29"
-			(at 132.08 72.39 0)
+			(at 119.38 72.39 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -2706,8 +2706,8 @@
 				)
 			)
 		)
-		(property "Value" "0402WGF3300TCE"
-			(at 132.08 80.01 0)
+		(property "Value" "0402WGF5101TCE"
+			(at 119.38 80.01 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2718,7 +2718,7 @@
 			)
 		)
 		(property "Footprint" "Resistor_SMD:R_0402_1005Metric"
-			(at 132.08 87.63 0)
+			(at 119.38 87.63 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2730,7 +2730,7 @@
 			)
 		)
 		(property "Datasheet" "https://item.szlcsc.com/323315.html"
-			(at 129.794 77.343 0)
+			(at 117.094 77.343 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2741,8 +2741,8 @@
 				(justify left)
 			)
 		)
-		(property "Description" "RES 330Ω ±1% 62.5mW 0402"
-			(at 132.08 77.47 0)
+		(property "Description" "5.1kΩ ±1% 62.5mW 0402 Thick Film Resistor"
+			(at 119.38 77.47 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2752,8 +2752,8 @@
 				)
 			)
 		)
-		(property "LCSC" "C25104"
-			(at 132.08 77.47 0)
+		(property "LCSC" "C25905"
+			(at 119.38 77.47 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2763,8 +2763,8 @@
 				)
 			)
 		)
-		(property "Symbol Name" "0402WGF3300TCE"
-			(at 132.08 77.47 0)
+		(property "Symbol Name" "0402WGF5101TCE"
+			(at 119.38 77.47 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2775,7 +2775,7 @@
 			)
 		)
 		(property "Sim.Device" ""
-			(at 132.08 77.47 0)
+			(at 119.38 77.47 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2786,7 +2786,7 @@
 			)
 		)
 		(property "Sim.Pins" ""
-			(at 132.08 77.47 0)
+			(at 119.38 77.47 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2843,7 +2843,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "93eca166-2967-4436-b15c-424110968098")
-		(property "Reference" "#PWR0103"
+		(property "Reference" "#PWR0104"
 			(at 228.6 81.28 0)
 			(hide yes)
 			(show_name no)
@@ -2903,35 +2903,35 @@
 		(instances
 			(project "TMR2615F_osu_pad"
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/1c908246-f45e-479b-81f5-310842a674b3"
-					(reference "#PWR0121")
+					(reference "#PWR0122")
 					(unit 1)
 				)
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/27bf897c-e7c4-42f0-a892-9a5ce92b0666"
-					(reference "#PWR0130")
+					(reference "#PWR0131")
 					(unit 1)
 				)
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/7f9ef015-2204-4ce0-87cb-ceb865f14cf5"
-					(reference "#PWR0112")
+					(reference "#PWR0113")
 					(unit 1)
 				)
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/b67cf318-8f26-4075-8130-210e83bda6ef"
-					(reference "#PWR0139")
+					(reference "#PWR0140")
 					(unit 1)
 				)
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/c054f78e-e93e-4508-aa3c-98e78e922ef3"
-					(reference "#PWR0148")
+					(reference "#PWR0149")
 					(unit 1)
 				)
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/f1fb0698-e95b-4af0-8838-756e58475d83"
-					(reference "#PWR0103")
+					(reference "#PWR0104")
 					(unit 1)
 				)
 			)
 		)
 	)
 	(symbol
-		(lib_id "Basic_Capacitors_Resistors__C:CL10B473KB8NNNC")
-		(at 148.59 88.9 90)
+		(lib_id "Basic_Capacitors_Resistors__C:CL10B332KB8NNNC")
+		(at 135.89 88.9 90)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -2942,7 +2942,7 @@
 		(fields_autoplaced yes)
 		(uuid "a23ce9f4-9ae9-470f-a108-133402fd21c9")
 		(property "Reference" "C34"
-			(at 152.4 88.8999 90)
+			(at 139.7 88.8999 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -2952,8 +2952,8 @@
 				(justify right)
 			)
 		)
-		(property "Value" "CL10B473KB8NNNC"
-			(at 151.13 88.9 0)
+		(property "Value" "CL10B332KB8NNNC"
+			(at 138.43 88.9 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2964,7 +2964,7 @@
 			)
 		)
 		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
-			(at 158.75 88.9 0)
+			(at 146.05 88.9 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2976,7 +2976,7 @@
 			)
 		)
 		(property "Datasheet" "https://item.szlcsc.com/362304.html"
-			(at 158.115 93.98 0)
+			(at 145.415 93.98 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2987,8 +2987,8 @@
 				(justify left)
 			)
 		)
-		(property "Description" "47nF ±10% 50V Ceramic Capacitor X7R 0603"
-			(at 158.242 91.694 0)
+		(property "Description" "3.3nF ±10% 50V Ceramic Capacitor X7R 0603"
+			(at 145.542 91.694 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2998,8 +2998,8 @@
 				)
 			)
 		)
-		(property "LCSC" "C1622"
-			(at 148.59 88.9 0)
+		(property "LCSC" "C1613"
+			(at 135.89 88.9 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3009,8 +3009,8 @@
 				)
 			)
 		)
-		(property "Symbol Name" "CL10B473KB8NNNC"
-			(at 153.924 90.678 0)
+		(property "Symbol Name" "CL10B332KB8NNNC"
+			(at 141.224 90.678 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3183,7 +3183,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "be7e7620-babd-4f25-a106-745b85c10617")
-		(property "Reference" "#PWR0105"
+		(property "Reference" "#PWR0106"
 			(at 99.06 106.68 0)
 			(hide yes)
 			(show_name no)
@@ -3243,27 +3243,27 @@
 		(instances
 			(project "TMR2615F_osu_pad"
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/1c908246-f45e-479b-81f5-310842a674b3"
-					(reference "#PWR0123")
+					(reference "#PWR0124")
 					(unit 1)
 				)
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/27bf897c-e7c4-42f0-a892-9a5ce92b0666"
-					(reference "#PWR0132")
+					(reference "#PWR0133")
 					(unit 1)
 				)
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/7f9ef015-2204-4ce0-87cb-ceb865f14cf5"
-					(reference "#PWR0114")
+					(reference "#PWR0115")
 					(unit 1)
 				)
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/b67cf318-8f26-4075-8130-210e83bda6ef"
-					(reference "#PWR0141")
+					(reference "#PWR0142")
 					(unit 1)
 				)
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/c054f78e-e93e-4508-aa3c-98e78e922ef3"
-					(reference "#PWR0150")
+					(reference "#PWR0151")
 					(unit 1)
 				)
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/f1fb0698-e95b-4af0-8838-756e58475d83"
-					(reference "#PWR0105")
+					(reference "#PWR0106")
 					(unit 1)
 				)
 			)
@@ -3281,7 +3281,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "c1da8c15-de50-4dc7-89b1-ee975da14066")
-		(property "Reference" "#PWR0110"
+		(property "Reference" "#PWR0111"
 			(at 236.22 111.76 0)
 			(hide yes)
 			(show_name no)
@@ -3341,27 +3341,27 @@
 		(instances
 			(project "TMR2615F_osu_pad"
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/1c908246-f45e-479b-81f5-310842a674b3"
-					(reference "#PWR0128")
+					(reference "#PWR0129")
 					(unit 1)
 				)
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/27bf897c-e7c4-42f0-a892-9a5ce92b0666"
-					(reference "#PWR0137")
+					(reference "#PWR0138")
 					(unit 1)
 				)
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/7f9ef015-2204-4ce0-87cb-ceb865f14cf5"
-					(reference "#PWR0119")
+					(reference "#PWR0120")
 					(unit 1)
 				)
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/b67cf318-8f26-4075-8130-210e83bda6ef"
-					(reference "#PWR0146")
+					(reference "#PWR0147")
 					(unit 1)
 				)
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/c054f78e-e93e-4508-aa3c-98e78e922ef3"
-					(reference "#PWR0155")
+					(reference "#PWR0156")
 					(unit 1)
 				)
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/f1fb0698-e95b-4af0-8838-756e58475d83"
-					(reference "#PWR0110")
+					(reference "#PWR0111")
 					(unit 1)
 				)
 			)
@@ -3632,7 +3632,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "d83aaaf4-6ddb-41d3-b8e8-f98f8f5c3c4d")
-		(property "Reference" "#PWR0104"
+		(property "Reference" "#PWR0105"
 			(at 77.47 106.68 0)
 			(hide yes)
 			(show_name no)
@@ -3692,27 +3692,27 @@
 		(instances
 			(project "TMR2615F_osu_pad"
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/1c908246-f45e-479b-81f5-310842a674b3"
-					(reference "#PWR0122")
+					(reference "#PWR0123")
 					(unit 1)
 				)
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/27bf897c-e7c4-42f0-a892-9a5ce92b0666"
-					(reference "#PWR0131")
+					(reference "#PWR0132")
 					(unit 1)
 				)
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/7f9ef015-2204-4ce0-87cb-ceb865f14cf5"
-					(reference "#PWR0113")
+					(reference "#PWR0114")
 					(unit 1)
 				)
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/b67cf318-8f26-4075-8130-210e83bda6ef"
-					(reference "#PWR0140")
+					(reference "#PWR0141")
 					(unit 1)
 				)
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/c054f78e-e93e-4508-aa3c-98e78e922ef3"
-					(reference "#PWR0149")
+					(reference "#PWR0150")
 					(unit 1)
 				)
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/f1fb0698-e95b-4af0-8838-756e58475d83"
-					(reference "#PWR0104")
+					(reference "#PWR0105")
 					(unit 1)
 				)
 			)
@@ -3720,7 +3720,7 @@
 	)
 	(symbol
 		(lib_id "HOTSWAP__C:CPG151101S11-16_C41430893")
-		(at 123.19 90.17 90)
+		(at 151.13 90.17 90)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -3731,7 +3731,7 @@
 		(fields_autoplaced yes)
 		(uuid "e6369bad-11b1-4ed8-95e5-634676874189")
 		(property "Reference" "SW3"
-			(at 124.46 87.6299 90)
+			(at 152.4 87.6299 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -3742,7 +3742,7 @@
 			)
 		)
 		(property "Value" "CPG151101S11-16"
-			(at 124.46 90.1699 90)
+			(at 152.4 90.1699 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -3753,7 +3753,7 @@
 			)
 		)
 		(property "Footprint" "HOTSWAP__C:SMD_KEYBOARD-SW"
-			(at 133.35 90.17 0)
+			(at 161.29 90.17 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3765,7 +3765,7 @@
 			)
 		)
 		(property "Datasheet" "https://cn.bing.com/search?q=datasheet%3A+%20MX-KEY-INSTALLED"
-			(at 123.063 92.456 0)
+			(at 151.003 92.456 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3777,7 +3777,7 @@
 			)
 		)
 		(property "Description" "Kailh-style MX hotswap socket (CPG151101S11-16)"
-			(at 123.19 90.17 0)
+			(at 151.13 90.17 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3788,7 +3788,7 @@
 			)
 		)
 		(property "LCSC" "C41430893"
-			(at 123.19 90.17 0)
+			(at 151.13 90.17 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3964,7 +3964,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "f417b65b-8406-437d-b256-3bd5ed11a397")
-		(property "Reference" "#PWR0102"
+		(property "Reference" "#PWR0103"
 			(at 77.47 74.93 0)
 			(hide yes)
 			(show_name no)
@@ -4024,27 +4024,27 @@
 		(instances
 			(project "TMR2615F_osu_pad"
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/1c908246-f45e-479b-81f5-310842a674b3"
-					(reference "#PWR0120")
+					(reference "#PWR0121")
 					(unit 1)
 				)
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/27bf897c-e7c4-42f0-a892-9a5ce92b0666"
-					(reference "#PWR0129")
+					(reference "#PWR0130")
 					(unit 1)
 				)
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/7f9ef015-2204-4ce0-87cb-ceb865f14cf5"
-					(reference "#PWR0111")
+					(reference "#PWR0112")
 					(unit 1)
 				)
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/b67cf318-8f26-4075-8130-210e83bda6ef"
-					(reference "#PWR0138")
+					(reference "#PWR0139")
 					(unit 1)
 				)
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/c054f78e-e93e-4508-aa3c-98e78e922ef3"
-					(reference "#PWR0147")
+					(reference "#PWR0148")
 					(unit 1)
 				)
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/f1fb0698-e95b-4af0-8838-756e58475d83"
-					(reference "#PWR0102")
+					(reference "#PWR0103")
 					(unit 1)
 				)
 			)
@@ -4063,7 +4063,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "f4e59db3-b4b3-4f90-b1a2-76e608a03aaa")
-		(property "Reference" "#PWR0106"
+		(property "Reference" "#PWR0107"
 			(at 110.49 106.68 0)
 			(hide yes)
 			(show_name no)
@@ -4123,27 +4123,27 @@
 		(instances
 			(project "TMR2615F_osu_pad"
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/1c908246-f45e-479b-81f5-310842a674b3"
-					(reference "#PWR0124")
+					(reference "#PWR0125")
 					(unit 1)
 				)
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/27bf897c-e7c4-42f0-a892-9a5ce92b0666"
-					(reference "#PWR0133")
+					(reference "#PWR0134")
 					(unit 1)
 				)
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/7f9ef015-2204-4ce0-87cb-ceb865f14cf5"
-					(reference "#PWR0115")
+					(reference "#PWR0116")
 					(unit 1)
 				)
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/b67cf318-8f26-4075-8130-210e83bda6ef"
-					(reference "#PWR0142")
+					(reference "#PWR0143")
 					(unit 1)
 				)
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/c054f78e-e93e-4508-aa3c-98e78e922ef3"
-					(reference "#PWR0151")
+					(reference "#PWR0152")
 					(unit 1)
 				)
 				(path "/0c357edf-5b81-40d5-9dd7-a7455ce1b19d/f1fb0698-e95b-4af0-8838-756e58475d83"
-					(reference "#PWR0106")
+					(reference "#PWR0107")
 					(unit 1)
 				)
 			)
