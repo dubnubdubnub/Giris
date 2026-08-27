@@ -1,6 +1,6 @@
 PCB statistics report
 =====================
-- Date: Saturday, August 01, 2026 at 02:02:00 AM
+- Date: Tuesday, August 04, 2026 at 04:04:55 AM
 - Project: TMR2615F_osu_pad
 - Board name: TMR2615F_osu_pad
 
@@ -9,21 +9,21 @@ Board
 - Width: 70.1000 mm
 - Height: 60.0000 mm
 - Area: 3619.511 mm²
-- Front copper area: 3150.764 mm²
-- Back copper area: 3110.351 mm²
-- Min track clearance: 0.1599 mm
+- Front copper area: 3157.492 mm²
+- Back copper area: 3108.101 mm²
+- Min track clearance: 0.1600 mm
 - Min track width: 0.1600 mm
 - Min drill diameter: 0.3000 mm
 - Board stackup thickness: 1.6167 mm
 
-- Front footprint area: 1587.89 mm²
+- Front footprint area: 1576.027 mm²
 - Back footprint area: 1497.011 mm²
-- Front component density: 43.87 %
+- Front component density: 43.54 %
 - Back component density: 41.36 %
 Pads
 ----
 - Through hole: 94
-- SMD: 493
+- SMD: 491
 - Connector: 6
 - NPTH: 27
 - Castellated: 0
@@ -31,7 +31,7 @@ Pads
 
 Vias
 ----
-- Through vias: 644
+- Through vias: 636
 - Blind vias: 0
 - Buried vias: 0
 - Micro vias: 0
@@ -42,16 +42,16 @@ Components
 |              | Front Side | Back Side | Total |
 |--------------|------------|-----------|-------|
 |THT:          |          7 |         0 |     7 |
-|SMD:          |        131 |         0 |   131 |
+|SMD:          |        132 |         0 |   132 |
 |Unspecified:  |          3 |        26 |    29 |
-|Total:        |        141 |        26 |   167 |
+|Total:        |        142 |        26 |   168 |
 
 Drill holes
 -----------
 
 | Count | Shape |    X Size |    Y Size | Plated | Via/Pad | Start Layer | Stop Layer |
 |-------|-------|-----------|-----------|--------|---------|-------------|------------|
-|   595 | Round | 0.3000 mm | 0.3000 mm |    PTH |     Via |        F.Cu |       B.Cu |
+|   587 | Round | 0.3000 mm | 0.3000 mm |    PTH |     Via |        F.Cu |       B.Cu |
 |    43 | Round | 1.0000 mm | 1.0000 mm |    PTH |     Pad |        F.Cu |       B.Cu |
 |    33 | Round | 0.4000 mm | 0.4000 mm |    PTH |     Via |        F.Cu |       B.Cu |
 |    24 | Round | 0.4000 mm | 0.4000 mm |    PTH |     Pad |        F.Cu |       B.Cu |
