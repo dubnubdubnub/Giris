@@ -4,6 +4,10 @@
 
 static link_mode_t current_mode = LINK_MODE_OFF;
 
+/* Landing zone for the DMA receive test. Sized to the protocol's nbytes cap. */
+#define LINK_RX_BUF_MAX  4096
+static uint8_t rx_buf[LINK_RX_BUF_MAX];
+
 void link_init(void)
 {
   crm_periph_clock_enable(CRM_GPIOB_PERIPH_CLOCK, TRUE);
@@ -245,16 +249,55 @@ void link_selftest(link_mode_t mode, uint32_t baud, uint16_t nbytes,
      * of the DWC2 ISR; only tud_task() stalls, and nothing needs it meanwhile. */
     const uint32_t limit = (system_core_clock / 1000u) * (uint32_t)timeout_ms;
     const uint32_t t0 = DWT->CYCCNT;
-    while (out->received < nbytes && (DWT->CYCCNT - t0) < limit) {
-      if (usart_flag_get(USART6, USART_RDBF_FLAG) != SET) continue;
-      const uint8_t rx = (uint8_t)usart_data_receive(USART6);
-      const uint8_t want = (uint8_t)out->received;
-      out->received++;
-      if (rx != want) {
-        out->mismatched++;
-        if (out->mismatched == 1) { out->first_bad_tx = want; out->first_bad_rx = rx; }
+
+    /* DMA, not polling.
+     *
+     * A CPU loop cannot do this and the failure is deeply misleading: almost
+     * every byte arrives and almost every byte is wrong, which reads exactly
+     * like a bad cable. What actually happens is that the 16 kHz ADC/mux ISR
+     * preempts the loop for longer than one byte time, the USART overruns, the
+     * lost byte shifts the expected value for every byte after it, and reading
+     * DT silently clears ROERR on the way past so no error flag survives.
+     *
+     * DMA1_CHANNEL1 is the ADC ring, so this takes channel 2. */
+    dma_reset(DMA1_CHANNEL2);
+    dma_init_type d;
+    dma_default_para_init(&d);
+    d.buffer_size         = nbytes;
+    d.direction           = DMA_DIR_PERIPHERAL_TO_MEMORY;
+    d.memory_base_addr    = (uint32_t)rx_buf;
+    d.memory_data_width   = DMA_MEMORY_DATA_WIDTH_BYTE;
+    d.memory_inc_enable   = TRUE;
+    d.peripheral_base_addr = (uint32_t)&USART6->dt;
+    d.peripheral_data_width = DMA_PERIPHERAL_DATA_WIDTH_BYTE;
+    d.peripheral_inc_enable = FALSE;
+    d.priority            = DMA_PRIORITY_VERY_HIGH;
+    d.loop_mode_enable    = FALSE;
+    dma_init(DMA1_CHANNEL2, &d);
+
+    dmamux_enable(DMA1, TRUE);
+    dmamux_init(DMA1MUX_CHANNEL2, DMAMUX_DMAREQ_ID_USART6_RX);
+    dma_channel_enable(DMA1_CHANNEL2, TRUE);
+    usart_dma_receiver_enable(USART6, TRUE);
+
+    while (dma_data_number_get(DMA1_CHANNEL2) && (DWT->CYCCNT - t0) < limit) {
+    }
+
+    const uint16_t left = dma_data_number_get(DMA1_CHANNEL2);
+    usart_dma_receiver_enable(USART6, FALSE);
+    dma_channel_enable(DMA1_CHANNEL2, FALSE);
+
+    const uint16_t got = (uint16_t)(nbytes - left);
+    uint16_t bad = 0;
+    for (uint16_t i = 0; i < got; i++) {
+      if (rx_buf[i] != (uint8_t)i) {
+        if (!bad) { out->first_bad_tx = (uint8_t)i; out->first_bad_rx = rx_buf[i]; }
+        bad++;
       }
     }
+    out->received   = got;
+    out->mismatched = bad;
+    out->overruns   = (usart_flag_get(USART6, USART_ROERR_FLAG) == SET) ? 1u : 0u;
     if (out->received < nbytes) out->timeouts = (uint16_t)(nbytes - out->received);
     goto done;
   }

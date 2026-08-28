@@ -118,19 +118,46 @@ tools/.venv/bin/python tools/dfu.py --serial 5C13     # prints the DFU path it l
 ### The J1 link
 
 ```bash
-tools/.venv/bin/python tools/link.py --serial 5C13 --probe
+tools/.venv/bin/python tools/link.py --probe --serial 5C13   # one board, J1 empty
+tools/.venv/bin/python tools/link.py --continuity            # two boards: is there a wire?
+tools/.venv/bin/python tools/link.py --peer                  # two boards: the real sweep
+tools/.venv/bin/python tools/link.py --soak --baud 13500000
 ```
 
-`--probe` needs nothing plugged into J1. It drives each link pad open-drain and reads it back, tells a
-driven pin from a floating one on `/LM_ST` and `/AP_FAULT`, and sweeps all sixteen GPIO MUX indices
-while the USART shifts out `0x00`, watching the pad. That last sweep is what confirmed **MUX8 is
-USART6** on this part — the datasheet gives the pin functions for PC6/PC7 but not the MUX number.
+**Measured, two boards, straight-through USB-C on J1:**
 
-`--selftest` and `--mode` send `0x00..0xFF` and check what returns. They need the loop closed outside
-the chip, because **this silicon does not echo its own half-duplex transmission back into RDBF** —
-RM 12.2 says TX and SW_RX are interconnected, but with `SLBEN=1 TEN=1 REN=1` a lone board receives
-nothing, at either baud, open-drain or push-pull, with no error flag raised. Close the loop with a peer
-on J1 or a jumper from **TP1** (J1 D+) to **TP2** (J1 D−).
+| Config | Result |
+|---|---|
+| Half duplex, open drain, one wire on D− — *the discovery bus* | clean at 115200 and **500 kbaud**; framing errors at 1 Mbaud |
+| Full duplex, push-pull, TRPSWAP on one half — *the run phase* | clean at every rung to **13.5 Mbaud**, the USART's ceiling, both directions |
+| Soak at 9 Mbaud and at 13.5 Mbaud | 163,840 bytes each, alternating direction, **zero errors** |
+
+500 kbaud is exactly where the architecture doc predicted the open-drain bus
+would die: two 10 k pull-ups into ~70 pF. Discovery at 115200 has 4× margin.
+
+Three traps are baked into the tooling because each one costs an afternoon:
+
+- **`--probe` before anything else.** The datasheet gives PC6 = USART6_TX and
+  PC7 = USART6_RX but not the MUX index. The probe sweeps all sixteen while the
+  USART shifts `0x00` and watches the pad; only **MUX8** modulates.
+- **`--continuity` before believing any link failure.** It is a DC test with no
+  USART involved: one board holds a pad low, the other reads its own. A
+  charge-only USB-C cable carries VBUS and GND but neither D+ nor D−, and from
+  the firmware side that is indistinguishable from a dead peripheral. The first
+  cable tried here was one of those, and it also fed 5 V into J1 — which is what
+  made one board's `/LM_ST` read high and sent us hunting a phantom.
+- **Receive by DMA, never by polling.** A CPU loop gets preempted by the 16 kHz
+  ADC/mux ISR for longer than a byte time above ~8 Mbaud. The USART overruns,
+  the lost byte shifts the expected value for every byte after it, and reading
+  `DT` silently clears `ROERR` — so you see *almost every byte arriving and
+  almost every byte wrong, with no error flag*, which looks precisely like a bad
+  cable. It is not. `DMA1_CHANNEL1` is the ADC ring, so the link takes channel 2.
+
+**This silicon does not echo its own half-duplex transmission.** RM 12.2 says TX
+and SW_RX are interconnected, but with `SLBEN=1 TEN=1 REN=1` a lone board never
+raises RDBF, at any baud, open-drain or push-pull, with no error flag — and
+turning the listener's transmitter off does not change it. Testing the receive
+path needs a peer on J1 or a jumper from **TP1** (D+) to **TP2** (D−).
 
 ### Checking the USB side
 

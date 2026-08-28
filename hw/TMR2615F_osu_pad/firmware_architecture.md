@@ -539,8 +539,12 @@ Both dev pads, self-powered from their own J3, nothing in J1. Run with
 | PC6 = USART6_TX, PC7 = USART6_RX | **Confirmed** — DS_AT32F405_402 V2.03, pins 37/38 of the 64-pin part |
 | USART6 is at **MUX8** on those pins | **Confirmed by measurement.** The datasheet does not print MUX indices. Sweeping 0–15 while shifting `0x00`, only MUX8 modulated the pad (78–80 % low against the 90 % the framing implies). MUX15 reads a flat 100 % — an undriven pad, not a signal |
 | R1/R2 10k pull-ups and R3/R7 120 Ω fitted and working | **Confirmed** — both pads pull to 0 open-drain and return high through the fitted resistor, on both boards |
+| **The link runs** | **Confirmed.** Two boards, straight-through USB-C on J1. Full-duplex push-pull with TRPSWAP on one half is clean at every rung of the ladder to **13.5 Mbaud** — the USART's hard ceiling — in both directions. Soaks of 163,840 bytes at 9 Mbaud and at 13.5 Mbaud: zero corrupt, zero missing, no error flag. The 9 Mbaud target has comfortable margin and 13.5 is available if it is ever wanted |
+| Open-drain half-duplex is a ≤500 kbaud transport | **Confirmed, to the rung.** Clean at 115200 and at 500 kbaud; at 1 Mbaud every byte arrives and 1020 of 1024 are corrupt with FERR set. That is the 10k-into-70pF rise, and it is a genuine *wire* limit, not a CPU one. Discovery at 115200 has 4x margin |
 | Single-wire half-duplex echoes to its own receiver | **REFUTED.** RM 12.2 says "TX and SW_RX are interconnected inside the USART", but with `SLBEN=1 TEN=1 REN=1` neither board raised RDBF on 256 bytes, at 115200 *and* 9 Mbaud, open-drain *and* push-pull, with `STS = 0x00C0` (TDC+TDBE, no error). The transmitter is provably running. **Consequence: the discovery bus cannot be validated by one board — it needs a peer or a TP1–TP2 jumper.** The discovery design itself is unaffected |
-| `/LM_ST` (PB12) means "we are link-powered" | **Open, and now suspicious.** Read with the internal pull-up and then the pull-down, the pin is genuinely *driven* on both boards — and the two boards disagree. In identical states (J3-powered, J1 empty) board `…5C13` drives it **high** and board `…5113` drives it **low**. U2 is an LM66100 ideal diode on VBUS_B; U7 is its twin on VBUS_HOST; the pair ORs into +5V. Until this is explained, **no power decision may key off PB12** |
+| `/LM_ST` (PB12) means "we are link-powered" | **Confirmed, and the earlier alarm was a bad cable.** LM66100 ST is Hi-Z (so R5 pulls it high) while that ideal diode conducts, and pulled low while it blocks — so high really does mean "our +5 V is coming in through J1". The two boards disagreed because the first cable tried was carrying 5 V into J1, powering one of them through it. With a proper cable both read low, both PC13 read low, and nothing sources VBUS. The AP22653 fitted is the **active-high** enable variant (AP22652 is the active-low one), so R10's 10k pulldown does hold it off |
+| ~~`/LM_ST` is driven, not floating~~ | **Over-claimed and withdrawn.** R5's 10k pull-up beats the MCU's ~40k internal pull-down, so a Hi-Z ST reads high under both internal pulls. Only the LOW result was ever conclusive |
+| ~~Old note~~ | **Open, and now suspicious.** Read with the internal pull-up and then the pull-down, the pin is genuinely *driven* on both boards — and the two boards disagree. In identical states (J3-powered, J1 empty) board `…5C13` drives it **high** and board `…5113` drives it **low**. U2 is an LM66100 ideal diode on VBUS_B; U7 is its twin on VBUS_HOST; the pair ORs into +5V. Until this is explained, **no power decision may key off PB12** |
 
 ### The identity problem, and why it came first
 
@@ -554,13 +558,30 @@ The two boards on the bench are adjacent dice: `E75C3040 00801605 05875C13` and
 `E85C3040 00801605 05875113` differ in two of twelve bytes. A truncation would collide; FNV-1a over all
 twelve gives 0x436A and 0xF885. That tag is the arbitration tie-break.
 
+### Two traps that cost real time, recorded so they are not paid twice
+
+**A charge-only USB-C cable is indistinguishable from a dead peripheral.** The first cable tried
+carried VBUS and GND but neither D+ nor D−. Every link test failed identically with no error flag, and
+it also fed 5 V into J1, which lit one board's `/LM_ST` and started a hunt for a phantom power fault.
+`tools/link.py --continuity` now settles this in two seconds with no USART involved at all: one board
+holds a link pad low open-drain, the other reads its own pad. **Run it before believing any link
+failure.**
+
+**Receive by DMA, never by polling.** A CPU loop reading RDBF gets preempted by the 16 kHz ADC/mux ISR
+for longer than a byte time above roughly 8 Mbaud. The USART overruns, the lost byte shifts the
+expected value for every byte after it, and reading `DT` clears `ROERR` on the way past — so the
+symptom is *almost every byte arriving, almost every byte wrong, and no error flag*, which reads
+exactly like a bad cable. With DMA the same hardware is clean to 13.5 Mbaud. `DMA1_CHANNEL1` is the ADC
+ring; the link takes `DMA1_CHANNEL2` with `DMAMUX_DMAREQ_ID_USART6_RX`.
+
 ### Order of the remaining link work
 
-1. **Connect J1↔J1** (straight USB-C, or TP1↔TP1 / TP2↔TP2 / GND). Safe as built: firmware never drives
-   PC13, so neither AP22653 sources 5 V, and each board keeps its own J3 supply. This is topology (b)
-   electrically.
-2. Half-duplex open-drain at 115200 on D−, both halves unswapped — the only channel that is symmetric
-   before anyone has agreed who swaps. Prove RX both ways.
-3. UID-tag arbitration; loser sets `CTRL2.TRPSWAP`.
-4. Full-duplex push-pull at 9 Mbaud (216/24 exactly), then DMA + IDLE-line framing with CRC-16.
-5. Explain PB12 before touching PC13.
+1. ~~Connect J1↔J1 and prove the wire.~~ **Done.** Safe as built: firmware never drives PC13, so
+   neither AP22653 sources 5 V and each board keeps its own J3 supply. Electrically this is topology (b).
+2. ~~Half-duplex open-drain at 115200 on D−, both halves unswapped; full-duplex with TRPSWAP.~~ **Done,
+   both directions, to 13.5 Mbaud.**
+3. **Next:** UID-tag arbitration over the 115200 discovery bus — hail, exchange tags, loser sets
+   `CTRL2.TRPSWAP`, both switch to push-pull. Tie-break is `uid_tag()`, which is FNV-1a over the whole
+   96-bit UID precisely because two boards off one reel differ in only a couple of bytes.
+4. Framing: fixed-size isochronous frames, DMA + IDLE-line, CRC-16, and the SOF phase servo.
+5. Then the peer/token model and topology detection.
