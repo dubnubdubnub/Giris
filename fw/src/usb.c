@@ -363,6 +363,40 @@ void tud_hid_set_report_cb(uint8_t instance, uint8_t report_id,
   tx_pump();
 }
 
+/* ------------------------------------------------- connection lifecycle */
+/* Telemetry must not outlive the host that asked for it.
+ *
+ * Without these, stream_on survives a disconnect, a re-enumeration and the host
+ * closing its handle — so an aborted capture leaves the device blasting 64-byte
+ * reports at 8 kHz forever, with nobody reading. On macOS that is merely untidy.
+ * On Windows the HID class driver's input ring overflows, ReadFile fails, the
+ * port gets reset, the device re-enumerates into the same flood, and the next
+ * open walks straight back into it. Observed here as a device that "randomly"
+ * dropped off and could not be reopened, and very likely as the AMD xHCI
+ * controller that went to CM_PROB_FAILED_POST_START (problem 43) under a flood
+ * with no reader.
+ *
+ * A host that wants telemetry asks for it again after it reconnects. */
+static void telemetry_quiesce(void)
+{
+  stream_on     = false;
+  stream_decim  = 8;
+  last_streamed = 0;
+  stream_gap    = false;
+  burst_state   = 0;
+  burst_count   = 0;
+  tx_head = tx_tail = 0;      /* drop anything queued for a host that is gone */
+}
+
+void tud_mount_cb(void)   { telemetry_quiesce(); }
+void tud_umount_cb(void)  { telemetry_quiesce(); }
+
+/* Suspend is not disconnect: the host still owns us, it has just stopped
+ * polling. Stop producing either way — bus-powered devices must drop to the
+ * suspend current budget, and anything queued now is stale by resume. */
+void tud_suspend_cb(bool remote_wakeup_en) { (void)remote_wakeup_en; telemetry_quiesce(); }
+void tud_resume_cb(void)  { }
+
 uint16_t tud_hid_get_report_cb(uint8_t instance, uint8_t report_id,
                                hid_report_type_t report_type,
                                uint8_t *buffer, uint16_t reqlen)
