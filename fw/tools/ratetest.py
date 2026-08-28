@@ -60,9 +60,16 @@ def send(d, cmd, *args):
 
 
 def wait(d, msg, timeout=2.0):
+    # Tolerate a host-side read error rather than aborting: on Windows a long
+    # 8 kHz read loop in Python eventually wedges the HID handle, and that is a
+    # limit of this tool, not of the bus. The device-side counters are the point.
     end = time.time() + timeout
     while time.time() < end:
-        r = d.read(RPT, timeout_ms=200)
+        try:
+            r = d.read(RPT, timeout_ms=200)
+        except OSError:
+            time.sleep(0.05)
+            continue
         if r and r[0] == msg:
             return bytes(r)
     return None
@@ -80,6 +87,8 @@ if __name__ == "__main__":
     ap = argparse.ArgumentParser()
     ap.add_argument("--serial")
     ap.add_argument("--seconds", type=float, default=5.0)
+    ap.add_argument("--no-read", action="store_true",
+                    help="load the bus without draining, so Python cannot be the limit")
     a = ap.parse_args()
 
     dev, ser = open_dev(a.serial)
@@ -100,8 +109,22 @@ if __name__ == "__main__":
     t0 = time.time()
     reports = frames = gaps = 0
     last_seq = None
+    read_errors = 0
     while time.time() - t0 < a.seconds:
-        r = dev.read(RPT, timeout_ms=100)
+        if a.no_read:
+            # Do not drain. The host controller keeps polling the endpoint at the
+            # negotiated interval regardless of whether anything reads, so this
+            # loads the BUS at 8 kHz without Python in the path. Use it to tell a
+            # host-software limit apart from a real one.
+            time.sleep(0.05)
+            continue
+        try:
+            r = dev.read(RPT, timeout_ms=100)
+        except OSError:
+            # Do not abort the soak for a host-side hiccup; the device-side
+            # counters are what we are actually here to read.
+            read_errors += 1
+            continue
         if not r or r[0] != RSP_STREAM:
             continue
         reports += 1
@@ -126,9 +149,13 @@ if __name__ == "__main__":
 
     print(f"\n{elapsed:.2f} s")
     print(f"  scan rate        {produced/elapsed:9.0f} frames/s   (firmware frame counter)")
-    print(f"  host-observed    {reports/elapsed:9.0f} reports/s  ({frames} frames, {gaps} seq gaps)")
+    if a.no_read:
+        print(f"  host-observed          n/a             (--no-read: nothing drained)")
+    else:
+        print(f"  host-observed    {reports/elapsed:9.0f} reports/s  ({frames} frames, "
+              f"{gaps} seq gaps, {read_errors} read errors)")
     print(f"  device-side      {delivered/elapsed:9.0f} reports/s  ({dropped} dropped by the device)")
-    best = max(reports / elapsed, delivered / elapsed)
+    best = delivered / elapsed if a.no_read else max(reports / elapsed, delivered / elapsed)
     if best > 6000:
         print("\n  -> 8 kHz: high speed and bInterval=1 both honoured")
     elif best > 3000:
