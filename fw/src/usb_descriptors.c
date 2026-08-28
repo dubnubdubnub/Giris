@@ -7,6 +7,7 @@
  */
 #include "tusb.h"
 #include "protocol.h"
+#include "uid.h"
 
 #define USB_VID   0x1209   /* pid.codes — open-source range, fine for a dev board */
 #define USB_PID   0x0001   /* placeholder; claim a real one before anything ships */
@@ -91,7 +92,7 @@ static const char *string_desc_arr[] = {
     (const char[]){0x09, 0x04},   /* 0: en-US */
     "Giris",                      /* 1: manufacturer */
     "Giris osu pad (telemetry)",  /* 2: product      */
-    "000000000001",               /* 3: serial — replaced from the 96-bit UID */
+    NULL,                         /* 3: serial — filled from the 96-bit UID */
 };
 
 static uint16_t _desc_str[33];
@@ -107,7 +108,7 @@ const uint16_t *tud_descriptor_string_cb(uint8_t index, uint16_t langid)
   } else {
     if (index >= sizeof(string_desc_arr) / sizeof(string_desc_arr[0])) return NULL;
 
-    const char *str = string_desc_arr[index];
+    const char *str = (index == 3) ? uid_serial() : string_desc_arr[index];
     chr_count = strlen(str);
     if (chr_count > 31) chr_count = 31;
 

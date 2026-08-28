@@ -14,6 +14,8 @@
 #include "clock.h"
 #include "sk6812.h"
 #include "adc.h"
+#include "uid.h"
+#include "link.h"
 #include "usb.h"
 #include "console.h"
 #include "tusb.h"
@@ -63,6 +65,8 @@ int main(void)
    * anything that can hang. The previous build initialised the PLL first and
    * spun forever waiting on HEXT — from outside that is indistinguishable from
    * a dead board. */
+  usb_bootloader_check();      /* honours a pending reboot-to-DFU request */
+
   system_core_clock_update();
   board_delay_cycles_init();
   console_init();
@@ -92,6 +96,26 @@ int main(void)
   /* PC13 (AP22653 enable) is deliberately left untouched. It is Hi-Z at reset and
    * R27's 10k pulldown holds the 5 V source OFF. */
 
+  /* Identity before anything else that talks. With two halves running one
+   * image, an unlabelled log line is worthless. */
+  console_stage("board identity");
+  console_puts("   uid    ");
+  console_puts(uid_serial());
+  console_puts("\n   tag    0x");
+  console_hex(uid_tag());
+  console_puts("\n");
+
+  console_stage("link pins (J1 / USART6)");
+  link_init();
+  {
+    const uint8_t s = link_sense();
+    console_puts("   PB12 /LM_ST   ");
+    console_puts((s & 1u) ? "high" : "low");
+    console_puts("   (U2 LM66100 ST, the VBUS_B ideal diode)\n   PB10 /AP_FAULT ");
+    console_puts((s & 2u) ? "high" : "low");
+    console_puts("   (AP22653 overcurrent, active low)\n");
+  }
+
   console_stage("scope pin");
   scope_pin_init();
 
@@ -111,15 +135,22 @@ int main(void)
 
   console_stage("running");
 
-  uint32_t last_blink = 0;
+  /* Set the status pixels ONCE and leave them alone. The bit-bang blocks
+   * interrupts for ~210 us, which is 3.4 TMR2 periods: conversions keep firing
+   * while the SEL flip cannot, so the DMA ring slips a bank. Resyncing after
+   * each write costs a glitched frame instead, which is no better while we are
+   * measuring. The real fix is SPI + DMA (see the architecture doc); until then
+   * the LEDs simply do not run during acquisition. */
+  leds[0] = 0;
+  for (uint32_t i = LED_FIRST_KEY_PIXEL; i < LED_COUNT; i++) leds[i] = hue((uint8_t)(i * 36u), 10);
+  sk6812_write(leds, LED_COUNT);
+  adc_resync();
+
   uint32_t last_report = 0;
-  uint8_t  phase      = 0;
 
   for (;;) {
     usb_task();
 
-    /* Once a second, say what is actually happening. Cheap, and it is the
-     * difference between "the board is dead" and "USB never enumerated". */
     adc_frame_t hb;
     adc_read_frame(&hb);
     if (++last_report > 150000u) {
@@ -127,31 +158,10 @@ int main(void)
       console_puts("frame ");
       console_dec(hb.frame);
       console_puts("  slots");
-      for (int i = 0; i < PROTO_NUM_SLOTS; i++) {
-        console_puts(" ");
-        console_dec(hb.slot[i]);
-      }
-      console_puts("  usb=");
-      console_puts(tud_mounted() ? "mounted" : "down");
-      console_puts("\n");
-    }
-
-    /* Status pixels, refreshed slowly so the blocking bit-bang stays out of the
-     * way of USB. Pixel 0 is the level shifter and stays dark. */
-    adc_frame_t f;
-    if (adc_read_frame(&f) && (f.frame - last_blink) > (ADC_SCAN_HZ / 20u)) {
-      last_blink = f.frame;
-
-      leds[0] = 0;
-      for (uint32_t i = LED_FIRST_KEY_PIXEL; i < LED_COUNT; i++) {
-        leds[i] = hue((uint8_t)(phase + i * 36u), 12);
-      }
-      sk6812_write(leds, LED_COUNT);
-      phase++;
-
-      SCOPE_PORT->scr = SCOPE_PIN;
-      board_delay_us(20);
-      SCOPE_PORT->clr = SCOPE_PIN;
+      for (int i = 0; i < PROTO_NUM_SLOTS; i++) { console_puts(" "); console_dec(hb.slot[i]); }
+      console_puts("  phase_err ");
+      console_dec(adc_phase_errors());
+      console_puts(tud_mounted() ? "  usb=mounted\n" : "  usb=down\n");
     }
   }
 }
