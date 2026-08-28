@@ -839,6 +839,32 @@ Worst inter-arrival 171 µs against a 125 µs nominal: **+46 µs, or 37 % of one
 receiving half's main-loop servicing latency, not wire jitter, and it is the number the SOF phase servo
 would improve. It does not need improving yet.
 
+### The accidental soak
+
+The bench was then left alone and picked up 11 hours later, still running, counters never reset:
+
+```
+5C13  rx 317,821,329   crc 0   gaps 0   resync 0    rate re-measured: 8,000/s
+5113  rx 317,820,879   crc 0   gaps 0   resync 0    rate re-measured: 8,000/s
+peer: drops back to discovery 0 since the link came up
+```
+
+**635.6 million frames across the two directions — 3.1 × 10¹¹ bit-times — with zero CRC failures, zero
+sequence gaps and zero resyncs**, and the link never once fell back to discovery. Read carefully, though:
+the *payload* check only runs while the test pattern is on, which was 180 s of that window. For the
+other 11 hours the guarantees in force were CRC-32 and sequence continuity, on live key data. Those are
+the two that matter for "did every frame arrive intact and in order"; "was the frame the one that was
+sent" rests on the 180 s figure above.
+
+One wrinkle worth writing down because it looks alarming and is not: half 5C13 reports **2** switches
+into RUNNING and **1** drop, against 5113's 1 and 0. That is the flashing order, not a link fault — 5C13
+got the new image first and briefly paired with a 5113 still running the previous build, which answers
+with 20 Hz PF_PING and never sends a data frame, so the new half's liveness timer expired exactly as
+designed. It re-paired once both halves matched and has not dropped since. The failure mode is real and
+worth remembering: **a mixed-firmware pair does not interoperate in the run phase**, and it presents as a
+liveness drop rather than as anything that names a version. `peer_frame_t` already carries `fw`; nothing
+yet refuses to pair on a mismatch.
+
 **The unit is provisional and the index is provisional.** There is no travel pipeline yet, so what ships
 today is the raw 12-bit count shifted to 9 bits, and key *index* is hardware scan order because the
 keymap layer that would give these positions names does not exist either. The transport is final; the
