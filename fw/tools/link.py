@@ -79,12 +79,27 @@ def txn(d, cmd, payload=b"", want=None, timeout=3.0):
 
 
 def sense_str(v):
-    return ("PB12 /LM_ST=%s  PB10 /AP_FAULT=%s"
-            % ("high" if v & 1 else "low", "high" if v & 2 else "low"))
+    # LM66100: ST is Hi-Z (so R5 pulls it high) while that ideal diode conducts,
+    # and pulled low while it blocks. U2's input is VBUS_B off J1.
+    # AP22653 fitted here is the active-HIGH enable variant, so PC13 high = we
+    # are sourcing 5 V out of J1.
+    return ("PB12 /LM_ST=%-4s (+5V from %s)   PB10 /AP_FAULT=%-4s   PC13 EN=%-4s (%s)"
+            % ("high" if v & 1 else "low",
+               "J1" if v & 1 else "our own J3",
+               "high" if v & 2 else "LOW - FAULT",
+               "HIGH" if v & 4 else "low",
+               "SOURCING 5V ON J1" if v & 4 else "not sourcing"))
 
 
-def run(d, mode, baud, nbytes):
-    r = txn(d, CMD_LINK_TEST, struct.pack("<BIH", mode, baud, nbytes), want=RSP_LINK, timeout=10.0)
+def run(d, mode, baud, nbytes, role=0, tmo=750, wait=True):
+    payload = struct.pack("<BIHBH", mode, baud, nbytes, role, tmo)
+    if not wait:
+        buf = bytearray(RPT)
+        buf[0], buf[1] = CMD_LINK_TEST, 1
+        buf[2:2 + len(payload)] = payload
+        d.write(bytes([0]) + bytes(buf))
+        return None, None
+    r = txn(d, CMD_LINK_TEST, payload, want=RSP_LINK, timeout=15.0)
     if not r:
         sys.exit("no RSP_LINK — firmware predates CMD_LINK_TEST, or the test hung")
     got_mode = r[4]
@@ -108,6 +123,53 @@ def run(d, mode, baud, nbytes):
     if not ok and external:
         print(f"      ({why} — needs a TP1-TP2 jumper or a peer echoing)")
     return ok, sense
+
+
+def drain(d, want, timeout):
+    end = time.time() + timeout
+    while time.time() < end:
+        r = d.read(RPT, timeout_ms=250)
+        if r and r[0] == want:
+            return bytes(r)
+    return None
+
+
+def report(r, label):
+    if not r:
+        print(f"  {label:12s} no reply")
+        return False
+    mode = r[4]
+    baud, sent, recv, mism, tmo = struct.unpack_from("<IHHHH", r, 5)
+    errs = r[19]
+    name = MODES.get(mode, ("?",))[0]
+    ok = (recv or sent) and mism == 0 and errs == 0 and not (recv and tmo)
+    print(f"  {label:12s} mode {mode} {name:8s} {baud:>9,} baud  "
+          f"sent {sent:4d}  got {recv:4d}  bad {mism:4d}  short {tmo:4d}  err 0x{errs:X}")
+    if mism:
+        print(f"               first mismatch: expected 0x{r[17]:02X}, got 0x{r[18]:02X}")
+    return ok
+
+
+def peer_run(tx_dev, tx_name, rx_dev, rx_name, mode, baud, nbytes, tmo=1500):
+    """One board transmits, the other listens. The listener blocks in firmware,
+    so arm it without waiting for its reply, then fire the transmitter."""
+    run(rx_dev, mode, baud, nbytes, role=2, tmo=tmo, wait=False)
+    time.sleep(0.2)
+    run(tx_dev, mode, baud, nbytes, role=1, wait=False)
+    ok = report(drain(tx_dev, RSP_LINK, 5.0), f"{tx_name} TX")
+    ok &= report(drain(rx_dev, RSP_LINK, 8.0), f"{rx_name} RX")
+    return ok
+
+
+def peer_pair(tx_dev, tx_name, rx_dev, rx_name, txmode, rxmode, baud, nbytes, tmo=1500):
+    """Asymmetric: the listener runs the TRPSWAP counterpart of the transmitter's
+    mode, which is exactly the arrangement a straight-through USB-C cable forces."""
+    run(rx_dev, rxmode, baud, nbytes, role=2, tmo=tmo, wait=False)
+    time.sleep(0.2)
+    run(tx_dev, txmode, baud, nbytes, role=1, wait=False)
+    ok = report(drain(tx_dev, RSP_LINK, 5.0), f"{tx_name} TX")
+    ok &= report(drain(rx_dev, RSP_LINK, 8.0), f"{rx_name} RX")
+    return ok
 
 
 def probe(d, mode, baud):
@@ -153,6 +215,8 @@ if __name__ == "__main__":
     ap = argparse.ArgumentParser()
     ap.add_argument("--serial", help="UID substring picking one board of several")
     ap.add_argument("--list", action="store_true")
+    ap.add_argument("--peer", action="store_true",
+                    help="two boards, J1 connected: each transmits while the other listens")
     ap.add_argument("--probe", action="store_true",
                     help="electrical check of the link pins and a MUX sweep; J1 must be EMPTY")
     ap.add_argument("--selftest", action="store_true",
@@ -166,6 +230,28 @@ if __name__ == "__main__":
         for s, e in sorted(list_boards().items()):
             print(f"{s}  {e['product_string']}")
         sys.exit(0)
+
+    if a.peer:
+        bs = list_boards()
+        if len(bs) != 2:
+            sys.exit(f"--peer needs exactly two boards, found {len(bs)}")
+        (n1, e1), (n2, e2) = sorted(bs.items())
+        d1, d2 = hid.device(), hid.device()
+        d1.open_path(e1["path"]); d2.open_path(e2["path"])
+        d1.set_nonblocking(0); d2.set_nonblocking(0)
+        s1, s2 = n1[-4:], n2[-4:]
+        allok = True
+        for mode, baud in ((1, 115200), (1, 9000000), (2, 115200), (3, 115200), (4, 115200)):
+            print(f"\nmode {mode} ({MODES[mode][1]}) at {baud:,}:")
+            # In an asymmetric mode the two halves must be opposite: the FD test
+            # pairs an unswapped transmitter with a swapped listener.
+            rxmode = {3: 4, 4: 3}.get(mode, mode)
+            allok &= peer_run(d1, s1, d2, s2, mode, baud, a.bytes) if mode == rxmode else \
+                     peer_pair(d1, s1, d2, s2, mode, rxmode, baud, a.bytes)
+            if mode == rxmode:
+                allok &= peer_run(d2, s2, d1, s1, mode, baud, a.bytes)
+        print("\npeer link " + ("PASSED" if allok else "FAILED"))
+        sys.exit(0 if allok else 1)
 
     dev, serial = open_dev(a.serial)
     info = txn(dev, CMD_INFO, want=RSP_INFO)
