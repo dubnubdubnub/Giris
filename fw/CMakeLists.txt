@@ -33,6 +33,8 @@ add_executable(giris.elf
   src/usb.c
   src/usb_descriptors.c
   src/console.c
+  src/uid.c
+  src/link.c
   ${TUSB}/src/tusb.c
   ${TUSB}/src/common/tusb_fifo.c
   ${TUSB}/src/device/usbd.c

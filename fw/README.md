@@ -92,6 +92,46 @@ That FFT is the point of the whole exercise: **a flat spectrum means white noise
 analog filter is worth it; a −1/2 amplitude slope means 1/f and narrowing buys ~5 % for a 103 µs
 transport delay.** That measurement decides the filter respin.
 
+### Two boards at once
+
+Every board now takes its USB serial from the 96-bit factory UID at `0x1FFFF7E8`, so two halves
+running one image are separable everywhere — `capture.py`, `link.py`, `dfu.py` and the viewer all take
+`--serial` with any unique substring. The last four hex characters are a good handle.
+
+```bash
+tools/.venv/bin/python tools/link.py --list
+E75C30400080160505875C13  Giris osu pad (telemetry)
+E85C30400080160505875113  Giris osu pad (telemetry)
+```
+
+Those two are adjacent dice off one wafer and differ in only two of twelve bytes, which is why
+`uid_tag()` — the 16-bit condensation used to break ties in link arbitration — is FNV-1a over the whole
+UID rather than a truncation. They come out 0x436A and 0xF885.
+
+In DFU every AT32 reports the serial `AT32`, so there the bus path is the only discriminator:
+
+```bash
+tools/.venv/bin/python tools/dfu.py --serial 5C13     # prints the DFU path it lands on
+./tools/flash.sh build/giris.bin 2-1.3
+```
+
+### The J1 link
+
+```bash
+tools/.venv/bin/python tools/link.py --serial 5C13 --probe
+```
+
+`--probe` needs nothing plugged into J1. It drives each link pad open-drain and reads it back, tells a
+driven pin from a floating one on `/LM_ST` and `/AP_FAULT`, and sweeps all sixteen GPIO MUX indices
+while the USART shifts out `0x00`, watching the pad. That last sweep is what confirmed **MUX8 is
+USART6** on this part — the datasheet gives the pin functions for PC6/PC7 but not the MUX number.
+
+`--selftest` and `--mode` send `0x00..0xFF` and check what returns. They need the loop closed outside
+the chip, because **this silicon does not echo its own half-duplex transmission back into RDBF** —
+RM 12.2 says TX and SW_RX are interconnected, but with `SLBEN=1 TEN=1 REN=1` a lone board receives
+nothing, at either baud, open-drain or push-pull, with no error flag raised. Close the loop with a peer
+on J1 or a jumper from **TP1** (J1 D+) to **TP2** (J1 D−).
+
 ### Checking the USB side
 
 ```bash

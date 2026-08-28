@@ -526,3 +526,41 @@ three. If the noise spectrum comes back white, 2.2 kΩ + 100 nF (τ = 220 µs, 0
 pay 103 µs of transport delay for nothing. Capture the noise spectrum on one channel with the key at
 rest before ordering the respin. Note also that "BW = 5 kHz" in the noise spec is itself ambiguous
 (brickwall vs single pole swings the extrapolation by 20 %), and 10 mV_PP is a **max**, not a typ.
+
+---
+
+## 13. Link bring-up: what the two boards actually measured (2026-08-28)
+
+Both dev pads, self-powered from their own J3, nothing in J1. Run with
+`tools/link.py --probe`, which sweeps the GPIO MUX electrically instead of trusting a table.
+
+| Claim | Status |
+|---|---|
+| PC6 = USART6_TX, PC7 = USART6_RX | **Confirmed** — DS_AT32F405_402 V2.03, pins 37/38 of the 64-pin part |
+| USART6 is at **MUX8** on those pins | **Confirmed by measurement.** The datasheet does not print MUX indices. Sweeping 0–15 while shifting `0x00`, only MUX8 modulated the pad (78–80 % low against the 90 % the framing implies). MUX15 reads a flat 100 % — an undriven pad, not a signal |
+| R1/R2 10k pull-ups and R3/R7 120 Ω fitted and working | **Confirmed** — both pads pull to 0 open-drain and return high through the fitted resistor, on both boards |
+| Single-wire half-duplex echoes to its own receiver | **REFUTED.** RM 12.2 says "TX and SW_RX are interconnected inside the USART", but with `SLBEN=1 TEN=1 REN=1` neither board raised RDBF on 256 bytes, at 115200 *and* 9 Mbaud, open-drain *and* push-pull, with `STS = 0x00C0` (TDC+TDBE, no error). The transmitter is provably running. **Consequence: the discovery bus cannot be validated by one board — it needs a peer or a TP1–TP2 jumper.** The discovery design itself is unaffected |
+| `/LM_ST` (PB12) means "we are link-powered" | **Open, and now suspicious.** Read with the internal pull-up and then the pull-down, the pin is genuinely *driven* on both boards — and the two boards disagree. In identical states (J3-powered, J1 empty) board `…5C13` drives it **high** and board `…5113` drives it **low**. U2 is an LM66100 ideal diode on VBUS_B; U7 is its twin on VBUS_HOST; the pair ORs into +5V. Until this is explained, **no power decision may key off PB12** |
+
+### The identity problem, and why it came first
+
+Two halves run one image. Before this, both enumerated as `1209:0001` serial `000000000001`, and in DFU
+every AT32 reports the serial `AT32` — so no host tool could name a board, and no log line was
+attributable. Fixed by taking the USB serial from the 96-bit UID at `0x1FFFF7E8` (Artery's device
+electronic signature, the address their own USB middleware uses) and by adding it, plus a 16-bit
+`uid_tag`, to `RSP_INFO`.
+
+The two boards on the bench are adjacent dice: `E75C3040 00801605 05875C13` and
+`E85C3040 00801605 05875113` differ in two of twelve bytes. A truncation would collide; FNV-1a over all
+twelve gives 0x436A and 0xF885. That tag is the arbitration tie-break.
+
+### Order of the remaining link work
+
+1. **Connect J1↔J1** (straight USB-C, or TP1↔TP1 / TP2↔TP2 / GND). Safe as built: firmware never drives
+   PC13, so neither AP22653 sources 5 V, and each board keeps its own J3 supply. This is topology (b)
+   electrically.
+2. Half-duplex open-drain at 115200 on D−, both halves unswapped — the only channel that is symmetric
+   before anyone has agreed who swaps. Prove RX both ways.
+3. UID-tag arbitration; loser sets `CTRL2.TRPSWAP`.
+4. Full-duplex push-pull at 9 Mbaud (216/24 exactly), then DMA + IDLE-line framing with CRC-16.
+5. Explain PB12 before touching PC13.

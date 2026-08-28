@@ -15,6 +15,8 @@
 
 #include "tusb.h"
 #include "adc.h"
+#include "uid.h"
+#include "link.h"
 #include "board.h"
 #include "clock.h"
 #include "protocol.h"
@@ -154,11 +156,36 @@ static void send_info(uint8_t tag)
   p[7] = 12;
   const uint16_t hz = ADC_SCAN_HZ;
   memcpy(&p[8], &hz, 2);
-  memcpy(&p[10], adc_slot_map(), PROTO_NUM_SLOTS);
-  const uint32_t cpg_q8 = 1573;               /* 6.144 counts/Gs * 256 */
-  memcpy(&p[18], &cpg_q8, 4);
+  memcpy(&p[10], adc_slot_map(), PROTO_NUM_SLOTS);   /* [10..19] */
+  const uint32_t cpg_q8 = 1573;                      /* 6.144 counts/Gs * 256 */
+  memcpy(&p[20], &cpg_q8, 4);
   const uint32_t build = BUILD_ID;
-  memcpy(&p[22], &build, 4);
+  memcpy(&p[24], &build, 4);
+  memcpy(&p[28], adc_sequence(), PROTO_SEQ_LEN);     /* [28..32] */
+  memcpy(&p[PROTO_INFO_UID], uid_bytes(), 12);       /* [33..44] */
+  const uint16_t tag16 = uid_tag();
+  memcpy(&p[PROTO_INFO_UID_TAG], &tag16, 2);         /* [45..46] */
+  p[PROTO_INFO_SENSE] = link_sense();                /* [47]     */
+  tx_commit();
+}
+
+static void send_link(uint8_t tag, const link_test_t *t)
+{
+  uint8_t *p = tx_begin(RSP_LINK, tag);
+  p[4] = t->mode;
+  memcpy(&p[5],  &t->baud, 4);
+  memcpy(&p[9],  &t->sent, 2);
+  memcpy(&p[11], &t->received, 2);
+  memcpy(&p[13], &t->mismatched, 2);
+  memcpy(&p[15], &t->timeouts, 2);
+  p[17] = t->first_bad_tx;
+  p[18] = t->first_bad_rx;
+  p[19] = t->err_flags;
+  p[20] = link_sense();
+  memcpy(&p[21], &t->sts,   4);
+  memcpy(&p[25], &t->ctrl1, 4);
+  memcpy(&p[29], &t->ctrl2, 4);
+  memcpy(&p[33], &t->ctrl3, 4);
   tx_commit();
 }
 
@@ -170,8 +197,8 @@ static void send_snapshot(uint8_t tag)
   memcpy(&p[4], &f.frame, 4);
   memcpy(&p[8], f.slot, 2 * PROTO_NUM_SLOTS);
   const uint32_t pe = adc_phase_errors();
-  memcpy(&p[24], &pe, 4);
-  memcpy(&p[28], &tx_dropped, 4);
+  memcpy(&p[48], &pe, 4);
+  memcpy(&p[52], &tx_dropped, 4);
   tx_commit();
 }
 
@@ -239,6 +266,52 @@ void tud_hid_set_report_cb(uint8_t instance, uint8_t report_id,
       break;
     }
 
+    case CMD_SEQ_SET: {
+      bool ok = true;
+      for (int i = 0; i < PROTO_SEQ_LEN; i++) if (buffer[2 + i] > 3) ok = false;
+      if (ok) adc_set_sequence(&buffer[2]);
+      uint8_t *p = tx_begin(RSP_SEQ, tag);
+      memcpy(&p[4], adc_sequence(), PROTO_SEQ_LEN);
+      tx_commit();
+      break;
+    }
+
+    case CMD_LINK_TEST: {
+      uint32_t baud;
+      uint16_t nbytes;
+      memcpy(&baud,   &buffer[3], 4);
+      memcpy(&nbytes, &buffer[7], 2);
+      if (baud < 9600u || baud > 13500000u) baud = LINK_DISCOVERY_BAUD;
+      if (nbytes == 0 || nbytes > 4096u)    nbytes = 256u;
+
+      link_test_t t;
+      link_selftest((link_mode_t)buffer[2], baud, nbytes, &t);
+
+      /* Park the pins again. Leaving PC6/PC7 driven push-pull between tests is
+       * how you find out the hard way that the peer was mid-transmission. */
+      link_configure(LINK_MODE_OFF, 0);
+      send_link(tag, &t);
+      break;
+    }
+
+    case CMD_LINK_PROBE: {
+      uint32_t baud;
+      memcpy(&baud, &buffer[3], 4);
+      if (baud < 9600u || baud > 13500000u) baud = LINK_DISCOVERY_BAUD;
+
+      link_probe_t pr;
+      link_probe((link_mode_t)buffer[2], baud, &pr);
+
+      uint8_t *p = tx_begin(RSP_PROBE, tag);
+      p[PROTO_PROBE_PADS]     = pr.pads;
+      p[PROTO_PROBE_SENSE_PU] = pr.sense_pu;
+      p[PROTO_PROBE_SENSE_PD] = pr.sense_pd;
+      memcpy(&p[PROTO_PROBE_SAMPLES], &pr.mux_samples, 2);
+      memcpy(&p[PROTO_PROBE_MUX], pr.mux_low, sizeof(pr.mux_low));
+      tx_commit();
+      break;
+    }
+
     case CMD_BURST_STATUS:
       send_burst_status(tag);
       break;
@@ -258,7 +331,7 @@ void tud_hid_set_report_cb(uint8_t instance, uint8_t report_id,
       tx_pump();
       for (volatile int i = 0; i < 2000000; i++) {
       }
-      usb_jump_to_bootloader();
+      usb_jump_to_bootloader();      /* resets; nothing after this runs */
       break;
     }
 
@@ -286,24 +359,31 @@ uint16_t tud_hid_get_report_cb(uint8_t instance, uint8_t report_id,
   return 0;
 }
 
+/* Survives reset (see ld/at32f405rbt7.ld). Jumping into the ROM bootloader from
+ * a live application does not work on this part — the first attempt left the
+ * core hung with nothing on either USB port. Instead: stash a magic, reset, and
+ * let early startup do the jump from a clean state. */
+__attribute__((section(".noinit"))) volatile uint32_t giris_boot_magic;
+
 void usb_jump_to_bootloader(void)
 {
+  giris_boot_magic = GIRIS_BOOT_MAGIC;
+  __DSB();
+  NVIC_SystemReset();
+}
+
+void usb_bootloader_check(void)
+{
+  if (giris_boot_magic != GIRIS_BOOT_MAGIC) return;
+  giris_boot_magic = 0;
+  __DSB();
+
   __disable_irq();
-
-  /* Detach cleanly so the host tears the device down rather than waiting on a
-   * port that has simply gone quiet. */
-  OTGHS_GCCFG &= ~(GCCFG_PWRDOWN);
-
-  /* Undo enough of our setup that the ROM code starts from something sane. */
-  tmr_counter_enable(TMR2, FALSE);
-  dma_channel_enable(DMA1_CHANNEL1, FALSE);
-  adc_enable(ADC1, FALSE);
 
   for (uint32_t i = 0; i < 8; i++) {
     NVIC->ICER[i] = 0xFFFFFFFFu;
     NVIC->ICPR[i] = 0xFFFFFFFFu;
   }
-
   SysTick->CTRL = 0;
 
   const uint32_t sp = *(volatile uint32_t *)ROM_BOOTLOADER_ADDR;
