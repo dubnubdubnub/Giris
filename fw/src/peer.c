@@ -53,11 +53,16 @@ static uint32_t ms_now, ms_acc, ms_last_cyc;
 
 static void ms_tick(void)
 {
+  const uint32_t per_ms = system_core_clock / 1000u;
+  if (per_ms == 0u) return;              /* never divide the main loop by zero */
+
   const uint32_t now = DWT->CYCCNT;
   ms_acc += now - ms_last_cyc;
   ms_last_cyc = now;
-  const uint32_t per_ms = system_core_clock / 1000u;
-  while (ms_acc >= per_ms) { ms_acc -= per_ms; ms_now++; }
+  /* Bounded: a stale ms_last_cyc can make the first delta a full DWT wrap, and
+   * an unbounded catch-up loop there is 20 s of frozen main loop. */
+  uint32_t guard = 4000u;
+  while (ms_acc >= per_ms && guard--) { ms_acc -= per_ms; ms_now++; }
 }
 
 static uint32_t since(uint32_t stamp) { return ms_now - stamp; }
@@ -75,7 +80,12 @@ static bool     tx_busy;
 static peer_state_t state = PEER_DISCOVER;
 static peer_role_t  role  = PEER_ROLE_UNKNOWN;
 static uint16_t     my_tag, peer_tag, peer_fw;
+/* Two different numbers, and conflating them cost a link that paired perfectly
+ * and then ran at the discovery rate. run_baud is the NEGOTIATED target; cur_baud
+ * is whatever the USART is actually configured for at this instant, including
+ * 115200 while discovery is in progress. */
 static uint32_t     run_baud = PEER_RUN_BAUD;
+static uint32_t     cur_baud;
 static uint32_t     t_hail, t_rx, t_state;
 static uint32_t     hail_period;
 static peer_status_t st;
@@ -139,7 +149,7 @@ static void mode_for(uint32_t baud, bool run)
     link_configure(role == PEER_ROLE_B ? LINK_MODE_FD_SWAP : LINK_MODE_FD, baud);
   }
   rx_dma_start();
-  run_baud = baud;
+  cur_baud = baud;
 }
 
 static void tx_frame(uint8_t type, uint16_t dst, uint32_t arg)
@@ -190,12 +200,20 @@ static bool tx_done(void)
 
 /* --------------------------------------------------------------- receive */
 
-static void on_frame(const peer_frame_t *f);
+/* Returns true if it reconfigured the USART, which invalidates the caller's
+ * view of the ring. */
+static bool on_frame(const peer_frame_t *f);
 
 static void rx_scan(void)
 {
   const uint16_t w = rx_write_index();
-  while (rx_read != w) {
+  /* Hard bound. Nothing inside this loop should be able to stop it terminating,
+   * but "should" is how the board that never enumerated got built: peer_task()
+   * runs in the same loop as tud_task(), so any spin here takes USB with it and
+   * the only way back in is BOOT0 + NRST. One bounded counter buys the ability
+   * to always reflash over HID instead. */
+  uint32_t guard = RX_RING_LEN;
+  while (rx_read != w && guard--) {
     const uint8_t b = rx_ring[rx_read];
     rx_read = (uint16_t)((rx_read + 1u) & (RX_RING_LEN - 1u));
 
@@ -216,7 +234,11 @@ static void rx_scan(void)
     if (f.src == my_tag) continue;             /* never pair with ourselves */
     st.frames_rx++;
     t_rx = ms_now;
-    on_frame(&f);
+    /* If that frame reconfigured the link, rx_read has been reset to 0 and the
+     * ring now holds bytes from the old baud rate. Carrying on would re-parse
+     * frames already acted on — which is exactly why B counted five switches
+     * for one COMMIT. */
+    if (on_frame(&f)) return;
   }
 }
 
@@ -230,7 +252,7 @@ static void assign_roles(uint16_t other)
 
 static void go(peer_state_t s) { state = s; t_state = ms_now; }
 
-static void on_frame(const peer_frame_t *f)
+static bool on_frame(const peer_frame_t *f)
 {
   switch (f->type) {
     case PF_HAIL:
@@ -270,6 +292,7 @@ static void on_frame(const peer_frame_t *f)
         mode_for(run_baud, true);
         st.switches++;
         go(PEER_RUNNING);
+        return true;                            /* ring is stale from here on */
       }
       break;
 
@@ -283,6 +306,7 @@ static void on_frame(const peer_frame_t *f)
     default:
       break;
   }
+  return false;
 }
 
 /* ------------------------------------------------------------------- api */
@@ -324,6 +348,11 @@ void peer_task(void)
   ms_tick();
   if (state == PEER_DISABLED) return;
 
+  /* Let USB come up first. If anything below ever wedges, enumeration has
+   * already happened and CMD_BOOTLOADER is still reachable — the difference
+   * between a two-minute reflash and asking someone to hold two buttons. */
+  if (ms_now < 1500u) return;
+
   tx_done();
   rx_scan();
 
@@ -345,7 +374,8 @@ void peer_task(void)
        * Wait for our own HAIL_ACK to finish clearing the wire before pushing
        * the next frame onto a bus that cannot detect a collision. */
       if (role == PEER_ROLE_A && tx_done() && since(t_state) >= 5u) {
-        tx_frame(PF_SWITCH, peer_tag, PEER_RUN_BAUD);
+        run_baud = PEER_RUN_BAUD;               /* the target, not the current rate */
+        tx_frame(PF_SWITCH, peer_tag, run_baud);
         go(PEER_SWITCHING);
       }
       if (since(t_rx) > ALONE_AFTER_MS) peer_enable(true);
@@ -386,6 +416,6 @@ void peer_status(peer_status_t *out)
   out->role       = (uint8_t)role;
   out->peer_tag   = peer_tag;
   out->peer_fw    = peer_fw;
-  out->baud       = run_baud;
+  out->baud       = cur_baud;
   out->last_rx_ms = since(t_rx);
 }
