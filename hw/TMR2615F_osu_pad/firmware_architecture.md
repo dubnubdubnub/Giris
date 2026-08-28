@@ -768,3 +768,47 @@ once: **PA2/PA3 are USART2's ROM pins and are also this board's ADC mux outputs 
 therefore puts a USART peripheral onto two analog nodes. It has been harmless in practice — the mux
 R_ON plus the 5.1 kΩ filter resistor limits contention to a few hundred µA — but it is worth designing
 out on a board being laid out fresh.
+
+---
+
+## 15. Windows: the descriptor bug, and 8 kHz confirmed
+
+The second board would not start on Windows 11 24H2 — `CM_PROB_FAILED_START`, problem code 10 — while
+being perfectly healthy on macOS. What Windows had managed to read localised it precisely:
+
+```
+HardwareIds           = USB\VID_1209&PID_0001&REV_0100     device descriptor OK
+CompatibleIds         = USB\Class_03&SubClass_00&Prot_00   config descriptor OK
+BusReportedDeviceDesc = (empty)                            no string descriptor ever read
+Children              = none                               never reached interface enumeration
+ProblemStatus         = 0xC000000E                         STATUS_NO_SUCH_DEVICE
+```
+
+**Cause: `bcdUSB = 0x0210` with no BOS descriptor.** A device claiming 2.01 or higher must answer
+`GET_DESCRIPTOR(BOS)`; TinyUSB's `tud_descriptor_bos_cb` is a weak stub returning NULL, so
+`usbd.c:1344` fails `TU_VERIFY` and the request is stalled. **macOS never asks.** Declaring 2.00 fixed
+it outright — same hub, same port, `status OK`, `problem 0`, iProduct read, and the UID serial now
+appearing in the Windows instance ID.
+
+The general lesson is worth keeping: **macOS is not a sufficient test of a USB descriptor set.** Two
+other candidate causes were eliminated first and both were wrong — the J1 ground bond (removing the
+cable changed nothing) and the hub (its other devices were healthy throughout).
+
+### 8 kHz on Windows
+
+The open question from §2 was whether Windows honours a `bInterval` exponent of 1 on a high-speed
+interrupt endpoint. `tools/ratetest.py` answers it by counting polls: the streaming path emits exactly
+one frame per report, so the achieved report rate is `min(poll rate, scan rate)`.
+
+| Host | scan | host-observed | device-side | dropped | seq gaps |
+|---|---|---|---|---|---|
+| macOS 26, 30 s | 8000 frames/s | 7902 reports/s | 8000 reports/s | 0 | 0 |
+| Windows 11 24H2, 5 s | 8001 frames/s | 7883 reports/s | 8001 reports/s | 0 | 0 |
+
+**Windows delivers the full 8 kHz, within 0.2 % of macOS.** The device-side figure comes from the
+firmware's own `tx_dropped` counter and so is immune to how fast the host software runs.
+
+**Not yet closed:** a 30 s Windows run ended in an `OSError: read error` from hidapi, after which the
+whole hub dropped off `array` — taking its other devices with it, which points at cable movement rather
+than a device fault. A long Windows soak has not completed cleanly and needs repeating before 8 kHz is
+called settled under sustained load.
