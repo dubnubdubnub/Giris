@@ -722,22 +722,49 @@ ISRs alive across the 6.6–8 ms stall (§2). Do that before designing around it
 And add a **firmware version field to the hail**. Two halves running different protocol versions is a
 silent corruption source; the correct behaviour is to refuse to form a split and say so.
 
-### The respin lever: two traces buy an unbrickable path
+### The respin lever: move the link to USART1, and it costs nothing
 
-Both of these are free today:
+**Put J1's D+/D- on PA9/PA10 (USART1) instead of PC6/PC7 (USART6), and move the debug console to
+USART3 on PC10/PC11.** A straight swap of two nets, and the peripheral's ROM bootloader becomes
+reachable over the link with no extra conductors.
 
-- **PC10 / PC11 are unused** — the netlist has them going only to J6 pins 13/14 as `/SPI3_SCK` and
-  `/SPI3_MISO` breakouts.
-- **J1's SBU1 (A8) and SBU2 (B8) are unconnected.**
+This works because of a coincidence worth stating plainly: **USART1 is the only ROM bootloader
+interface that is also APB2-clocked.**
 
-Wire SBU1→PC10 and SBU2→PC11 and the peripheral's ROM bootloader becomes reachable over the link.
-Updating it is then: centre tells the peripheral to reboot into ROM — the magic-in-`.noinit` plus
-`NVIC_SystemReset()` trick that already works for `CMD_BOOTLOADER` — then bridges USB to USART3 and
-speaks Artery's ISP protocol. **No custom updater, no RAM-resident flash writer, and unbrickable**,
-because the ROM runs before user code. The fast data path stays on USART6 over D+/D− at 12 Mbaud,
-untouched.
+| Candidate | Clock domain | Baud ceiling | ROM bootloader? |
+|---|---|---|---|
+| USART6 / UART7 — PC6/PC7, where J1 is today | APB2 216 MHz / APB1 108 MHz | 13.5 / 6.75 | **no** |
+| USART3 — PC10/PC11 | APB1 108 MHz | **6.75** | yes |
+| USART2 — PA2/PA3 | APB1 108 MHz | 6.75 | yes, but those pins are ADC mux outputs |
+| **USART1 — PA9/PA10** | **APB2 216 MHz** | **13.5** | **yes** |
 
-The cost is honest and worth stating: **USB 2.0-only Type-C cables are not required to carry SBU.**
-Only full-featured cables do. So this path works with the supplied cable and silently disappears with a
-random substitute — acceptable for a firmware-update path, unacceptable for the data path, which is why
-the fast link stays on D+/D−. The "unplug the half" fallback covers the rest.
+APB1 is not a free choice: the datasheet fixes `fPCLK1 = fHCLK/2` whenever `fHCLK > 120 MHz`, so at
+216 MHz SCLK every APB1 UART is capped at 108/16 = 6.75 Mbaud. Measured against the frame budget that
+is 108 µs for a 72-byte frame — **86 % of a microframe**, and still 67 % after packing positions to
+12 bits. USART1 keeps the whole measured 12 Mbaud and its 48.5 %.
+
+On the dev board PA9/PA10 go only to J6 pins 8/7 and J9 pins 3/5 — the debug console and the SWD
+header — so freeing them costs nothing but relocating the console, and PC10/PC11 (`/SPI3_SCK` and
+`/SPI3_MISO` breakouts on J6) are free to take it. A console does not care that USART3 is APB1-clocked.
+
+Directions work out with a straight-through cable and no new hardware. The ROM has USART1_TX on PA9 and
+USART1_RX on PA10; put **PA9 on D+ and PA10 on D-**. The peripheral in ROM then transmits on D+ and
+listens on D-, so the centre sets `CTRL2.TRPSWAP` to transmit on D- and listen on D+ — a register write
+it already controls. Normal operation is unchanged: arbitration still decides which half swaps, just on
+a different USART.
+
+Updating the peripheral becomes: centre tells it to reboot into ROM (the magic-in-`.noinit` plus
+`NVIC_SystemReset()` that already works for `CMD_BOOTLOADER`), then bridges USB to USART1 and speaks
+Artery's ISP protocol. **No custom updater, no RAM-resident flash writer, and unbrickable**, because the
+ROM runs before user code.
+
+*(An earlier revision of this section proposed wiring J1's unconnected SBU1/SBU2 to PC10/PC11 as a
+side-channel. Rejected: USB 2.0-only Type-C cables are not required to carry SBU, so that path would
+vanish under a substituted cable, and it spent two extra conductors to reach a slower UART. D+/D- is
+carried by every cable that could possibly work at all.)*
+
+One pin-map caveat to carry into the respin, since the ROM configures every bootloader interface at
+once: **PA2/PA3 are USART2's ROM pins and are also this board's ADC mux outputs D2/D3.** Entering DFU
+therefore puts a USART peripheral onto two analog nodes. It has been harmless in practice — the mux
+R_ON plus the 5.1 kΩ filter resistor limits contention to a few hundred µA — but it is worth designing
+out on a board being laid out fresh.
