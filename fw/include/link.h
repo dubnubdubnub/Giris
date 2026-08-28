@@ -48,6 +48,14 @@
 #include <stdint.h>
 #include <stdbool.h>
 
+/* Who does what in a two-board run. Role 0 needs the loop closed on itself,
+ * which this silicon will not do; roles 1 and 2 are the real test. */
+typedef enum {
+  LINK_ROLE_LOOPBACK  = 0,
+  LINK_ROLE_TX        = 1,
+  LINK_ROLE_RX        = 2,
+} link_role_t;
+
 typedef enum {
   LINK_MODE_OFF       = 0,
   LINK_MODE_HD_PC6    = 1,  /* single wire, open drain, TX+RX both on PC6 = D- */
@@ -76,7 +84,18 @@ typedef struct {
  * USART6 and GPIOC clocks. Does NOT touch PC13. */
 void link_init(void);
 
-/* bit0 = PB12 /LM_ST level, bit1 = PB10 /AP_FAULT level.
+/* bit0 = PB12 /LM_ST, bit1 = PB10 /AP_FAULT, bit2 = PC13 /PW_PSTRH read back.
+ *
+ * PC13 is read with NO internal pull, ever. It is the AP22653 enable and the
+ * part fitted is the active-HIGH variant, so an internal pull-up on this pin
+ * would switch 5 V onto J1 — which is the one thing this firmware must not do
+ * by accident. R10 (10k to GND) is what holds it off; reading it back is how we
+ * find out whether R10 is doing its job.
+ *
+ * bit3 = PC6 pad level, bit4 = PC7 pad level, read passively. With link_hold()
+ * on the far board these two turn J1 into a DC continuity tester: no USART, no
+ * baud rate, no framing — just "does a low on one board's pad appear on the
+ * other's". That separates a cable/connector fault from a peripheral fault.
  *
  * /LM_ST is the ST pin of U2, the LM66100 ideal diode whose input is VBUS_B off
  * J1; U7 is the matching one on VBUS_HOST off J3, and the two OR into +5V. So
@@ -90,6 +109,10 @@ uint8_t link_sense(void);
  * USART6_RX but does not print the MUX index — that table is in the reference
  * manual. link_probe() sweeps it rather than trusting it. */
 #define LINK_MUX_USART6  8
+
+/* Park a link pin as an input, or hold it low open-drain. Open-drain only: this
+ * pin may be tied to a peer that is also driving. */
+void link_hold(uint8_t pin_sel, bool drive_low);
 
 void link_configure_mux(link_mode_t mode, uint32_t baud, uint8_t mux);
 void link_configure(link_mode_t mode, uint32_t baud);
@@ -124,6 +147,7 @@ void link_probe(link_mode_t mode, uint32_t baud, link_probe_t *out);
  * the clock, the MUX8 mapping, the divider and the open-drain drive against the
  * fitted pull-up. In a full-duplex mode it needs either a TP1-TP2 jumper or a
  * peer that is echoing. */
-void link_selftest(link_mode_t mode, uint32_t baud, uint16_t nbytes, link_test_t *out);
+void link_selftest(link_mode_t mode, uint32_t baud, uint16_t nbytes,
+                   link_role_t role, uint16_t timeout_ms, link_test_t *out);
 
 #endif

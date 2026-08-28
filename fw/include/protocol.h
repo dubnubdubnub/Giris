@@ -37,7 +37,9 @@ enum {
   CMD_BURST_READ   = 0x06,  /* args: [2..3]=sample offset LE -> RSP_BURST_DATA */
   CMD_BURST_ABORT  = 0x07,
   CMD_SEQ_SET      = 0x08,  /* args [2..5] = ADC channel for rank 1..4 */
-  CMD_LINK_TEST    = 0x09,  /* args: [2]=link_mode_t, [3..6]=baud LE, [7..8]=nbytes LE */
+  CMD_LINK_TEST    = 0x09,  /* args: [2]=link_mode_t, [3..6]=baud LE, [7..8]=nbytes LE,
+                             *       [9]=link_role_t (0 loop, 1 tx, 2 rx), [10..11]=rx timeout ms */
+  CMD_LINK_HOLD    = 0x0B,  /* args: [2]=pin (0 PC6/D-, 1 PC7/D+), [3]=1 hold low, 0 release */
   CMD_LINK_PROBE   = 0x0A,  /* args: [2]=link_mode_t, [3..6]=baud LE -> RSP_PROBE */
   CMD_BOOTLOADER   = 0x7E,  /* jump to the ROM DFU — no buttons needed */
 };
@@ -82,7 +84,8 @@ enum {
  *   [28..32] ordinary-sequence channel order, rank 1..5
  *   [33..44] the 96-bit factory UID, low word first
  *   [45..46] uid_tag LE — the 16-bit condensation used for link arbitration
- *   [47]     link sense: bit0 = PB12 /LM_ST, bit1 = PB10 /AP_FAULT
+ *   [47]     link sense: bit0 = PB12 /LM_ST, bit1 = PB10 /AP_FAULT,
+ *            bit2 = PC13 AP22653 EN, bit3 = PC6 pad, bit4 = PC7 pad
  *
  * Two halves run one image, so every field above that is not identical between
  * them is the interesting one. The UID is what makes a report attributable.

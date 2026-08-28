@@ -18,6 +18,12 @@ void link_init(void)
   gi.gpio_mode = GPIO_MODE_INPUT;
   gi.gpio_pull = GPIO_PULL_NONE;
   gpio_init(GPIOB, &gi);
+
+  /* PC13 / AP22653 EN, input, NO PULL. The fitted part is the active-high
+   * variant, so a pull-up here would source 5 V out of J1. Reading it tells us
+   * whether R10 is actually holding it down. */
+  gi.gpio_pins = PWR_SOURCE_EN_PIN;
+  gpio_init(PWR_SOURCE_EN_PORT, &gi);
 }
 
 uint8_t link_sense(void)
@@ -25,7 +31,28 @@ uint8_t link_sense(void)
   uint8_t s = 0;
   if (gpio_input_data_bit_read(LINK_POWERED_PORT, LINK_POWERED_PIN)) s |= 1u;
   if (gpio_input_data_bit_read(PWR_FAULT_PORT, PWR_FAULT_PIN))       s |= 2u;
+  if (gpio_input_data_bit_read(PWR_SOURCE_EN_PORT, PWR_SOURCE_EN_PIN)) s |= 4u;
+  if (gpio_input_data_bit_read(LINK_PORT, LINK_PIN_PC6))               s |= 8u;
+  if (gpio_input_data_bit_read(LINK_PORT, LINK_PIN_PC7))               s |= 16u;
   return s;
+}
+
+void link_hold(uint8_t pin_sel, bool drive_low)
+{
+  const uint16_t pin = pin_sel ? LINK_PIN_PC7 : LINK_PIN_PC6;
+
+  usart_enable(USART6, FALSE);
+  current_mode = LINK_MODE_OFF;
+
+  gpio_init_type gi;
+  gpio_default_para_init(&gi);
+  gi.gpio_pins           = pin;
+  gi.gpio_mode           = drive_low ? GPIO_MODE_OUTPUT : GPIO_MODE_INPUT;
+  gi.gpio_out_type       = GPIO_OUTPUT_OPEN_DRAIN;
+  gi.gpio_pull           = GPIO_PULL_NONE;
+  gi.gpio_drive_strength = GPIO_DRIVE_STRENGTH_STRONGER;
+  if (drive_low) gpio_bits_reset(LINK_PORT, pin);
+  gpio_init(LINK_PORT, &gi);
 }
 
 static void pins_release(void)
@@ -180,7 +207,8 @@ static uint8_t collect_errors(void)
   return e;
 }
 
-void link_selftest(link_mode_t mode, uint32_t baud, uint16_t nbytes, link_test_t *out)
+void link_selftest(link_mode_t mode, uint32_t baud, uint16_t nbytes,
+                   link_role_t role, uint16_t timeout_ms, link_test_t *out)
 {
   for (uint32_t i = 0; i < sizeof(*out); i++) ((uint8_t *)out)[i] = 0;
   out->mode = (uint8_t)mode;
@@ -188,6 +216,48 @@ void link_selftest(link_mode_t mode, uint32_t baud, uint16_t nbytes, link_test_t
 
   if (mode == LINK_MODE_OFF || nbytes == 0) return;
   link_configure(mode, baud);
+
+  if (role == LINK_ROLE_TX) {
+    for (uint16_t i = 0; i < nbytes; i++) {
+      uint32_t guard = system_core_clock / 100u;      /* 10 ms, bounded */
+      while (usart_flag_get(USART6, USART_TDBE_FLAG) == RESET && guard) guard--;
+      if (!guard) { out->timeouts++; break; }
+      usart_data_transmit(USART6, (uint8_t)i);
+      out->sent++;
+    }
+    uint32_t guard = system_core_clock / 100u;
+    while (usart_flag_get(USART6, USART_TDC_FLAG) == RESET && guard) guard--;
+    goto done;
+  }
+
+  if (role == LINK_ROLE_RX) {
+    /* Turn the transmitter OFF while listening. In single-wire half-duplex the
+     * TX pin is the bus, and if this silicon gates the receiver on TEN — which
+     * would also explain why it never echoes itself — a listener with TEN=1 is
+     * deaf. Costs nothing in full duplex, where the two are independent. */
+    usart_transmitter_enable(USART6, FALSE);
+    usart_receiver_enable(USART6, TRUE);
+    (void)usart_data_receive(USART6);
+    usart_flag_clear(USART6, USART_ROERR_FLAG | USART_FERR_FLAG |
+                             USART_NERR_FLAG  | USART_PERR_FLAG);
+
+    /* Blocks the main loop for up to timeout_ms. USB transfers keep running out
+     * of the DWC2 ISR; only tud_task() stalls, and nothing needs it meanwhile. */
+    const uint32_t limit = (system_core_clock / 1000u) * (uint32_t)timeout_ms;
+    const uint32_t t0 = DWT->CYCCNT;
+    while (out->received < nbytes && (DWT->CYCCNT - t0) < limit) {
+      if (usart_flag_get(USART6, USART_RDBF_FLAG) != SET) continue;
+      const uint8_t rx = (uint8_t)usart_data_receive(USART6);
+      const uint8_t want = (uint8_t)out->received;
+      out->received++;
+      if (rx != want) {
+        out->mismatched++;
+        if (out->mismatched == 1) { out->first_bad_tx = want; out->first_bad_rx = rx; }
+      }
+    }
+    if (out->received < nbytes) out->timeouts = (uint16_t)(nbytes - out->received);
+    goto done;
+  }
 
   /* Two full byte periods is a generous ceiling at any baud on this ladder and
    * still bounded: 17 us at 9 Mbaud, 174 us at 115200. */
@@ -222,6 +292,7 @@ void link_selftest(link_mode_t mode, uint32_t baud, uint16_t nbytes, link_test_t
     }
   }
 
+done:
   out->err_flags = collect_errors();
   out->sts   = USART6->sts;
   out->ctrl1 = USART6->ctrl1;

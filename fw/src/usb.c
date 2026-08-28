@@ -284,8 +284,13 @@ void tud_hid_set_report_cb(uint8_t instance, uint8_t report_id,
       if (baud < 9600u || baud > 13500000u) baud = LINK_DISCOVERY_BAUD;
       if (nbytes == 0 || nbytes > 4096u)    nbytes = 256u;
 
+      const link_role_t role = (link_role_t)buffer[9];
+      uint16_t tmo;
+      memcpy(&tmo, &buffer[10], 2);
+      if (tmo == 0 || tmo > 5000u) tmo = 750u;
+
       link_test_t t;
-      link_selftest((link_mode_t)buffer[2], baud, nbytes, &t);
+      link_selftest((link_mode_t)buffer[2], baud, nbytes, role, tmo, &t);
 
       /* Park the pins again. Leaving PC6/PC7 driven push-pull between tests is
        * how you find out the hard way that the peer was mid-transmission. */
@@ -293,6 +298,11 @@ void tud_hid_set_report_cb(uint8_t instance, uint8_t report_id,
       send_link(tag, &t);
       break;
     }
+
+    case CMD_LINK_HOLD:
+      link_hold(buffer[2], buffer[3] != 0);
+      send_info(tag);
+      break;
 
     case CMD_LINK_PROBE: {
       uint32_t baud;
