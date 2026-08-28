@@ -106,7 +106,17 @@ enum {
 
 /* RSP_SNAPSHOT body: [4..7] u32 frame_index, [8..] u16 slot[PROTO_NUM_SLOTS] raw
  * in hardware scan order, then at fixed offsets [48] phase_errors u32 and
- * [52] tx_dropped u32. Deliberately raw and unmapped, for debugging the mux. */
+ * [52] tx_dropped u32. Deliberately raw and unmapped, for debugging the mux.
+ *
+ * A snapshot is ALWAYS answered, even when the scan engine cannot produce a
+ * frame — silence is not a diagnosis:
+ *   [56]     flags: bit0 = the frame read failed, so [4..47] are zeros
+ *   [57..60] adc_read_failures LE
+ *   [61]     low byte of the raw seqlock counter; odd means the writer is stuck
+ *            mid-update, which is the only way the read fails four times running */
+#define PROTO_SNAP_FLAGS      56
+#define PROTO_SNAP_READ_FAIL  57
+#define PROTO_SNAP_SEQ_LSB    61
 
 /* Burst capture: one slot, sampled as fast as the ADC allows, into SRAM. */
 #define PROTO_BURST_MAX       8192

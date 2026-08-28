@@ -79,7 +79,13 @@ def snapshot(d):
     send(d, CMD_SNAPSHOT)
     r = wait(d, RSP_SNAPSHOT)
     if not r:
-        sys.exit("no snapshot")
+        sys.exit("no snapshot — device did not answer at all (firmware predates "
+                 "the always-answer fix, or the HID pipe is wedged)")
+    if r[56] & 1:
+        fails = struct.unpack_from("<I", r, 57)[0]
+        sys.exit(f"scan engine is not producing frames: {fails} read failures, "
+                 f"seqlock lsb 0x{r[61]:02X}"
+                 + (" (ODD - writer stuck mid-update)" if r[61] & 1 else ""))
     return struct.unpack_from("<I", r, 4)[0], struct.unpack_from("<I", r, 52)[0]
 
 
