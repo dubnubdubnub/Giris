@@ -25,7 +25,7 @@ superloop cannot hold a 125 µs deadline once a link and RGB are added.
 | Base | Clean-room C on Artery BSP (BSD-3) + TinyUSB (MIT), CMake. libhmk as a read-only reference. |
 | Scheduling | SOF-phased interrupt pipeline, strict NVIC priority hierarchy, lock-free SPSC handoff |
 | Split cut point | **Semi-smart peripheral**: each half owns analog→key-position; centre owns keymap/layers/HID |
-| Link | Fixed-size full-duplex isochronous frames on **USART6 at 9 Mbaud**, DMA + IDLE-line, CRC-16; 115200 open-drain only for discovery |
+| Link | Fixed-size full-duplex isochronous frames on **USART6 at 12 Mbaud**, DMA both ways, hardware CRC-32; 115200 open-drain only for discovery |
 | Roles | **Symmetric peers + transferable input-owner token.** Master/slave survives only as a *power* concept |
 | Config transport | Own protocol over a dedicated raw-HID interface (vendor usage page), WebHID |
 | Configurator | Own web app, self-describing device (gzipped keyboard metadata in flash) |
@@ -688,8 +688,11 @@ ring; the link takes `DMA1_CHANNEL2` with `DMAMUX_DMAREQ_ID_USART6_RX`.
    60 s at 12 Mbaud: 1198 ping/pong exchanges each, exactly the designed 20/s, **zero CRC errors, zero
    drops, zero re-switches.** The handshake costs a few CRC errors and at most one drop while the peer
    changes rate under it, then converges within a second and stays converged.
-4. **Next:** framing — fixed-size isochronous frames, DMA + IDLE-line, CRC-16, and the SOF phase servo.
-5. Then the peer/token model and topology detection.
+4. ~~Framing — fixed-size isochronous frames into a circular DMA ring.~~ **Done.** 48-byte frames, both
+   directions, paced by each half's own 8 kHz ADC tick. See §7a.
+5. **Next:** the peer/token model and topology detection. `SPLIT_F_HOST` already rides in every frame,
+   which is the one input topology detection cannot work out locally.
+6. Then the SOF phase servo, if the measured jitter ever justifies it — see §7a.
 
 ### Three things the arbitration design had to work around
 
@@ -716,6 +719,130 @@ otherwise it walks stale bytes and re-acts on a COMMIT it already handled, which
 report five switches for one handshake.
 
 ---
+
+## 13b. Framing: the run-phase data plane as built (2026-08-28)
+
+`split.c` is what actually crosses J1 once `peer.c` has both halves at 12 Mbaud. Three deviations from
+the plan in §5, all of them things the hardware or the measurement decided rather than the design.
+
+**48 bytes, not 40, and CRC-32 rather than CRC-16.** The architecture doc costed CRC-16/CCITT on the
+hardware CRC unit. That unit turns out to have a programmable polynomial (`CRC_POLY`, `POLY_SIZE` = 16b),
+so CRC-16 *was* available — but its reset default is already the 32-bit Ethernet polynomial, it consumes
+a **word** per write, and header + payload is 44 bytes = 11 words exactly. CRC-32 therefore costs the
+same eleven register writes CRC-16 would have, needs no configuration at all, and detects every burst up
+to 32 bits instead of 16. The two extra bytes are what makes the frame word-aligned in the first place.
+
+| | |
+|---|---|
+| `0` sync | `0x5A` — deliberately *not* `peer.c`'s `0xA5`, so a control frame left in the ring across a rate change can never be parsed as data |
+| `1` flags | keys / test-pattern / **this half has a host** |
+| `2..3` seq | the receiver's only drop detector |
+| `4..7` ctrl | piggybacked control channel: token transfer, layer state and lock LEDs ride here rather than on frames of their own, so the wire has exactly **one** frame shape |
+| `8..43` keys | 32 × 9 bits = 36 bytes exactly — the reason §5 chose centi-mm |
+| `44..47` crc | hardware CRC-32 over bytes 0..43 |
+
+48 bytes at 12 Mbaud 8N1 = 480 bit-times = **40 µs**, against a 125 µs period: 32 % duty each way, and
+the wire is idle for 85 µs between frames.
+
+**No IDLE-line interrupt.** §5 specified IDLE-line delimiting. Clearing `IDLEF` requires reading `STS`
+and then `DT` (RM 12.6.1), and with the receive DMA live that `DT` read races the DMA's own: the CPU
+read clears `RDBF` and the DMA request for that byte is simply lost. The delimiting is done in software
+instead, and it costs nothing — with an 85 µs gap between 40 µs frames the alignment is never in doubt.
+
+**The receiver slides one byte on a rejected frame, not 48.** This is the part that would have been a
+long-lived bug. Discovery frames are rare and separated by milliseconds, so the ring always starts on a
+real sync byte and discarding a whole failed frame is free. Data frames are back-to-back at 8 kHz with
+9-bit-packed payloads, and `0x5A` turns up *inside* a payload roughly one frame in five. Consuming 48
+bytes from a false sync would swallow the genuine sync behind it — and then the next, and the next: a
+link that mis-frames once would stay mis-framed. Sliding by one costs a CRC per false sync (tens of
+nanoseconds) and re-locks inside a single frame period.
+
+**Pacing is the ADC's own 8 kHz tick, not SOF.** `split_tx_due()` compares the published ADC frame index
+against the last one sent. The frame therefore carries data at most one scan old, and the link rate
+cannot drift against the scan rate because it *is* the scan rate. The SOF phase servo §6 anticipates is
+still unbuilt, and the jitter measured below does not yet justify it.
+
+### What it measures
+
+Sequence numbers give drop detection; a deterministic payload generated from the sequence number alone
+gives something a CRC cannot — it separates *corrupted and correctly discarded* from **accepted and
+still wrong**:
+
+| Counter | Meaning |
+|---|---|
+| `crc_errors` | a frame arrived corrupted and was thrown away. Small counts while re-locking are normal |
+| `seq_gaps` | frames the peer's own sequence numbers say never arrived |
+| `payload_errors` | good CRC, wrong contents. **Must be zero.** Anything else means a frame was accepted that was not the frame that was sent |
+| `period_max_us` | worst inter-arrival — in practice, the longest the receiving half's main loop ever went without servicing the ring |
+
+### The 9 ms debug print
+
+First measurement of the framed link, both halves running:
+
+```
+5C13 rx 7,806/s   gaps +96/s (1.2 %)   crc 0   bad 0   inter-arrival 8 .. 8,645 us
+5113 rx 7,805/s   gaps +96/s (1.2 %)   crc 0   bad 0   inter-arrival 8 .. 8,676 us
+```
+
+Zero corruption, but 1.2 % of frames simply never arrived, and the worst gap was **8.6 ms** — pinned to
+that value, never growing, so periodic rather than random. Frames arriving 8 µs apart said the receiver
+was draining several at once after a stall rather than losing them on the wire.
+
+The cause was `main.c`'s periodic status line. `console_puts()` is a **blocking** polled write at
+115200, and a ~100-character line stops the main loop for ~9 ms; the 512-byte ring holds 10.6 frames, so
+everything past ~1.3 ms was lost. A first-light debug print nobody was reading was costing 96 frames a
+second. Deleted — everything it printed is available over USB (`CMD_SNAPSHOT`, `RSP_INFO`).
+
+> The general lesson, worth keeping: once the main loop has a real-time obligation, **any blocking
+> console write is a fault**, not a diagnostic. The link's own jitter counter is what found it.
+
+### After
+
+```
+5C13 rx 8,001.1/s  gaps 0  crc 0  resync 0  bad 0  inter-arrival 103 / 126 / 155 us
+5113 rx 8,001.3/s  gaps 0  crc 0  resync 0  bad 0  inter-arrival 103 / 126 / 155 us
+```
+
+8 kHz both ways with nothing lost, and ±30 µs of jitter against a 125 µs period — comfortably inside one
+microframe, which is why the SOF servo stays on the shelf for now.
+
+End-to-end, live sensor data rather than a test pattern — each half's own ADC slots against what the
+other half received:
+
+```
+5C13 own slots >>3 :  234  242  258    1  233  243  242
+5113 received      :  234  242  258    1  233  244  242      max difference 1 count
+5113 own slots >>3 :  255  255  255    1  254  258  255
+5C13 received      :  255  255  255    1  254  258  255      max difference 0 counts
+```
+
+### The soak
+
+180 s, both halves in test-pattern mode so every accepted frame is checked against a payload
+regenerated from its own sequence number:
+
+```
+5C13:  tx 1,440,112 (8,000/s)   rx 1,440,114 (8,000/s)
+5113:  tx 1,440,112 (8,000/s)   rx 1,440,110 (8,000/s)
+       frames lost   0   (0.0000 %)
+       crc rejects   0
+       resync slides 0 bytes
+       payload errs  0
+       inter-arrival 83 / 128 / 171 us   and   84 / 123 / 159 us   (min/last/max)
+```
+
+**2,880,224 frames, zero errors of every kind**, over the 3 m cable. That is 1.38 × 10⁹ bit-times
+without a single one going astray, so by the rule of three the bit error rate is **below 2 × 10⁻⁹ at
+95 % confidence** — which is a bound set by how long the test ran, not by anything the link did.
+
+Worst inter-arrival 171 µs against a 125 µs nominal: **+46 µs, or 37 % of one microframe.** That is the
+receiving half's main-loop servicing latency, not wire jitter, and it is the number the SOF phase servo
+would improve. It does not need improving yet.
+
+**The unit is provisional and the index is provisional.** There is no travel pipeline yet, so what ships
+today is the raw 12-bit count shifted to 9 bits, and key *index* is hardware scan order because the
+keymap layer that would give these positions names does not exist either. The transport is final; the
+semantics are not.
 
 ## 14. Updating the half that has no host (topology a)
 

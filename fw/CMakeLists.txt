@@ -36,6 +36,7 @@ add_executable(giris.elf
   src/uid.c
   src/link.c
   src/peer.c
+  src/split.c
   ${TUSB}/src/tusb.c
   ${TUSB}/src/common/tusb_fifo.c
   ${TUSB}/src/device/usbd.c
@@ -52,6 +53,7 @@ add_executable(giris.elf
   ${DRIVERS}/src/at32f402_405_dma.c
   ${DRIVERS}/src/at32f402_405_tmr.c
   ${DRIVERS}/src/at32f402_405_usart.c
+  ${DRIVERS}/src/at32f402_405_crc.c
 )
 
 target_include_directories(giris.elf PRIVATE

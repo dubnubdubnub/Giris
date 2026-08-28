@@ -231,6 +231,7 @@ static uint32_t read_failures;
 
 uint32_t adc_read_failures(void) { return read_failures; }
 uint32_t adc_seq_raw(void)       { return pub_seq; }
+uint32_t adc_frame_index(void)   { return pub_frame; }
 
 bool adc_read_frame(adc_frame_t *out)
 {

@@ -18,6 +18,7 @@
 #include "uid.h"
 #include "link.h"
 #include "peer.h"
+#include "split.h"
 #include "board.h"
 #include "clock.h"
 #include "protocol.h"
@@ -344,6 +345,36 @@ void tud_hid_set_report_cb(uint8_t instance, uint8_t report_id,
       memcpy(&p[28], &ps.switches, 4);
       memcpy(&p[32], &ps.drops, 4);
       memcpy(&p[36], &ps.last_rx_ms, 4);
+      tx_commit();
+      break;
+    }
+
+    case CMD_SPLIT: {
+      if (buffer[2] == 1) split_set_test(true);
+      else if (buffer[2] == 2) split_set_test(false);
+
+      split_stats_t ss;
+      split_stats(&ss);
+      uint8_t *p = tx_begin(RSP_SPLIT, tag);
+      memcpy(&p[4],  &ss.tx_frames, 4);
+      memcpy(&p[8],  &ss.rx_frames, 4);
+      memcpy(&p[12], &ss.crc_errors, 4);
+      memcpy(&p[16], &ss.seq_gaps, 4);
+      memcpy(&p[20], &ss.resyncs, 4);
+      memcpy(&p[24], &ss.payload_errors, 4);
+      memcpy(&p[28], &ss.age_us, 4);
+      memcpy(&p[32], &ss.period_us, 4);
+      memcpy(&p[36], &ss.period_max_us, 4);
+      memcpy(&p[40], &ss.period_min_us, 4);
+      memcpy(&p[44], &ss.peer_seq, 2);
+      p[46] = ss.peer_flags;
+      p[47] = ss.stale;
+      p[48] = split_test_enabled() ? 1u : 0u;
+
+      const uint32_t room = (PROTO_REPORT_SIZE - PROTO_SPLIT_KEYS) / 2u;
+      const uint32_t n    = (room < SPLIT_KEYS) ? room : SPLIT_KEYS;
+      p[49] = (uint8_t)n;
+      memcpy(&p[PROTO_SPLIT_KEYS], split_peer_keys(), n * 2u);
       tx_commit();
       break;
     }

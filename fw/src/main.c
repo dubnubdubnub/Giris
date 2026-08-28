@@ -17,6 +17,7 @@
 #include "uid.h"
 #include "link.h"
 #include "peer.h"
+#include "split.h"
 #include "usb.h"
 #include "console.h"
 #include "tusb.h"
@@ -150,23 +151,20 @@ int main(void)
   sk6812_write(leds, LED_COUNT);
   adc_resync();
 
-  uint32_t last_report = 0;
-
+  /* No periodic console heartbeat. It was a first-light aid and USB telemetry
+   * replaced it long ago, but it survived into the run phase and cost dearly:
+   * console_puts() is a blocking polled write at 115200, so a ~100-character
+   * status line stops the main loop for ~9 ms. Measured against the split link
+   * that was 96 lost frames per second — 1.2 % of an 8 kHz stream, and a
+   * worst-case inter-arrival of 8.6 ms — from a debug print nobody was reading.
+   * Everything it printed is available over USB: CMD_SNAPSHOT for the frame
+   * index and slots, RSP_INFO for the phase error count. */
   for (;;) {
     usb_task();
+    /* Rides in every link frame. Both halves setting it is topology (b) — the
+     * dual-host case — and it is the one input topology detection needs that
+     * cannot be worked out locally. */
+    split_set_host(tud_mounted());
     peer_task();
-
-    adc_frame_t hb;
-    adc_read_frame(&hb);
-    if (++last_report > 150000u) {
-      last_report = 0;
-      console_puts("frame ");
-      console_dec(hb.frame);
-      console_puts("  slots");
-      for (int i = 0; i < PROTO_NUM_SLOTS; i++) { console_puts(" "); console_dec(hb.slot[i]); }
-      console_puts("  phase_err ");
-      console_dec(adc_phase_errors());
-      console_puts(tud_mounted() ? "  usb=mounted\n" : "  usb=down\n");
-    }
   }
 }
