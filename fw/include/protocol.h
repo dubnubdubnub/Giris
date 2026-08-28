@@ -41,6 +41,7 @@ enum {
                              *       [9]=link_role_t (0 loop, 1 tx, 2 rx), [10..11]=rx timeout ms */
   CMD_LINK_HOLD    = 0x0B,  /* args: [2]=pin (0 PC6/D-, 1 PC7/D+), [3]=1 hold low, 0 release */
   CMD_PEER         = 0x0C,  /* args: [2]=0 query, 1 enable+restart, 2 disable -> RSP_PEER */
+  CMD_SPLIT        = 0x0D,  /* args: [2]=0 query, 1 test pattern on, 2 off -> RSP_SPLIT */
   CMD_LINK_PROBE   = 0x0A,  /* args: [2]=link_mode_t, [3..6]=baud LE -> RSP_PROBE */
   CMD_BOOTLOADER   = 0x7E,  /* jump to the ROM DFU — no buttons needed */
 };
@@ -56,6 +57,7 @@ enum {
   RSP_LINK         = 0x89,
   RSP_PROBE        = 0x8A,
   RSP_PEER         = 0x8B,
+  RSP_SPLIT        = 0x8C,
   RSP_ERROR        = 0xEE,
 };
 
@@ -136,6 +138,31 @@ enum {
  *   [32..35] drops back to discovery LE
  *   [36..39] ms since the last valid frame from the peer LE */
 #define PROTO_PEER_STATE   4
+
+/* RSP_SPLIT body — the run-phase data plane. Only meaningful while RSP_PEER
+ * says state 5. The two numbers that decide whether the split is sound are
+ * [36..39] period_max_us, which should sit near 125, and [24..27]
+ * payload_errors, which must be exactly zero.
+ *   [4..7]   frames transmitted LE
+ *   [8..11]  frames received and accepted LE
+ *   [12..15] CRC rejects LE  (a small count while re-locking is normal)
+ *   [16..19] sequence gaps — frames the peer sent that never arrived LE
+ *   [20..23] resync slides, in bytes LE
+ *   [24..27] payload errors: good CRC, wrong contents. MUST be 0 LE
+ *   [28..31] us since the last accepted frame LE
+ *   [32..35] most recent inter-arrival, us LE
+ *   [36..39] worst inter-arrival, us LE   <- the jitter figure
+ *   [40..43] best inter-arrival, us LE
+ *   [44..45] peer sequence number LE
+ *   [46]     peer frame flags: bit0 keys, bit1 test pattern, bit2 peer has a host
+ *   [47]     peer key data is stale (older than 5 ms)
+ *   [48]     1 if we are sending the test pattern
+ *   [49]     how many peer key values follow
+ *   [50..63] peer key values, u16 LE — 7 of them, which is all a 64-byte
+ *            report has room for. Enough for the 6-key dev board; the 32-key
+ *            build will need a paged read. */
+#define PROTO_SPLIT_TX     4
+#define PROTO_SPLIT_KEYS   50
 
 /* Burst capture: one slot, sampled as fast as the ADC allows, into SRAM. */
 #define PROTO_BURST_MAX       8192

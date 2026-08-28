@@ -148,11 +148,14 @@ void link_probe(link_mode_t mode, uint32_t baud, link_probe_t *out);
 /* Sends 0x00..0xFF (nbytes of them, wrapping) one at a time and reads back what
  * the line returns, byte for byte.
  *
- * In a half-duplex mode the receiver is on the wire being driven, so a lone board
- * hears its own transmission: this passes with nothing plugged into J1 and proves
- * the clock, the MUX8 mapping, the divider and the open-drain drive against the
- * fitted pull-up. In a full-duplex mode it needs either a TP1-TP2 jumper or a
- * peer that is echoing. */
+ * LINK_ROLE_LOOPBACK does NOT work on this silicon. RM 12.2 says TX and SW_RX are
+ * interconnected in half-duplex, which reads like a lone board should hear its own
+ * transmission — measured, it does not: SLBEN=1 TEN=1 REN=1, STS=0x00C0, and RDBF
+ * never sets, at any baud, open-drain or push-pull. Every mode here therefore needs
+ * a real peer (LINK_ROLE_TX on one board, LINK_ROLE_RX on the other) or, for the
+ * full-duplex modes, a TP1-TP2 jumper. The consequence for the protocol is in
+ * peer.h: collisions on the discovery bus cannot be detected, so they are made
+ * impossible instead. */
 void link_selftest(link_mode_t mode, uint32_t baud, uint16_t nbytes,
                    link_role_t role, uint16_t timeout_ms, link_test_t *out);
 

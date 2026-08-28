@@ -24,6 +24,11 @@ uint32_t adc_phase_errors(void);
  * frame index means the scan engine has stopped. */
 uint32_t adc_read_failures(void);
 uint32_t adc_seq_raw(void);
+
+/* Just the published frame index — one volatile read, no seqlock retry and no
+ * 10-slot copy. The split link paces itself off this, so it is called every
+ * time round the main loop and adc_read_frame() would be far too heavy. */
+uint32_t adc_frame_index(void);
 bool adc_calibration_failed(void);
 
 /* Realign the DMA ring with the mux SEL phase. Call after anything that blocks

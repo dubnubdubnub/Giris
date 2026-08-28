@@ -5,6 +5,7 @@
 #include "link.h"
 #include "uid.h"
 #include "peer.h"
+#include "split.h"
 
 /* ------------------------------------------------------------ wire format */
 /* Fixed 16 bytes so the receiver never has to parse a length it has not
@@ -68,7 +69,11 @@ static void ms_tick(void)
 static uint32_t since(uint32_t stamp) { return ms_now - stamp; }
 
 /* ------------------------------------------------------------------ state */
-#define RX_RING_LEN   256          /* power of two: the DMA counter maps directly */
+/* Power of two: the DMA counter maps directly onto the index. 512 bytes is
+ * 10.6 run-phase frames, i.e. 1.3 ms of slack before the DMA laps the reader —
+ * the main loop would have to stall for longer than USB's own bus-turnaround
+ * budget before anything is lost. */
+#define RX_RING_LEN   512
 static uint8_t  rx_ring[RX_RING_LEN];
 static uint16_t rx_read;
 static uint8_t  asm_buf[PEER_FRAME_LEN];
@@ -76,6 +81,14 @@ static uint8_t  asm_len;
 
 static uint8_t  tx_buf[PEER_FRAME_LEN];
 static bool     tx_busy;
+
+/* The CRC unit consumes words, so the frame the scanner hands to split_rx()
+ * has to be word-aligned. It is copied out of the ring rather than parsed in
+ * place because a frame can straddle the wrap. */
+static union {
+  uint32_t w[SPLIT_FRAME_LEN / 4];
+  uint8_t  b[SPLIT_FRAME_LEN];
+} rx_frame;
 
 static peer_state_t state = PEER_DISCOVER;
 static peer_role_t  role  = PEER_ROLE_UNKNOWN;
@@ -132,9 +145,9 @@ static uint16_t rx_write_index(void)
   /* Mask. In circular mode the counter reloads to RX_RING_LEN rather than
    * resting at 0, so the raw subtraction yields 0 for "empty" but ALSO yields
    * RX_RING_LEN itself at the reload instant — a value rx_read, which is masked
-   * to 0..255, can never equal. The scan loop then never terminates and the
-   * whole main loop stops, taking tud_task() with it: the board simply never
-   * enumerates. Cost one hung board to find. */
+   * to 0..RX_RING_LEN-1, can never equal. The scan loop then never terminates
+   * and the whole main loop stops, taking tud_task() with it: the board simply
+   * never enumerates. Cost one hung board to find. */
   return (uint16_t)((RX_RING_LEN - dma_data_number_get(DMA1_CHANNEL2)) & (RX_RING_LEN - 1u));
 }
 
@@ -152,6 +165,29 @@ static void mode_for(uint32_t baud, bool run)
   cur_baud = baud;
 }
 
+static void tx_raw(const void *buf, uint32_t len)
+{
+  usart_flag_clear(USART6, USART_TDC_FLAG);
+  dma_reset(DMA1_CHANNEL3);
+  dma_init_type d;
+  dma_default_para_init(&d);
+  d.buffer_size           = (uint16_t)len;
+  d.direction             = DMA_DIR_MEMORY_TO_PERIPHERAL;
+  d.memory_base_addr      = (uint32_t)buf;
+  d.memory_data_width     = DMA_MEMORY_DATA_WIDTH_BYTE;
+  d.memory_inc_enable     = TRUE;
+  d.peripheral_base_addr  = (uint32_t)&USART6->dt;
+  d.peripheral_data_width = DMA_PERIPHERAL_DATA_WIDTH_BYTE;
+  d.peripheral_inc_enable = FALSE;
+  d.priority              = DMA_PRIORITY_MEDIUM;
+  d.loop_mode_enable      = FALSE;
+  dma_init(DMA1_CHANNEL3, &d);
+  dmamux_init(DMA1MUX_CHANNEL3, DMAMUX_DMAREQ_ID_USART6_TX);
+  dma_channel_enable(DMA1_CHANNEL3, TRUE);
+  usart_dma_transmitter_enable(USART6, TRUE);
+  tx_busy = true;
+}
+
 static void tx_frame(uint8_t type, uint16_t dst, uint32_t arg)
 {
   peer_frame_t f;
@@ -166,26 +202,7 @@ static void tx_frame(uint8_t type, uint16_t dst, uint32_t arg)
   const uint16_t c = crc16(tx_buf, PEER_FRAME_LEN - 2);
   tx_buf[PEER_FRAME_LEN - 2] = (uint8_t)(c & 0xFFu);
   tx_buf[PEER_FRAME_LEN - 1] = (uint8_t)(c >> 8);
-
-  usart_flag_clear(USART6, USART_TDC_FLAG);
-  dma_reset(DMA1_CHANNEL3);
-  dma_init_type d;
-  dma_default_para_init(&d);
-  d.buffer_size           = PEER_FRAME_LEN;
-  d.direction             = DMA_DIR_MEMORY_TO_PERIPHERAL;
-  d.memory_base_addr      = (uint32_t)tx_buf;
-  d.memory_data_width     = DMA_MEMORY_DATA_WIDTH_BYTE;
-  d.memory_inc_enable     = TRUE;
-  d.peripheral_base_addr  = (uint32_t)&USART6->dt;
-  d.peripheral_data_width = DMA_PERIPHERAL_DATA_WIDTH_BYTE;
-  d.peripheral_inc_enable = FALSE;
-  d.priority              = DMA_PRIORITY_MEDIUM;
-  d.loop_mode_enable      = FALSE;
-  dma_init(DMA1_CHANNEL3, &d);
-  dmamux_init(DMA1MUX_CHANNEL3, DMAMUX_DMAREQ_ID_USART6_TX);
-  dma_channel_enable(DMA1_CHANNEL3, TRUE);
-  usart_dma_transmitter_enable(USART6, TRUE);
-  tx_busy = true;
+  tx_raw(tx_buf, PEER_FRAME_LEN);
 }
 
 static bool tx_done(void)
@@ -242,6 +259,49 @@ static void rx_scan(void)
   }
 }
 
+/* The run phase has one frame shape and no control traffic, so this is a
+ * different scanner from the discovery one above, in one way that matters:
+ * **on a rejected frame it slides forward by a single byte, not by 48.**
+ *
+ * Discovery frames are rare and separated by milliseconds of silence, so the
+ * ring always starts at a real sync byte and discarding a whole failed frame
+ * costs nothing. Data frames are back to back at 8 kHz with 9-bit-packed
+ * payloads, and 0x5A turns up inside a payload roughly one frame in five.
+ * Consuming 48 bytes from a false sync would swallow the genuine sync behind
+ * it — and then the next one, and the next: a link that mis-frames once stays
+ * mis-framed. Sliding by one costs a CRC per false sync (eleven register
+ * writes, tens of nanoseconds) and re-locks inside a single frame period. */
+static void rx_scan_run(void)
+{
+  const uint16_t w = rx_write_index();
+  /* Normal service accepts one frame per pass; 64 bounds the pathological case
+   * to roughly 60 us of main loop rather than the 475 us a full-ring guard
+   * would allow. Anything left over is picked up next time round. */
+  uint32_t guard = 64u;
+  while (guard--) {
+    if ((uint16_t)((w - rx_read) & (RX_RING_LEN - 1u)) < SPLIT_FRAME_LEN) break;
+
+    if (rx_ring[rx_read] != SPLIT_SYNC) {
+      rx_read = (uint16_t)((rx_read + 1u) & (RX_RING_LEN - 1u));
+      split_note_resync();
+      continue;
+    }
+
+    for (uint32_t i = 0; i < SPLIT_FRAME_LEN; i++)
+      rx_frame.b[i] = rx_ring[(rx_read + i) & (RX_RING_LEN - 1u)];
+
+    if (!split_rx(rx_frame.b)) {
+      rx_read = (uint16_t)((rx_read + 1u) & (RX_RING_LEN - 1u));
+      split_note_resync();
+      continue;
+    }
+
+    rx_read = (uint16_t)((rx_read + SPLIT_FRAME_LEN) & (RX_RING_LEN - 1u));
+    st.frames_rx++;
+    t_rx = ms_now;
+  }
+}
+
 static void assign_roles(uint16_t other)
 {
   peer_tag = other;
@@ -290,6 +350,7 @@ static bool on_frame(const peer_frame_t *f)
       if (role == PEER_ROLE_B && f->dst == my_tag) {
         run_baud = f->arg;
         mode_for(run_baud, true);
+        split_start();
         st.switches++;
         go(PEER_RUNNING);
         return true;                            /* ring is stale from here on */
@@ -314,6 +375,7 @@ static bool on_frame(const peer_frame_t *f)
 void peer_init(void)
 {
   link_init();
+  split_init();
   crm_periph_clock_enable(CRM_DMA1_PERIPH_CLOCK, TRUE);
   ms_last_cyc = DWT->CYCCNT;
   my_tag = uid_tag();
@@ -331,6 +393,7 @@ void peer_enable(bool on)
     dma_channel_enable(DMA1_CHANNEL2, FALSE);
     dma_channel_enable(DMA1_CHANNEL3, FALSE);
     tx_busy = false;
+    split_stop();
     state = PEER_DISABLED;
     role  = PEER_ROLE_UNKNOWN;
     peer_tag = peer_fw = 0;
@@ -338,6 +401,7 @@ void peer_enable(bool on)
   }
   role = PEER_ROLE_UNKNOWN;
   peer_tag = peer_fw = 0;
+  split_stop();
   mode_for(LINK_DISCOVERY_BAUD, false);
   t_hail = t_rx = ms_now;
   go(PEER_DISCOVER);
@@ -354,7 +418,7 @@ void peer_task(void)
   if (ms_now < 1500u) return;
 
   tx_done();
-  rx_scan();
+  if (state == PEER_RUNNING) rx_scan_run(); else rx_scan();
 
   switch (state) {
     case PEER_DISCOVER:
@@ -388,6 +452,7 @@ void peer_task(void)
          * tells the peer to follow. */
         if (tx_buf[1] == PF_COMMIT && tx_done()) {
           mode_for(run_baud, true);
+          split_start();
           st.switches++;
           go(PEER_RUNNING);
         }
@@ -396,10 +461,12 @@ void peer_task(void)
       break;
 
     case PEER_RUNNING:
-      if (role == PEER_ROLE_A && !tx_busy && since(t_hail) >= PING_MS) {
-        t_hail = ms_now;
-        tx_frame(PF_PING, peer_tag, ms_now);
-      }
+      /* Both halves transmit unprompted on their own scan tick, so there is no
+       * initiator here and no request/response round trip — which is also what
+       * makes the run phase completely symmetric between A and B. The data
+       * frame IS the liveness beacon; PF_PING exists only for the discovery
+       * bus and is unused from here on. */
+      if (!tx_busy && split_tx_due()) tx_raw(split_build_tx(), SPLIT_FRAME_LEN);
       if (since(t_rx) > LIVENESS_MS) { st.drops++; peer_enable(true); }
       break;
 
