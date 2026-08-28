@@ -42,7 +42,19 @@ static volatile uint8_t tx_head, tx_tail;
 static uint16_t in_seq;
 static uint32_t tx_dropped;
 
-static bool tx_ring_full(void) { return (uint8_t)(tx_head - tx_tail) >= TX_RING_LEN; }
+static uint8_t tx_ring_used(void) { return (uint8_t)(tx_head - tx_tail); }
+static bool tx_ring_full(void) { return tx_ring_used() >= TX_RING_LEN; }
+
+/* Unsolicited telemetry stops well short of full so a command response always
+ * has somewhere to go.
+ *
+ * tx_begin() evicts the OLDEST entry when the ring is full, and at 8 kHz the
+ * stream can refill all eight slots between two host polls. So a reply to an
+ * explicit command could be queued and then silently thrown away before it was
+ * ever sent — the host sees a command that produced no answer, which is
+ * indistinguishable from a dead peripheral and is exactly how the board on the
+ * Windows host looked. Stale telemetry is worthless; a dropped answer is a lie. */
+#define TX_RING_STREAM_LIMIT  (TX_RING_LEN / 2)
 
 /* Claim the next slot, pre-filled with the common header. */
 static uint8_t *tx_begin(uint8_t msg, uint8_t tag)
@@ -90,7 +102,7 @@ static bool     stream_gap;
 static void stream_service(void)
 {
   if (!stream_on) return;
-  if (tx_ring_full()) return;
+  if (tx_ring_used() >= TX_RING_STREAM_LIMIT) return;
 
   uint8_t *p = NULL;
   uint8_t  n = 0;
