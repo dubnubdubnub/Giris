@@ -186,6 +186,7 @@ static void send_link(uint8_t tag, const link_test_t *t)
   memcpy(&p[25], &t->ctrl1, 4);
   memcpy(&p[29], &t->ctrl2, 4);
   memcpy(&p[33], &t->ctrl3, 4);
+  memcpy(&p[37], &t->overruns, 2);
   tx_commit();
 }
 
@@ -282,7 +283,7 @@ void tud_hid_set_report_cb(uint8_t instance, uint8_t report_id,
       memcpy(&baud,   &buffer[3], 4);
       memcpy(&nbytes, &buffer[7], 2);
       if (baud < 9600u || baud > 13500000u) baud = LINK_DISCOVERY_BAUD;
-      if (nbytes == 0 || nbytes > 4096u)    nbytes = 256u;
+      if (nbytes == 0 || nbytes > 4096u)    nbytes = 256u;   /* == LINK_RX_BUF_MAX */
 
       const link_role_t role = (link_role_t)buffer[9];
       uint16_t tmo;

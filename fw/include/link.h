@@ -77,6 +77,7 @@ typedef struct {
   uint8_t  first_bad_tx;
   uint8_t  first_bad_rx;
   uint8_t  err_flags;       /* bit0 PERR, bit1 FERR, bit2 NERR, bit3 ROERR */
+  uint16_t overruns;        /* bytes the receive loop was too slow to collect */
   uint32_t sts, ctrl1, ctrl2, ctrl3;   /* the peripheral's own account of itself */
 } link_test_t;
 
