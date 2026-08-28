@@ -30,7 +30,8 @@ RPT = 64
 CMD_PEER, CMD_SPLIT = 0x0C, 0x0D
 RSP_PEER, RSP_SPLIT, RSP_ERROR = 0x8B, 0x8C, 0xEE
 
-PEER_STATE = ("disabled", "discover", "alone", "paired", "switching", "running")
+PEER_STATE = ("disabled", "discover", "alone", "paired", "switching",
+              "running", "INCOMPATIBLE")
 ROLE = ("?", "A", "B")
 
 
@@ -81,6 +82,7 @@ def peer(d):
     return dict(state=r[4], role=r[5],
                 tag=struct.unpack_from("<H", r, 6)[0],
                 peer=struct.unpack_from("<H", r, 8)[0],
+                proto=struct.unpack_from("<H", r, 10)[0],
                 baud=struct.unpack_from("<I", r, 12)[0])
 
 
@@ -108,9 +110,14 @@ def header(devs):
         if not p:
             print(f"{n}: no answer to CMD_PEER")
             continue
-        print(f"{n}: {PEER_STATE[p['state']]:9s} role={ROLE[p['role']]} "
+        print(f"{n}: {PEER_STATE[p['state']]:12s} role={ROLE[p['role']]} "
               f"tag=0x{p['tag']:04X} peer=0x{p['peer']:04X} baud={p['baud']:,}")
-        if p["state"] != 5:
+        if p["state"] == 6:
+            print(f"      the peer speaks link protocol v{p['proto']}, this half does not.")
+            print(f"      They stay paired on the 115200 discovery bus and never frame,")
+            print(f"      so the link that would carry a new image is still there.")
+            print(f"      Flash both halves from the same build.")
+        elif p["state"] != 5:
             print(f"      not in the run phase — nothing is being framed")
     print()
 

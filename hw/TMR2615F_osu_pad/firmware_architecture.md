@@ -865,6 +865,64 @@ worth remembering: **a mixed-firmware pair does not interoperate in the run phas
 liveness drop rather than as anything that names a version. `peer_frame_t` already carries `fw`; nothing
 yet refuses to pair on a mismatch.
 
+### Version gating, and the deadlock it uncovered
+
+The mixed-firmware failure above is now named rather than silent. `peer_frame_t` carries a **link
+protocol version** — deliberately not the firmware build version, or every routine bump would split the
+keyboard in half — and a mismatch parks both halves in `PEER_INCOMPAT`.
+
+**A mismatch does not stop the halves talking.** Refusing to pair would remove the only channel that can
+repair it: in topology (a) the far half has no host, so its next image has to arrive over this very link.
+The halves stay on the 115200 discovery bus, keep hailing, and never step up to the run phase. That
+places one permanent obligation on the design: **the first eight bytes of `peer_frame_t` are frozen
+across every future version**, or two halves lose the ability to work out that they disagree. `peer.c`
+static-asserts those offsets.
+
+Verified by flashing one half and leaving the other on v1:
+
+```
+5C13: INCOMPATIBLE role=A tag=0x436A peer=0xF885 baud=115,200
+      the peer speaks link protocol v1, this half does not.
+5113: paired       role=B tag=0xF885 peer=0x436A baud=115,200
+15 s later: 5C13 hails +30, switches +0, drops +0, crc +0 — parked, not thrashing
+```
+
+**Then flashing the second half did not recover, and that turned out to be a latent deadlock in the
+arbitration that predates the version gate.** Numbers first:
+
+```
+5C13: state ALONE   hails +24   frames_rx +0     last frame 75,563 ms ago
+5113: state PAIRED  hails  +0   frames_rx +24    last frame      63 ms ago
+```
+
+5113 was **receiving every one of A's hails and answering none of them**. `PF_HAIL` was only accepted
+from `DISCOVER`/`ALONE`, so a half sitting in `PAIRED` ignored them — while each ignored hail still
+refreshed `t_rx`, holding shut the very liveness escape (`since(t_rx) > 1500 ms`) that should have freed
+it. A had missed a `HAIL_ACK` and fallen back to `ALONE`; B waited forever for a switch A no longer knew
+to send. Both halves healthy, both halves hearing each other, permanently stuck.
+
+Two fixes, fast path and backstop:
+
+- **A hail is now answered from `PAIRED` and `SWITCHING` too.** A hail means the peer has forgotten the
+  pairing, so holding the old one is waiting for a handshake that is never coming. `assign_roles()` is
+  deterministic, so re-pairing is idempotent and costs one frame.
+- **`PEER_PAIRED` is bounded by time in state, not by liveness.** Role B has no action of its own there,
+  and a liveness timer fundamentally cannot bound a wait for one *specific* frame when any frame resets
+  it. 300 ms, against the 5 ms A actually takes.
+
+> The general lesson: **a liveness timeout is not a handshake timeout.** Any state whose exit depends on
+> receiving one particular message needs its own bound on time-in-state; refreshing on unrelated traffic
+> is what turns a missed frame into a permanent stall.
+
+Regression test — 30 cycles restarting one half's arbitration at randomised phase while the other holds
+the pairing:
+
+```
+30 cycles, 0 stuck, worst recovery 0.28 s
+```
+
+and the link still frames clean afterwards: 8,000/s each way, `crc 0  gaps 0  resync 0  bad 0`.
+
 **The unit is provisional and the index is provisional.** There is no travel pipeline yet, so what ships
 today is the raw 12-bit count shifted to 9 bits, and key *index* is hardware scan order because the
 keymap layer that would give these positions names does not exist either. The transport is final; the
