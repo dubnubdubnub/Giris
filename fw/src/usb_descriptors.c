@@ -11,7 +11,15 @@
 
 #define USB_VID   0x1209   /* pid.codes — open-source range, fine for a dev board */
 #define USB_PID   0x0001   /* placeholder; claim a real one before anything ships */
-#define USB_BCD   0x0210   /* 2.10 so a BOS descriptor is legal later */
+/* 2.00, not 2.10.
+ *
+ * Declaring 2.01 or higher obliges the device to answer GET_DESCRIPTOR(BOS), and
+ * TinyUSB's tud_descriptor_bos_cb is a weak stub returning NULL, so the request
+ * is STALLED (usbd.c:1344, TU_VERIFY(desc_bos != 0)). macOS does not care.
+ * Windows asks every device that claims >= 2.01 and is entitled not to forgive
+ * the stall. Claim 2.10 again only in the same commit that adds a real BOS
+ * descriptor — which is what a Microsoft OS 2.0 descriptor set would need. */
+#define USB_BCD   0x0200
 
 /* ---------------------------------------------------------------- device */
 static const tusb_desc_device_t desc_device = {
