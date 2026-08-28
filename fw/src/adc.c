@@ -21,7 +21,8 @@
 #include "board.h"
 #include "clock.h"
 
-#define SCAN_SLOTS       8
+#define SCAN_SLOTS       10
+#define SEQ_LEN          5
 #define TMR2_PERIOD      13499u   /* 216 MHz / 13500 = 16 kHz -> 8 kHz frames */
 
 static volatile uint16_t adc_ring[SCAN_SLOTS];
@@ -39,9 +40,10 @@ bool adc_calibration_failed(void) { return adc_cal_timed_out; }
 
 /* Physical scan slot -> key index, or a sentinel. Shipped to the host in
  * RSP_INFO so the viewer never hardcodes it. */
+/* bank A (SEL low) then bank B (SEL high); the 5th of each is the dummy. */
 static const uint8_t slot_map[SCAN_SLOTS] = {
-    0, 2, 4, SLOT_VBUS_DIV,
-    1, 3, 5, SLOT_UNUSED,
+    0, 2, 4, SLOT_VBUS_DIV, SLOT_DUMMY,
+    1, 3, 5, SLOT_UNUSED,   SLOT_DUMMY,
 };
 
 const uint8_t *adc_slot_map(void) { return slot_map; }
@@ -99,6 +101,47 @@ static void dma_setup(void)
   nvic_irq_enable(DMA1_Channel1_IRQn, 1, 0);
 }
 
+/* Ordinary-sequence channel order, rank 1..4. Default is the netlist order:
+ * D1..D4 on ADC1_IN3..IN0. Runtime-settable so we can put a known large step
+ * (the VBUS divider, ~3166 counts) immediately before a quiet channel and see
+ * whether the reading moves. If the ADC leaves its sampling cap holding the
+ * previous conversion, it will; if the cap is reset each conversion, it will not. */
+/* Five conversions, not four. The fifth repeats ch3 purely to be thrown away:
+ * charge redistribution means every conversion is pulled ~0.49% of the way
+ * toward its PREDECESSOR's voltage (measured, see tools/seqtest.py). The VBUS
+ * divider sits ~1200 counts above the sensors, so whatever follows it picks up
+ * ~6 LSB. Letting a discarded dummy absorb that leaves every real sensor
+ * reading preceded by another sensor at a similar voltage — steps under ~150
+ * counts, i.e. well under 1 LSB of error. */
+static uint8_t seq_ch[SEQ_LEN] = {ADC_CHANNEL_3, ADC_CHANNEL_2, ADC_CHANNEL_1,
+                                  ADC_CHANNEL_0, ADC_CHANNEL_3};
+
+const uint8_t *adc_sequence(void) { return seq_ch; }
+
+static void adc_apply_sequence(void)
+{
+  for (uint8_t i = 0; i < SEQ_LEN; i++)
+    adc_ordinary_channel_set(ADC1, seq_ch[i], (uint8_t)(i + 1), ADC_SAMPLETIME_28_5);
+}
+
+void adc_set_sequence(const uint8_t ch[SEQ_LEN])
+{
+  for (uint8_t i = 0; i < SEQ_LEN; i++)
+    seq_ch[i] = (ch[i] <= 3) ? ch[i] : seq_ch[i];
+
+  /* Stop, reprogram, resynchronise the mux phase, restart. */
+  tmr_counter_enable(TMR2, FALSE);
+  dma_channel_enable(DMA1_CHANNEL1, FALSE);
+
+  adc_apply_sequence();
+
+  dma_data_number_set(DMA1_CHANNEL1, SCAN_SLOTS);
+  gpio_bits_reset(MUX_SEL_PORT, MUX_SEL_PIN);      /* bank A, matches slot 0 */
+  dma_channel_enable(DMA1_CHANNEL1, TRUE);
+  tmr_flag_clear(TMR2, TMR_OVF_FLAG);
+  tmr_counter_enable(TMR2, TRUE);
+}
+
 static void adc_setup(void)
 {
   crm_periph_clock_enable(CRM_ADC1_PERIPH_CLOCK, TRUE);
@@ -114,17 +157,14 @@ static void adc_setup(void)
   b.sequence_mode           = TRUE;          /* required for >1 channel */
   b.repeat_mode             = FALSE;         /* one sequence per trigger */
   b.data_align              = ADC_RIGHT_ALIGNMENT;
-  b.ordinary_channel_length = 4;
+  b.ordinary_channel_length = SEQ_LEN;
   adc_base_config(ADC1, &b);
 
   /* Netlist order. The odd one out (VBUS_B/2, ~2.5 V) goes LAST so the three
    * sensors — which sit near each other in voltage — are not preceded by it:
    * each conversion carries ~0.39% of (previous slot - this slot) as charge
    * redistribution off the ADC sample cap. */
-  adc_ordinary_channel_set(ADC1, ADC_CHANNEL_3, 1, ADC_SAMPLETIME_28_5);
-  adc_ordinary_channel_set(ADC1, ADC_CHANNEL_2, 2, ADC_SAMPLETIME_28_5);
-  adc_ordinary_channel_set(ADC1, ADC_CHANNEL_1, 3, ADC_SAMPLETIME_28_5);
-  adc_ordinary_channel_set(ADC1, ADC_CHANNEL_0, 4, ADC_SAMPLETIME_28_5);
+  adc_apply_sequence();
 
   adc_ordinary_conversion_trigger_set(ADC1, ADC12_ORDINARY_TRIG_TMR2TRGOUT, TRUE);
   adc_dma_mode_enable(ADC1, TRUE);
@@ -169,6 +209,24 @@ void adc_scan_init(void)
   tmr_counter_enable(TMR2, TRUE);
 }
 
+void adc_resync(void)
+{
+  /* The DMA ring and the mux SEL line are kept in step by the half/full transfer
+   * interrupts. Anything that blocks interrupts for longer than a TMR2 period
+   * (62.5 us) — the blocking SK6812 bit-bang is the offender — lets conversions
+   * run on while SEL stays put, and the ring slips a whole bank. Stop, realign,
+   * restart. */
+  tmr_counter_enable(TMR2, FALSE);
+  dma_channel_enable(DMA1_CHANNEL1, FALSE);
+  dma_data_number_set(DMA1_CHANNEL1, SCAN_SLOTS);
+  gpio_bits_reset(MUX_SEL_PORT, MUX_SEL_PIN);      /* bank A == slot 0 */
+  dma_flag_clear(DMA1_HDT1_FLAG);
+  dma_flag_clear(DMA1_FDT1_FLAG);
+  dma_channel_enable(DMA1_CHANNEL1, TRUE);
+  tmr_flag_clear(TMR2, TMR_OVF_FLAG);
+  tmr_counter_enable(TMR2, TRUE);
+}
+
 bool adc_read_frame(adc_frame_t *out)
 {
   for (int attempt = 0; attempt < 4; attempt++) {
@@ -200,7 +258,7 @@ void DMA1_Channel1_IRQHandler(void)
      * ring forever with nothing to show for it. Slot 3 is the VBUS divider
      * (~2.5 V) and slot 7 is a floating header pin: if slot 7 ever reads higher
      * than slot 3, the phase has slipped. */
-    if (adc_ring[7] > adc_ring[3]) phase_errors++;
+    if (adc_ring[8] > adc_ring[3]) phase_errors++;
 
     pub_seq++;                                /* odd: writing */
     __DMB();

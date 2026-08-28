@@ -20,6 +20,14 @@ const uint8_t *adc_slot_map(void);
 uint32_t adc_phase_errors(void);
 bool adc_calibration_failed(void);
 
+/* Realign the DMA ring with the mux SEL phase. Call after anything that blocks
+ * interrupts for more than a scan period. */
+void adc_resync(void);
+
+/* Ordinary-sequence order, rank 1..4, as ADC channel numbers 0..3. */
+const uint8_t *adc_sequence(void);
+void adc_set_sequence(const uint8_t ch[5]);
+
 #define ADC_SCAN_HZ  8000u
 
 #endif

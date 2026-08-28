@@ -2,3 +2,5 @@ build/
 vendor/
 compile_commands.json
 .cache/
+tools/.venv/
+logs/
