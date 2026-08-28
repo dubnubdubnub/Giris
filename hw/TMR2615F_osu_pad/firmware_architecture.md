@@ -582,13 +582,41 @@ RGB sync, config traffic — rides the other wire concurrently and costs the for
 Packing positions to 12 bits (32 keys in 48 bytes) drops the frame to 56 B = 34 % at 13.5 Mbaud, if
 that headroom is ever wanted. It is not needed at 32 keys per half.
 
-**Recommendation: run at 12 Mbaud, not 13.5.** Both soak clean at 163,840 bytes, but DIV = 16 is the
-divider's floor, where the 16x oversampler has exactly one PCLK per step and the RM's allowable clock
-deviation is at its narrowest. DIV = 18 costs 5 % of a microframe and buys a rung of margin. Both
-halves run the same 12 MHz ±50 ppm crystal so relative drift is ~100 ppm — nowhere near the limit —
-but this was measured over a short bench cable. **Re-soak at the shipping cable length before
-committing.** The doc's estimate is that the 120 Ω series resistors support ~19 Mbaud over 1 m and
-~11 Mbaud over 2 m, so a 2 m split cable would itself argue for 8 or 9 Mbaud.
+#### Cable length: measured, 1.5 m and 3 m
+
+409,600 bytes per rate, 100 runs of 4096 alternating direction, over a **3 m** USB-C cable — roughly
+three times any split cable that would ship, chosen as a deliberate worst case.
+
+| Baud | 3 m result |
+|---|---|
+| 9 Mbaud | 409,600 B, 0 corrupt, 0 missing, **0/100 runs raised NERR** |
+| 12 Mbaud | 409,600 B, 0 corrupt, 0 missing, **0/100 runs raised NERR** |
+| 13.5 Mbaud | **61/100 runs raised NERR**, one run desynced entirely and lost 4093 B |
+
+At 1.5 m all three rungs including 13.5 Mbaud were clean.
+
+**NERR is the leading indicator, and it is free.** The receiver oversamples 16x and majority-votes
+samples 8/9/10 of each bit; NERR means those three disagreed. At 13.5 Mbaud over 3 m it fired on 61 %
+of runs while **still recovering every byte correctly** — zero corruption. So the eye closes visibly
+in the noise flag well before any data is lost. It is symmetric too: 27–39 of 50 on every combination
+of direction and of which wire carries the traffic, so this is cable length, not a board or a net.
+
+The a-priori estimate in §2 — 120 Ω supports ~19 Mbaud over 1 m and ~11 Mbaud over 2 m — turns out to
+have been slightly conservative and essentially right.
+
+The **open-drain discovery bus is unchanged between 1.5 m and 3 m**: clean at 115200 and 500 kbaud,
+1020 of 1024 bytes corrupt with FERR at 1 Mbaud. That limit is the 10 kΩ pull-ups into the node
+capacitance, not the cable, which is why length does not move it.
+
+**Recommendation: run at 12 Mbaud, and negotiate it.** 12 is clean at three times the realistic cable
+length with the leading-indicator flag never once firing, and it costs 48.5 % of a microframe against
+64.5 % at 9. DIV = 18 also keeps one rung off the divider's DIV ≥ 16 floor, where the oversampler has
+exactly one PCLK per step.
+
+Then make it adaptive, because NERR makes that nearly free: after the 115200 handshake, bring the link
+up at 12 Mbaud and watch NERR and the CRC-16 failure rate. If either rises, step down 9 → 8 → 6. The
+link then self-tunes to whatever cable the user actually plugged in, and it downshifts *before* frames
+start being lost rather than after.
 
 If a future design genuinely needs more, the lever is not the baud rate:
 - **J1's SBU1 (A8) and SBU2 (B8) are unconnected** on this board. Wiring them on the full-size respin

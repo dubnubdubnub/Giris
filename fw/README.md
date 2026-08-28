@@ -130,13 +130,16 @@ tools/.venv/bin/python tools/link.py --soak --baud 13500000
 |---|---|
 | Half duplex, open drain, one wire on D− — *the discovery bus* | clean at 115200 and **500 kbaud**; framing errors at 1 Mbaud |
 | Full duplex, push-pull, TRPSWAP on one half — *the run phase* | clean at every rung to **13.5 Mbaud**, the USART's ceiling, both directions |
-| Soak at 9, 12 and 13.5 Mbaud | 163,840 bytes each, alternating direction, **zero errors** |
+| Soak at 9 and 12 Mbaud, **3 m cable** | 409,600 bytes each, **0 corrupt, 0 missing, 0 noise flags** |
+| Same at 13.5 Mbaud, 3 m | NERR on **61/100 runs**; clean at 1.5 m |
 | Sustained rate, DMA both ends | **98.8–99.6 % of line rate** — the wire is saturated, not the CPU |
 
 At 13.5 Mbaud a 72-byte frame (32 keys × u16 + header + mech bitmap + CRC-16) takes **54 µs, 43 % of a
 125 µs microframe**, and the link is full duplex so the return path is free. 13.5 Mbaud is also the
 hard ceiling: RM 12.6.1 requires `DIV ≥ 16` with fixed 16× oversampling, and APB2 is already at the
-part's 216 MHz maximum. See the architecture doc for why 12 Mbaud is the better choice.
+part's 216 MHz maximum. **Run at 12 Mbaud**: it is clean over a 3 m cable with the receiver's noise
+flag never firing, where 13.5 raises NERR on most runs. See the architecture doc for the full table
+and for why the link should negotiate its own rate.
 
 500 kbaud is exactly where the architecture doc predicted the open-drain bus
 would die: two 10 k pull-ups into ~70 pF. Discovery at 115200 has 4× margin.
