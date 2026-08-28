@@ -677,11 +677,43 @@ ring; the link takes `DMA1_CHANNEL2` with `DMAMUX_DMAREQ_ID_USART6_RX`.
    neither AP22653 sources 5 V and each board keeps its own J3 supply. Electrically this is topology (b).
 2. ~~Half-duplex open-drain at 115200 on D−, both halves unswapped; full-duplex with TRPSWAP.~~ **Done,
    both directions, to 13.5 Mbaud.**
-3. **Next:** UID-tag arbitration over the 115200 discovery bus — hail, exchange tags, loser sets
-   `CTRL2.TRPSWAP`, both switch to push-pull. Tie-break is `uid_tag()`, which is FNV-1a over the whole
-   96-bit UID precisely because two boards off one reel differ in only a couple of bytes.
-4. Framing: fixed-size isochronous frames, DMA + IDLE-line, CRC-16, and the SOF phase servo.
+3. ~~UID-tag arbitration over the 115200 discovery bus.~~ **Done.** Two halves running one image find
+   each other, assign complementary roles and step up to 12 Mbaud unaided:
+
+   ```
+   5C13: running  role=A (unswapped)  tag=0x436A  peer=0xF885  baud=12,000,000
+   5113: running  role=B (TRPSWAP)    tag=0xF885  peer=0x436A  baud=12,000,000
+   ```
+
+   60 s at 12 Mbaud: 1198 ping/pong exchanges each, exactly the designed 20/s, **zero CRC errors, zero
+   drops, zero re-switches.** The handshake costs a few CRC errors and at most one drop while the peer
+   changes rate under it, then converges within a second and stays converged.
+4. **Next:** framing — fixed-size isochronous frames, DMA + IDLE-line, CRC-16, and the SOF phase servo.
 5. Then the peer/token model and topology detection.
+
+### Three things the arbitration design had to work around
+
+**Collision detection is impossible on the discovery bus.** This silicon does not echo its own
+half-duplex transmission (§13), so two halves hailing simultaneously simply do not hear each other and
+neither can tell. Rather than detect collisions, the protocol makes sustained ones impossible: each half
+hails on a period of `20 + (uid_tag & 15)` ms, so two halves cannot stay in lockstep — their phases
+drift apart within a few periods and one hail lands in the other's listen window.
+
+**Receive must be circular DMA, not a polled RDBF loop.** At 12 Mbaud a byte lands every 160 core
+cycles. The remaining-count register doubles as the write pointer — but **mask it**: in circular mode it
+reloads to the buffer length rather than resting at zero, so the naive subtraction can yield an index
+the masked read pointer never reaches, and the scan loop never terminates. That runs in the same loop as
+`tud_task()`, so the board simply never enumerates and the only way back in is BOOT0 + NRST. Every loop
+in the link task is now explicitly bounded, and the task refuses to run for the first 1500 ms so USB is
+always up first — the difference between a two-minute reflash over HID and asking someone to hold two
+buttons.
+
+**Keep the negotiated rate and the configured rate in separate variables.** Conflating them produced a
+link that paired perfectly, reported RUNNING, and ran at 115200: the reconfigure helper overwrote the
+target with whatever it was called with, including the discovery rate, so COMMIT carried 115200. The
+same reconfigure also resets the receive ring, so the frame handler must tell the scanner to stop —
+otherwise it walks stale bytes and re-acts on a COMMIT it already handled, which is what made one half
+report five switches for one handshake.
 
 ---
 
