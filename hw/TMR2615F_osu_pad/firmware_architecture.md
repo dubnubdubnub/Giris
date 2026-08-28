@@ -283,6 +283,35 @@ USB grounds**, because J1 must carry GND for the 5 V pass-through in topology (a
 ISO7721 across its link precisely to avoid this — but its own FAQ says running without the isolator is
 fine. Document it; don't pretend firmware can solve it.
 
+**Measured, 2026-08-28, two hosts on the same 120 V outlet, before bonding:**
+
+| Quantity | Value |
+|---|---|
+| Open-circuit potential between the two USB grounds | **50 V AC at 60 Hz** |
+| Current available between them | **70 µA AC** |
+| Implied source impedance | 50 V / 70 µA = **714 kΩ**, i.e. 3.7 nF at 60 Hz |
+
+That impedance is the giveaway: it is a **Y-capacitor divider**, not a fault. A Class II supply with no
+earth reference floats its DC ground at roughly half the line voltage through the EMI caps bridging
+mains to the secondary, and 2.2–4.7 nF is exactly what those parts are. **The voltage reading alone is
+meaningless** — a 10 MΩ meter across a 714 kΩ source reads most of the open-circuit value while almost
+no current is available. Measure the current.
+
+Consequences, all negligible:
+
+- IEC 62368-1 allows **250 µA** touch current for this class. 70 µA is 28 % of it.
+- Steady state, 70 µA down J1's ground through ~1 Ω is a **70 µV** offset between the two halves'
+  ground references — against a UART threshold margin measured in volts.
+- The hot-plug transient carries Q = CV̂ ≈ **262 nC**, E = ½CV̂² ≈ **9.3 µJ**, four orders of magnitude
+  below the SRV05-4A's 8 kV contact rating, and USB-C mates GND before signal regardless.
+
+**Verdict: no isolator.** One caveat for the product rather than the bench — this was 120 V mains. At
+**230 V** the float voltage roughly doubles and so does the leakage, to ~140 µA. Still inside the limit,
+with half the margin. Measure it in a 230 V region before shipping dual-host as a headline feature.
+
+Independently confirmed that this is not a functional problem either: the enumeration failure on the
+second host was the BOS descriptor (§15), and unplugging J1 changed nothing.
+
 Also unaddressed so far and worth budgeting: in topology (a) **one 500 mA host port powers both halves**
 — two MCUs, two HS PHYs, and up to 14 SK6812s.
 
