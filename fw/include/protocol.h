@@ -40,6 +40,7 @@ enum {
   CMD_LINK_TEST    = 0x09,  /* args: [2]=link_mode_t, [3..6]=baud LE, [7..8]=nbytes LE,
                              *       [9]=link_role_t (0 loop, 1 tx, 2 rx), [10..11]=rx timeout ms */
   CMD_LINK_HOLD    = 0x0B,  /* args: [2]=pin (0 PC6/D-, 1 PC7/D+), [3]=1 hold low, 0 release */
+  CMD_PEER         = 0x0C,  /* args: [2]=0 query, 1 enable+restart, 2 disable -> RSP_PEER */
   CMD_LINK_PROBE   = 0x0A,  /* args: [2]=link_mode_t, [3..6]=baud LE -> RSP_PROBE */
   CMD_BOOTLOADER   = 0x7E,  /* jump to the ROM DFU — no buttons needed */
 };
@@ -54,6 +55,7 @@ enum {
   RSP_SEQ          = 0x88,
   RSP_LINK         = 0x89,
   RSP_PROBE        = 0x8A,
+  RSP_PEER         = 0x8B,
   RSP_ERROR        = 0xEE,
 };
 
@@ -117,6 +119,23 @@ enum {
 #define PROTO_SNAP_FLAGS      56
 #define PROTO_SNAP_READ_FAIL  57
 #define PROTO_SNAP_SEQ_LSB    61
+
+/* RSP_PEER body — where link arbitration has got to. Both halves run one image,
+ * so the interesting check is that their answers are complementary: one A and
+ * one B, each naming the other's tag, both RUNNING at the same baud.
+ *   [4]      state   0 disabled, 1 discover, 2 alone, 3 paired, 4 switching, 5 running
+ *   [5]      role    0 unknown, 1 A (lower tag, unswapped), 2 B (TRPSWAP)
+ *   [6..7]   our uid_tag LE
+ *   [8..9]   peer uid_tag LE
+ *   [10..11] peer firmware version LE
+ *   [12..15] baud currently in force LE
+ *   [16..19] hails sent LE
+ *   [20..23] valid frames received LE
+ *   [24..27] CRC errors LE
+ *   [28..31] successful switches into RUNNING LE
+ *   [32..35] drops back to discovery LE
+ *   [36..39] ms since the last valid frame from the peer LE */
+#define PROTO_PEER_STATE   4
 
 /* Burst capture: one slot, sampled as fast as the ADC allows, into SRAM. */
 #define PROTO_BURST_MAX       8192

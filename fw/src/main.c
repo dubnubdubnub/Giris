@@ -16,6 +16,7 @@
 #include "adc.h"
 #include "uid.h"
 #include "link.h"
+#include "peer.h"
 #include "usb.h"
 #include "console.h"
 #include "tusb.h"
@@ -133,6 +134,9 @@ int main(void)
   adc_scan_init();
   if (adc_calibration_failed()) console_puts("!! ADC calibration timed out\n");
 
+  console_stage("link arbitration");
+  peer_init();
+
   console_stage("running");
 
   /* Set the status pixels ONCE and leave them alone. The bit-bang blocks
@@ -150,6 +154,7 @@ int main(void)
 
   for (;;) {
     usb_task();
+    peer_task();
 
     adc_frame_t hb;
     adc_read_frame(&hb);
