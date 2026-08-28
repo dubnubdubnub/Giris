@@ -25,7 +25,7 @@
 #include <stdint.h>
 
 #define PROTO_REPORT_SIZE     64
-#define PROTO_VERSION         2
+#define PROTO_VERSION         3
 
 /* ----- host -> device ------------------------------------------------- */
 enum {
@@ -125,11 +125,14 @@ enum {
 /* RSP_PEER body — where link arbitration has got to. Both halves run one image,
  * so the interesting check is that their answers are complementary: one A and
  * one B, each naming the other's tag, both RUNNING at the same baud.
- *   [4]      state   0 disabled, 1 discover, 2 alone, 3 paired, 4 switching, 5 running
+ *   [4]      state   0 disabled, 1 discover, 2 alone, 3 paired, 4 switching,
+ *                    5 running, 6 incompatible (peer speaks a different link
+ *                    protocol; parked on the discovery bus, never framing)
  *   [5]      role    0 unknown, 1 A (lower tag, unswapped), 2 B (TRPSWAP)
  *   [6..7]   our uid_tag LE
  *   [8..9]   peer uid_tag LE
- *   [10..11] peer firmware version LE
+ *   [10..11] peer LINK PROTOCOL version LE — not its firmware build. Compare
+ *            against our own PEER_PROTO; unequal is why state would be 6
  *   [12..15] baud currently in force LE
  *   [16..19] hails sent LE
  *   [20..23] valid frames received LE

@@ -136,6 +136,9 @@ int main(void)
   if (adc_calibration_failed()) console_puts("!! ADC calibration timed out\n");
 
   console_stage("link arbitration");
+  console_puts("   link protocol v");
+  console_dec(PEER_PROTO);
+  console_puts("  (both halves must match to reach the run phase)\n");
   peer_init();
 
   console_stage("running");

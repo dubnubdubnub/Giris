@@ -1,3 +1,4 @@
+#include <stddef.h>
 #include <string.h>
 
 #include "board.h"
@@ -36,6 +37,16 @@ typedef struct {
 } peer_frame_t;
 
 _Static_assert(sizeof(peer_frame_t) == PEER_FRAME_LEN, "peer frame must be 16 bytes");
+
+/* Frozen, forever, across every protocol version. If a future version moves the
+ * field carrying the version number, two halves lose the ability to discover
+ * that they disagree — and the failure reappears as the unexplained liveness
+ * drop this whole mechanism exists to replace. See peer.h. */
+_Static_assert(offsetof(peer_frame_t, sync) == 0, "discovery frame header is frozen");
+_Static_assert(offsetof(peer_frame_t, type) == 1, "discovery frame header is frozen");
+_Static_assert(offsetof(peer_frame_t, src)  == 2, "discovery frame header is frozen");
+_Static_assert(offsetof(peer_frame_t, dst)  == 4, "discovery frame header is frozen");
+_Static_assert(offsetof(peer_frame_t, fw)   == 6, "the version field may never move");
 
 static uint16_t crc16(const uint8_t *p, uint32_t n)
 {
@@ -103,12 +114,12 @@ static uint32_t     t_hail, t_rx, t_state;
 static uint32_t     hail_period;
 static peer_status_t st;
 
-#define FW_VERSION      1u
 #define ALONE_AFTER_MS  1500u      /* hail unanswered this long -> standalone */
 #define ALONE_HAIL_MS   500u       /* keep hailing, so a late peer can still join */
 #define PING_MS         50u
 #define LIVENESS_MS     250u
 #define SWITCH_TMO_MS   200u
+#define PAIRED_TMO_MS   300u       /* generous: A acts within 5 ms of pairing */
 
 /* ------------------------------------------------------------- transport */
 
@@ -196,7 +207,7 @@ static void tx_frame(uint8_t type, uint16_t dst, uint32_t arg)
   f.type = type;
   f.src  = my_tag;
   f.dst  = dst;
-  f.fw   = FW_VERSION;
+  f.fw   = PEER_PROTO;
   f.arg  = arg;
   memcpy(tx_buf, &f, PEER_FRAME_LEN);
   const uint16_t c = crc16(tx_buf, PEER_FRAME_LEN - 2);
@@ -314,10 +325,44 @@ static void go(peer_state_t s) { state = s; t_state = ms_now; }
 
 static bool on_frame(const peer_frame_t *f)
 {
+  peer_fw = f->fw;
+
+  /* Version gate, applied to EVERY frame rather than only to the hail, so no
+   * path into the run phase can skip it.
+   *
+   * A mismatch parks us on the discovery bus instead of disconnecting. That is
+   * deliberate: in topology (a) the far half has no host, so the image that
+   * would fix the mismatch has to arrive over this same link — refusing to talk
+   * would remove the only channel that can repair it. We keep answering hails,
+   * keep reporting what we heard, and simply never step up to the run phase. */
+  if (f->fw != PEER_PROTO) {
+    if (state != PEER_INCOMPAT) {
+      assign_roles(f->src);              /* deterministic; useful to report */
+      go(PEER_INCOMPAT);
+    }
+    if (f->type == PF_HAIL) tx_frame(PF_HAIL_ACK, f->src, 0);
+    return false;
+  }
+
+  /* A matching frame while parked means the peer has been updated under us.
+   * Restart discovery cleanly rather than trying to resume mid-handshake. */
+  if (state == PEER_INCOMPAT) { peer_enable(true); return true; }
+
   switch (f->type) {
     case PF_HAIL:
-      if (state == PEER_DISCOVER || state == PEER_ALONE) {
-        peer_fw = f->fw;
+      /* Answered from PAIRED and SWITCHING too, not only from DISCOVER/ALONE.
+       * A hail means the peer has forgotten the pairing — it rebooted, or it
+       * missed our HAIL_ACK — so holding the old pairing is waiting for a
+       * handshake that is never coming. assign_roles() is deterministic, so
+       * re-pairing is idempotent and costs one frame.
+       *
+       * Ignoring hails here was a deadlock, seen on the bench: A missed a
+       * HAIL_ACK and fell back to ALONE, hailing twice a second; B stayed in
+       * PAIRED as role B waiting for a switch A no longer knew to send; and
+       * every one of those hails refreshed B's t_rx, so the liveness escape
+       * that should have freed it never fired. B received 24 hails in 12 s and
+       * answered none of them. */
+      if (state != PEER_DISABLED) {
         assign_roles(f->src);
         tx_frame(PF_HAIL_ACK, f->src, 0);
         go(PEER_PAIRED);
@@ -326,7 +371,6 @@ static bool on_frame(const peer_frame_t *f)
 
     case PF_HAIL_ACK:
       if (f->dst == my_tag && (state == PEER_DISCOVER || state == PEER_ALONE)) {
-        peer_fw = f->fw;
         assign_roles(f->src);
         go(PEER_PAIRED);
       }
@@ -442,7 +486,12 @@ void peer_task(void)
         tx_frame(PF_SWITCH, peer_tag, run_baud);
         go(PEER_SWITCHING);
       }
-      if (since(t_rx) > ALONE_AFTER_MS) peer_enable(true);
+      /* Bounded by time IN THIS STATE, not by liveness. Role B has no action
+       * of its own here — it waits for A's SWITCH — and t_rx is refreshed by
+       * every valid frame including ones we do not act on, so a liveness timer
+       * cannot bound a wait for a specific frame. This is the backstop for the
+       * deadlock described above; the hail handler is the fast path out. */
+      if (since(t_state) > PAIRED_TMO_MS) { st.drops++; peer_enable(true); }
       break;
 
     case PEER_SWITCHING:
@@ -458,6 +507,16 @@ void peer_task(void)
         }
       }
       if (since(t_state) > SWITCH_TMO_MS) { st.drops++; peer_enable(true); }
+      break;
+
+    case PEER_INCOMPAT:
+      /* Keep hailing at the standalone rate. This is both how the host sees the
+       * mismatch persist and how we notice the moment the peer is updated. */
+      if (!tx_busy && since(t_hail) >= ALONE_HAIL_MS) {
+        t_hail = ms_now;
+        st.hails_sent++;
+        tx_frame(PF_HAIL, 0, 0);
+      }
       break;
 
     case PEER_RUNNING:

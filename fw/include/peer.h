@@ -45,6 +45,8 @@ typedef enum {
   PEER_PAIRED    = 3,  /* peer known, roles assigned, still on the slow bus */
   PEER_SWITCHING = 4,  /* committing to the run rate */
   PEER_RUNNING   = 5,  /* full duplex at the run rate, liveness holding */
+  PEER_INCOMPAT  = 6,  /* peer found, speaks a different link protocol; parked on
+                        * the discovery bus rather than disconnected — see below */
 } peer_state_t;
 
 typedef enum {
@@ -63,7 +65,8 @@ typedef struct {
   uint32_t frames_rx;
   uint32_t crc_errors;
   uint32_t switches;       /* successful transitions into RUNNING */
-  uint32_t drops;          /* RUNNING -> DISCOVER on a liveness timeout */
+  uint32_t drops;          /* restarts of discovery after a failed handshake or a
+                            * liveness timeout — anything that was not a clean run */
   uint32_t last_rx_ms;     /* ms since a valid frame from the peer */
 } peer_status_t;
 
@@ -81,5 +84,33 @@ void peer_enable(bool on);
 /* The rate the run phase aims for. 12 Mbaud measured clean over 3 m with the
  * receiver's noise flag never firing; 13.5 raises NERR on most runs. */
 #define PEER_RUN_BAUD  12000000u
+
+/* ------------------------------------------------------- protocol version */
+/*
+ * The version of the LINK WIRE FORMAT — not the firmware build. Two images with
+ * different features but the same wire format must still pair, or every routine
+ * firmware bump would split the keyboard in half.
+ *
+ * **Bump this whenever anything on the wire changes**: the discovery frame, the
+ * run frame, the meaning of a field, the negotiated rate. Forgetting to is what
+ * this whole mechanism exists to catch, and it has already happened once —
+ * framing changed the run phase from 16-byte PING/PONG at 20 Hz to 48-byte data
+ * frames at 8 kHz while the version stayed at 1. The two builds each claimed to
+ * be version 1 and were not interoperable, and the symptom was a bare liveness
+ * drop that named nothing.
+ *
+ * What a mismatch does NOT do is stop the halves talking. Refusing to pair would
+ * remove the only channel that can repair the mismatch: in topology (a) the far
+ * half has no host of its own, so its next image has to arrive over this very
+ * link. On a mismatch the halves stay paired on the 115200 discovery bus, which
+ * is where a firmware push would happen anyway, and simply never step up to the
+ * run phase.
+ *
+ * That places one permanent obligation on the discovery frame: **the first eight
+ * bytes of peer_frame_t are frozen.** sync, type, src, dst and this version field
+ * must keep their offsets in every future version, or two halves lose the ability
+ * to work out that they disagree. peer.c static-asserts those offsets.
+ */
+#define PEER_PROTO  2u
 
 #endif
