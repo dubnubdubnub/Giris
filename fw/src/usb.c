@@ -187,6 +187,7 @@ static void send_link(uint8_t tag, const link_test_t *t)
   memcpy(&p[29], &t->ctrl2, 4);
   memcpy(&p[33], &t->ctrl3, 4);
   memcpy(&p[37], &t->overruns, 2);
+  memcpy(&p[39], &t->cycles, 4);
   tx_commit();
 }
 

@@ -129,6 +129,7 @@ enum {
  *   [20]     link sense (same encoding as RSP_INFO[47])
  *   [21..36] USART6 STS, CTRL1, CTRL2, CTRL3 as the run left them
  *   [37..38] overruns LE — bytes the receive loop was too slow to collect
+ *   [39..42] cycles LE — core cycles the payload occupied the wire (216 MHz)
  *
  * Modes mirror link_mode_t in include/link.h. Every one of them needs the loop
  * closed outside the chip — a peer on J1, or a TP1-TP2 jumper — because this

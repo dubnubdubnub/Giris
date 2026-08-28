@@ -558,6 +558,46 @@ The two boards on the bench are adjacent dice: `E75C3040 00801605 05875C13` and
 `E85C3040 00801605 05875113` differ in two of twelve bytes. A truncation would collide; FNV-1a over all
 twelve gives 0x436A and 0xF885. That tag is the arbitration tie-break.
 
+### Is 13.5 Mbaud enough for an 8 kHz split, and can it go higher?
+
+**Higher is not available.** RM 12.6.1 is explicit: the receiver splits each bit into 16 oversample
+steps, "so the data bit width should not be less than 16 PCLK periods, that is, the DIV value must be
+greater than or equal to 16." No fractional divider, no OVER8. APB2 is already at the part's 216 MHz
+ceiling, so **13.5 Mbaud is a hard wall on USART6**, not a tuning knob.
+
+**Enough is not close.** Measured sustained rate with DMA on both ends (98.8–99.6 % of line rate, so
+the wire really is saturated), against a 72-byte frame — 32 keys x u16 position, header, 32-bit mech
+bitmap, CRC-16:
+
+| Baud | Sustained | 72 B frame | Share of a 125 µs microframe |
+|---|---|---|---|
+| 8 Mbaud | 7.94 Mb/s | 90.7 µs | 72.5 % |
+| 9 Mbaud | 8.93 Mb/s | 80.7 µs | 64.5 % |
+| 12 Mbaud | 11.87 Mb/s | 60.7 µs | 48.5 % |
+| **13.5 Mbaud** | **13.33 Mb/s** | **54.0 µs** | **43.2 %** |
+
+The link is full duplex, so the return path — layer state, lock LEDs per host, the input-owner token,
+RGB sync, config traffic — rides the other wire concurrently and costs the forward path nothing.
+
+Packing positions to 12 bits (32 keys in 48 bytes) drops the frame to 56 B = 34 % at 13.5 Mbaud, if
+that headroom is ever wanted. It is not needed at 32 keys per half.
+
+**Recommendation: run at 12 Mbaud, not 13.5.** Both soak clean at 163,840 bytes, but DIV = 16 is the
+divider's floor, where the 16x oversampler has exactly one PCLK per step and the RM's allowable clock
+deviation is at its narrowest. DIV = 18 costs 5 % of a microframe and buys a rung of margin. Both
+halves run the same 12 MHz ±50 ppm crystal so relative drift is ~100 ppm — nowhere near the limit —
+but this was measured over a short bench cable. **Re-soak at the shipping cable length before
+committing.** The doc's estimate is that the 120 Ω series resistors support ~19 Mbaud over 1 m and
+~11 Mbaud over 2 m, so a 2 m split cable would itself argue for 8 or 9 Mbaud.
+
+If a future design genuinely needs more, the lever is not the baud rate:
+- **J1's SBU1 (A8) and SBU2 (B8) are unconnected** on this board. Wiring them on the full-size respin
+  gives two more conductors — enough for a real SPI, or better, a **hardware frame-sync strobe**, which
+  would retire the software phase servo that topology (b)'s two independent SOF domains otherwise need.
+- Push more feature computation into each half so the link carries events rather than positions. That
+  is a ~10x payload cut, and the reason it was rejected is that SOCD, Rappy Snappy and Snappy Tappy are
+  cross-key features whose two keys may land on opposite halves.
+
 ### Two traps that cost real time, recorded so they are not paid twice
 
 **A charge-only USB-C cable is indistinguishable from a dead peripheral.** The first cable tried
