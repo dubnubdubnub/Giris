@@ -168,6 +168,33 @@ raises RDBF, at any baud, open-drain or push-pull, with no error flag — and
 turning the listener's transmitter off does not change it. Testing the receive
 path needs a peer on J1 or a jumper from **TP1** (D+) to **TP2** (D−).
 
+### Is it really 8 kHz?
+
+```bash
+tools/.venv/bin/python tools/ratetest.py --seconds 10
+```
+
+Measured, not asserted. The streaming path emits exactly **one frame per report** — `adc_read_frame()`
+always returns the newest complete frame, so the pack loop breaks on its second iteration — which means
+the device wants to send at the full scan rate and achieves `min(poll rate, scan rate)`. Counting
+reports therefore counts polls. `bInterval = 1` is 1 ms at full speed and 125 µs at high speed, so
+~8000/s proves both at once.
+
+Two independent numbers come out and should agree: the host-observed count, which Python can bottleneck,
+and a device-side figure computed from the firmware's own `tx_dropped` counter, which cannot.
+
+| Host | scan | host-observed | device-side | dropped | seq gaps |
+|---|---|---|---|---|---|
+| macOS 26, 30 s | 8000 frames/s | 7902 reports/s | 8000 reports/s | 0 | 0 |
+| **Windows 11 24H2, 5 s** | 8001 frames/s | **7883 reports/s** | 8001 reports/s | 0 | 0 |
+
+Windows matters here because it honours the `bInterval` exponent only for intervals 1–5, and it is the
+platform where 8 kHz claims usually fall apart. It does not: within 0.2 % of macOS.
+
+**Caveat:** a 30 s Windows run ended in an `OSError: read error` from hidapi and the hub then dropped
+off entirely, taking its other devices with it. That looks like cable movement rather than a device
+fault, but a long Windows soak has not yet completed cleanly and should be repeated.
+
 ### Checking the USB side
 
 ```bash
