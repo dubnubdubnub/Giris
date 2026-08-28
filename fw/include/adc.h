@@ -18,6 +18,12 @@ bool adc_read_frame(adc_frame_t *out);
 
 const uint8_t *adc_slot_map(void);
 uint32_t adc_phase_errors(void);
+
+/* Times adc_read_frame() gave up, and the raw seqlock counter. An odd counter
+ * means the writer is stuck mid-update; a climbing failure count with a static
+ * frame index means the scan engine has stopped. */
+uint32_t adc_read_failures(void);
+uint32_t adc_seq_raw(void);
 bool adc_calibration_failed(void);
 
 /* Realign the DMA ring with the mux SEL phase. Call after anything that blocks

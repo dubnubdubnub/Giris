@@ -227,6 +227,11 @@ void adc_resync(void)
   tmr_counter_enable(TMR2, TRUE);
 }
 
+static uint32_t read_failures;
+
+uint32_t adc_read_failures(void) { return read_failures; }
+uint32_t adc_seq_raw(void)       { return pub_seq; }
+
 bool adc_read_frame(adc_frame_t *out)
 {
   for (int attempt = 0; attempt < 4; attempt++) {
@@ -240,6 +245,11 @@ bool adc_read_frame(adc_frame_t *out)
 
     if (pub_seq == s0) return true;
   }
+  /* Four losses in a row against a 16 kHz writer is not bad luck — the copy is
+   * ~1 us against a 62.5 us update. It means pub_seq is stuck odd, i.e. the
+   * writer stopped mid-update. Count it so the failure is visible instead of
+   * looking like a command that no longer answers. */
+  read_failures++;
   return false;
 }
 

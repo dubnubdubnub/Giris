@@ -193,14 +193,23 @@ static void send_link(uint8_t tag, const link_test_t *t)
 
 static void send_snapshot(uint8_t tag)
 {
+  /* ALWAYS answer. Returning silently when the frame read fails turns a
+   * diagnosable fault into a host that hangs for its whole timeout with nothing
+   * to go on — which is exactly how this looked from the outside. */
   adc_frame_t f;
-  if (!adc_read_frame(&f)) return;
+  const bool ok = adc_read_frame(&f);
+  if (!ok) memset(&f, 0, sizeof(f));
+
   uint8_t *p = tx_begin(RSP_SNAPSHOT, tag);
   memcpy(&p[4], &f.frame, 4);
   memcpy(&p[8], f.slot, 2 * PROTO_NUM_SLOTS);
   const uint32_t pe = adc_phase_errors();
   memcpy(&p[48], &pe, 4);
   memcpy(&p[52], &tx_dropped, 4);
+  p[PROTO_SNAP_FLAGS] = ok ? 0u : 1u;
+  const uint32_t rf = adc_read_failures();
+  memcpy(&p[PROTO_SNAP_READ_FAIL], &rf, 4);
+  p[PROTO_SNAP_SEQ_LSB] = (uint8_t)(adc_seq_raw() & 0xFFu);
   tx_commit();
 }
 
