@@ -4,9 +4,33 @@
 
 static link_mode_t current_mode = LINK_MODE_OFF;
 
-/* Landing zone for the DMA receive test. Sized to the protocol's nbytes cap. */
-#define LINK_RX_BUF_MAX  4096
-static uint8_t rx_buf[LINK_RX_BUF_MAX];
+/* One buffer: a board is either the transmitter or the receiver in any given
+ * run, never both. Sized to the protocol's nbytes cap. */
+#define LINK_BUF_MAX  4096
+static uint8_t link_buf[LINK_BUF_MAX];
+
+static void dma_setup(dma_channel_type *ch, dmamux_channel_type *mux,
+                      dmamux_requst_id_sel_type req, uint16_t n, confirm_state to_periph)
+{
+  dma_reset(ch);
+  dma_init_type d;
+  dma_default_para_init(&d);
+  d.buffer_size           = n;
+  d.direction             = to_periph ? DMA_DIR_MEMORY_TO_PERIPHERAL
+                                      : DMA_DIR_PERIPHERAL_TO_MEMORY;
+  d.memory_base_addr      = (uint32_t)link_buf;
+  d.memory_data_width     = DMA_MEMORY_DATA_WIDTH_BYTE;
+  d.memory_inc_enable     = TRUE;
+  d.peripheral_base_addr  = (uint32_t)&USART6->dt;
+  d.peripheral_data_width = DMA_PERIPHERAL_DATA_WIDTH_BYTE;
+  d.peripheral_inc_enable = FALSE;
+  d.priority              = DMA_PRIORITY_VERY_HIGH;
+  d.loop_mode_enable      = FALSE;
+  dma_init(ch, &d);
+  dmamux_enable(DMA1, TRUE);
+  dmamux_init(mux, req);
+  dma_channel_enable(ch, TRUE);
+}
 
 void link_init(void)
 {
@@ -222,15 +246,24 @@ void link_selftest(link_mode_t mode, uint32_t baud, uint16_t nbytes,
   link_configure(mode, baud);
 
   if (role == LINK_ROLE_TX) {
-    for (uint16_t i = 0; i < nbytes; i++) {
-      uint32_t guard = system_core_clock / 100u;      /* 10 ms, bounded */
-      while (usart_flag_get(USART6, USART_TDBE_FLAG) == RESET && guard) guard--;
-      if (!guard) { out->timeouts++; break; }
-      usart_data_transmit(USART6, (uint8_t)i);
-      out->sent++;
-    }
-    uint32_t guard = system_core_clock / 100u;
+    /* DMA out, for the same reason the receiver uses it: a polled write loop
+     * cannot keep TDR fed at 13.5 Mbaud, where a byte leaves every 160 core
+     * cycles. Polling would silently measure the loop instead of the link. */
+    for (uint16_t i = 0; i < nbytes; i++) link_buf[i] = (uint8_t)i;
+
+    usart_flag_clear(USART6, USART_TDC_FLAG);
+    const uint32_t t0 = DWT->CYCCNT;
+    dma_setup(DMA1_CHANNEL3, DMA1MUX_CHANNEL3, DMAMUX_DMAREQ_ID_USART6_TX, nbytes, TRUE);
+    usart_dma_transmitter_enable(USART6, TRUE);
+
+    uint32_t guard = system_core_clock / 10u;          /* 100 ms, bounded */
     while (usart_flag_get(USART6, USART_TDC_FLAG) == RESET && guard) guard--;
+    out->cycles = DWT->CYCCNT - t0;
+    out->sent   = (uint16_t)(nbytes - dma_data_number_get(DMA1_CHANNEL3));
+    if (!guard) out->timeouts++;
+
+    usart_dma_transmitter_enable(USART6, FALSE);
+    dma_channel_enable(DMA1_CHANNEL3, FALSE);
     goto done;
   }
 
@@ -260,28 +293,17 @@ void link_selftest(link_mode_t mode, uint32_t baud, uint16_t nbytes,
      * DT silently clears ROERR on the way past so no error flag survives.
      *
      * DMA1_CHANNEL1 is the ADC ring, so this takes channel 2. */
-    dma_reset(DMA1_CHANNEL2);
-    dma_init_type d;
-    dma_default_para_init(&d);
-    d.buffer_size         = nbytes;
-    d.direction           = DMA_DIR_PERIPHERAL_TO_MEMORY;
-    d.memory_base_addr    = (uint32_t)rx_buf;
-    d.memory_data_width   = DMA_MEMORY_DATA_WIDTH_BYTE;
-    d.memory_inc_enable   = TRUE;
-    d.peripheral_base_addr = (uint32_t)&USART6->dt;
-    d.peripheral_data_width = DMA_PERIPHERAL_DATA_WIDTH_BYTE;
-    d.peripheral_inc_enable = FALSE;
-    d.priority            = DMA_PRIORITY_VERY_HIGH;
-    d.loop_mode_enable    = FALSE;
-    dma_init(DMA1_CHANNEL2, &d);
-
-    dmamux_enable(DMA1, TRUE);
-    dmamux_init(DMA1MUX_CHANNEL2, DMAMUX_DMAREQ_ID_USART6_RX);
-    dma_channel_enable(DMA1_CHANNEL2, TRUE);
+    dma_setup(DMA1_CHANNEL2, DMA1MUX_CHANNEL2, DMAMUX_DMAREQ_ID_USART6_RX, nbytes, FALSE);
     usart_dma_receiver_enable(USART6, TRUE);
 
+    /* Time from the first byte landing to the last, so the arming wait is not
+     * counted and what comes out is the sustained on-wire rate. */
+    while (dma_data_number_get(DMA1_CHANNEL2) == nbytes && (DWT->CYCCNT - t0) < limit) {
+    }
+    const uint32_t tfirst = DWT->CYCCNT;
     while (dma_data_number_get(DMA1_CHANNEL2) && (DWT->CYCCNT - t0) < limit) {
     }
+    out->cycles = DWT->CYCCNT - tfirst;
 
     const uint16_t left = dma_data_number_get(DMA1_CHANNEL2);
     usart_dma_receiver_enable(USART6, FALSE);
@@ -290,8 +312,8 @@ void link_selftest(link_mode_t mode, uint32_t baud, uint16_t nbytes,
     const uint16_t got = (uint16_t)(nbytes - left);
     uint16_t bad = 0;
     for (uint16_t i = 0; i < got; i++) {
-      if (rx_buf[i] != (uint8_t)i) {
-        if (!bad) { out->first_bad_tx = (uint8_t)i; out->first_bad_rx = rx_buf[i]; }
+      if (link_buf[i] != (uint8_t)i) {
+        if (!bad) { out->first_bad_tx = (uint8_t)i; out->first_bad_rx = link_buf[i]; }
         bad++;
       }
     }
