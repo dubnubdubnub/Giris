@@ -653,3 +653,91 @@ ring; the link takes `DMA1_CHANNEL2` with `DMAMUX_DMAREQ_ID_USART6_RX`.
    96-bit UID precisely because two boards off one reel differ in only a couple of bytes.
 4. Framing: fixed-size isochronous frames, DMA + IDLE-line, CRC-16, and the SOF phase servo.
 5. Then the peer/token model and topology detection.
+
+---
+
+## 14. Updating the half that has no host (topology a)
+
+In `PC → half A → half B`, half B has no USB connection to anything. Two questions fall out of that:
+where config lives, and how firmware gets there.
+
+### Config: mirror it, do not centralise it
+
+The instinct is "keymap lives on the centre". That is wrong here, because **either half can be the
+centre** — flip the cable and the roles swap, and in topology (b) the input-owner token moves at
+runtime. Config stored only on the centre would evaporate the first time someone reverses the cable.
+
+So the store has two regions with different rules:
+
+| Region | Contents | Rule |
+|---|---|---|
+| **Shared** | keymap, layers, actuation points, rapid trigger, Rappy Snappy, Snappy Tappy, DKS, toggle keys, RGB | **mirrored on both halves**, carrying a monotonic generation counter |
+| **Local** | per-key calibration (rest value, travel span, fitted magnet curve), board UID, last link rate | **never synced** — it describes that physical PCB |
+
+On link-up each half sends `(generation, hash)` in the hail. Higher generation wins and pushes the whole
+shared blob; a few KB at 12 Mbaud is under a millisecond, so there is no reason to be clever about
+deltas. Equal generation with unequal hash is a genuine conflict — surface it rather than guessing.
+
+Calibration being local is what makes `uid_tag()` matter beyond arbitration: calibration is keyed to the
+board that produced it, so swapping a half never silently applies the other board's curve.
+
+The web app only ever talks to the centre. Reaching the peripheral needs one addition to the raw-HID
+protocol: a **route-to-peer wrapper** — a command that says "forward this payload to the peer and
+return its reply". One frame type, and the configurator can then show and edit both halves without
+caring which one is plugged in.
+
+### Firmware: the ROM bootloader cannot be reached over J1 as wired
+
+Datasheet Table 5 lists every interface the boot ROM will accept a new image on:
+
+| Peripheral | Pins | On our AT32F405RBT7-7 |
+|---|---|---|
+| USART1 | PA9 / PA10 | yes — the J6/J9 debug header |
+| USART2 | PA2 / PA3 | pins are ADC mux inputs here |
+| **USART3** | **PC10 / PC11** | **yes**, listed for `AT32F405RxT7-7` specifically |
+| OTGHS1 | D− / D+ | yes (J3) |
+| OTGFS1 | PA11 / PA12 | yes (J2) — what `tools/flash.sh` uses |
+| I2C1/2/3, CAN1, SPI1 | various | yes |
+
+**USART6 and UART7 are absent from that list**, and USART6 on PC6/PC7 is exactly what J1 carries. So
+the peripheral's ROM is unreachable over the link on this board.
+
+Measured aside: with both J2 and J3 connected, the ROM DFU enumerates **only on J2, at full speed**,
+despite OTGHS1 being a listed interface. Whether it would fall back to J3 with J2 absent is untested.
+
+### What saves this: every half has its own USB
+
+Because the design is symmetric — same firmware, same schematic, both halves carrying J2 and J3 — the
+universal recovery is always "unplug that half and plug it into a computer". It then *is* the centre.
+A link-delivered update therefore does not have to be bulletproof, which makes an in-application
+updater acceptable:
+
+1. Host DFUs the centre exactly as today.
+2. Centre relays the image over the link in CRC'd chunks.
+3. Peripheral writes it with a **RAM-resident** flash routine and RAM-resident vectors.
+
+Step 3 depends on a Phase 0 measurement that is **still unverified**: whether a RAM-resident erase keeps
+ISRs alive across the 6.6–8 ms stall (§2). Do that before designing around it.
+
+And add a **firmware version field to the hail**. Two halves running different protocol versions is a
+silent corruption source; the correct behaviour is to refuse to form a split and say so.
+
+### The respin lever: two traces buy an unbrickable path
+
+Both of these are free today:
+
+- **PC10 / PC11 are unused** — the netlist has them going only to J6 pins 13/14 as `/SPI3_SCK` and
+  `/SPI3_MISO` breakouts.
+- **J1's SBU1 (A8) and SBU2 (B8) are unconnected.**
+
+Wire SBU1→PC10 and SBU2→PC11 and the peripheral's ROM bootloader becomes reachable over the link.
+Updating it is then: centre tells the peripheral to reboot into ROM — the magic-in-`.noinit` plus
+`NVIC_SystemReset()` trick that already works for `CMD_BOOTLOADER` — then bridges USB to USART3 and
+speaks Artery's ISP protocol. **No custom updater, no RAM-resident flash writer, and unbrickable**,
+because the ROM runs before user code. The fast data path stays on USART6 over D+/D− at 12 Mbaud,
+untouched.
+
+The cost is honest and worth stating: **USB 2.0-only Type-C cables are not required to carry SBU.**
+Only full-featured cables do. So this path works with the supplied cable and silently disappears with a
+random substitute — acceptable for a firmware-update path, unacceptable for the data path, which is why
+the fast link stays on D+/D−. The "unplug the half" fallback covers the rest.
