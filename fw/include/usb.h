@@ -13,4 +13,10 @@ void usb_task(void);
  * the BOOT0/NRST buttons. */
 void usb_jump_to_bootloader(void);
 
+/* Call FIRST in main(), before clocks. Jumps to the ROM bootloader if the
+ * previous run asked for it. */
+void usb_bootloader_check(void);
+
+#define GIRIS_BOOT_MAGIC  0xB007DF00u
+
 #endif
