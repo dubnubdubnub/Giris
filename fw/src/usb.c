@@ -17,6 +17,7 @@
 #include "adc.h"
 #include "uid.h"
 #include "link.h"
+#include "peer.h"
 #include "board.h"
 #include "clock.h"
 #include "protocol.h"
@@ -312,6 +313,7 @@ void tud_hid_set_report_cb(uint8_t instance, uint8_t report_id,
       memcpy(&tmo, &buffer[10], 2);
       if (tmo == 0 || tmo > 5000u) tmo = 750u;
 
+      peer_enable(false);           /* nothing else may drive USART6 meanwhile */
       link_test_t t;
       link_selftest((link_mode_t)buffer[2], baud, nbytes, role, tmo, &t);
 
@@ -322,7 +324,32 @@ void tud_hid_set_report_cb(uint8_t instance, uint8_t report_id,
       break;
     }
 
+    case CMD_PEER: {
+      if (buffer[2] == 1) peer_enable(true);
+      else if (buffer[2] == 2) peer_enable(false);
+
+      peer_status_t ps;
+      peer_status(&ps);
+      uint8_t *p = tx_begin(RSP_PEER, tag);
+      p[4] = ps.state;
+      p[5] = ps.role;
+      const uint16_t mine = uid_tag();
+      memcpy(&p[6],  &mine, 2);
+      memcpy(&p[8],  &ps.peer_tag, 2);
+      memcpy(&p[10], &ps.peer_fw, 2);
+      memcpy(&p[12], &ps.baud, 4);
+      memcpy(&p[16], &ps.hails_sent, 4);
+      memcpy(&p[20], &ps.frames_rx, 4);
+      memcpy(&p[24], &ps.crc_errors, 4);
+      memcpy(&p[28], &ps.switches, 4);
+      memcpy(&p[32], &ps.drops, 4);
+      memcpy(&p[36], &ps.last_rx_ms, 4);
+      tx_commit();
+      break;
+    }
+
     case CMD_LINK_HOLD:
+      peer_enable(false);           /* nothing else may drive USART6 meanwhile */
       link_hold(buffer[2], buffer[3] != 0);
       send_info(tag);
       break;
@@ -332,6 +359,7 @@ void tud_hid_set_report_cb(uint8_t instance, uint8_t report_id,
       memcpy(&baud, &buffer[3], 4);
       if (baud < 9600u || baud > 13500000u) baud = LINK_DISCOVERY_BAUD;
 
+      peer_enable(false);           /* nothing else may drive USART6 meanwhile */
       link_probe_t pr;
       link_probe((link_mode_t)buffer[2], baud, &pr);
 
