@@ -11,6 +11,24 @@ viewer's connection first (or just reload the page) before running this.
 import argparse, csv, struct, sys, time
 import hid
 
+# The board now exposes TWO HID interfaces: the vendor telemetry one this
+# protocol lives on, and a System Control one that exists only to make the
+# device wake-capable. hid.enumerate() returns both, so anything that picks the
+# first match is a coin flip — and landing on System Control looks exactly like
+# a dead board, because it answers nothing.
+GIRIS_USAGE_PAGE = 0xFF60
+
+
+def giris_interfaces(vid, pid):
+    """Only the vendor telemetry interface, on any platform."""
+    es = hid.enumerate(vid, pid)
+    hits = [e for e in es if e.get("usage_page") == GIRIS_USAGE_PAGE]
+    if not hits:                      # platforms that do not report usage_page
+        hits = [e for e in es if e.get("interface_number") in (0, -1, None)]
+    return hits or es
+
+
+
 VID, PID = 0x1209, 0x0001
 RPT = 64
 CMD_INFO, CMD_STREAM_SET, CMD_SNAPSHOT = 0x01, 0x02, 0x03
@@ -26,7 +44,7 @@ def list_boards():
     appear twice with the same path prefix; keying on the serial is what makes
     "how many boards are attached" answerable."""
     out = {}
-    for e in hid.enumerate(VID, PID):
+    for e in giris_interfaces(VID, PID):
         out.setdefault(e["serial_number"] or "?", e)
     return out
 

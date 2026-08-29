@@ -64,19 +64,41 @@ static const uint8_t desc_hid_report[] = {
     0xC0                           /* End Collection                        */
 };
 
+#include "usb_descriptors.h"
+
+/* Interface 1: a real HID keyboard.
+ *
+ * This is what the board is for, and it is also the only thing that makes it
+ * wake-capable. A vendor-defined HID is not a wake source: Windows exposed no
+ * MSPower_DeviceWakeEnable for it, powercfg refused to arm it under either
+ * name, and the host therefore never sent SET_FEATURE(DEVICE_REMOTE_WAKEUP) —
+ * measured as 65 detected presses against 0 grants while genuinely suspended.
+ * A keyboard is the canonical wake source on every OS.
+ *
+ * The cost, and it is real: keyboard usages are what make macOS demand Input
+ * Monitoring before any process may open the device, so the telemetry tooling
+ * now needs that permission granted once to whatever runs it. That was the
+ * reason this interface was kept out until now (see main.c), but it buys a
+ * convenience that has to be spent the moment the keyboard exists at all.
+ *
+ * Boot protocol, 6KRO — which is exactly the six keys this board has fitted.
+ * NKRO is a later concern and belongs with the keymap layer. */
+static const uint8_t desc_hid_report_kbd[] = {
+    TUD_HID_REPORT_DESC_KEYBOARD()
+};
+
 const uint8_t *tud_hid_descriptor_report_cb(uint8_t instance)
 {
-  (void)instance;
-  return desc_hid_report;
+  return (instance == ITF_NUM_KBD) ? desc_hid_report_kbd : desc_hid_report;
 }
 
 /* --------------------------------------------------------- configuration */
-enum { ITF_NUM_HID = 0, ITF_NUM_TOTAL };
+#define EP_HID_OUT     0x01
+#define EP_HID_IN      0x81
+#define EP_KBD_IN      0x82
 
-#define EP_HID_OUT  0x01
-#define EP_HID_IN   0x81
-
-#define CONFIG_TOTAL_LEN  (TUD_CONFIG_DESC_LEN + TUD_HID_INOUT_DESC_LEN)
+#define CONFIG_TOTAL_LEN  (TUD_CONFIG_DESC_LEN + TUD_HID_INOUT_DESC_LEN \
+                                               + TUD_HID_DESC_LEN)
 
 static const uint8_t desc_configuration[] = {
     TUD_CONFIG_DESCRIPTOR(1, ITF_NUM_TOTAL, 0, CONFIG_TOTAL_LEN,
@@ -87,6 +109,14 @@ static const uint8_t desc_configuration[] = {
     TUD_HID_INOUT_DESCRIPTOR(ITF_NUM_HID, 0, HID_ITF_PROTOCOL_NONE,
                              sizeof(desc_hid_report), EP_HID_OUT, EP_HID_IN,
                              CFG_TUD_HID_EP_BUFSIZE, 1),
+
+    /* bInterval 1 = one 125 us microframe. The whole point of the board is that
+     * a keypress is not waiting on a poll, so the keyboard gets the same 8 kHz
+     * the telemetry interface does. HID_ITF_PROTOCOL_KEYBOARD is what makes the
+     * host treat it as a boot keyboard — and as a wake source. */
+    TUD_HID_DESCRIPTOR(ITF_NUM_KBD, 0, HID_ITF_PROTOCOL_KEYBOARD,
+                       sizeof(desc_hid_report_kbd), EP_KBD_IN,
+                       CFG_TUD_HID_EP_BUFSIZE, 1),
 };
 
 const uint8_t *tud_descriptor_configuration_cb(uint8_t index)

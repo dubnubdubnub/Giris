@@ -1135,6 +1135,63 @@ keyboard is; a vendor collection frequently is not. That cannot be settled witho
 sleeps, and it may resolve itself once there is a real keyboard interface — which carries its own cost
 on macOS, since keyboard usages are what make it demand Input Monitoring to open the device (§main.c).
 
+## 13e. The keyboard interface, and what it cost
+
+Wake capability turned out not to be negotiable. Windows exposed no
+`MSPower_DeviceWakeEnable` for a vendor-defined HID, `powercfg /deviceenablewake` refused it under both
+friendly names, and the host consequently never sent `SET_FEATURE(DEVICE_REMOTE_WAKEUP)` — measured, while
+genuinely suspended, as **65 detected presses against 0 grants.** The instrumentation earned itself
+there: attempts and grants counted separately is exactly what says "the keyboard saw the press and the
+host refused" rather than "the press was missed".
+
+A HID **System Control** collection was the tempting middle road, since "System Wake Up" is the usage the
+spec defines for this and it carries no keyboard usages — which is what makes macOS demand Input
+Monitoring. It was built and then discarded, correctly: this board is a keyboard, a keyboard is the
+canonical wake source on every OS, and the Input Monitoring cost has to be paid the moment the real
+interface exists at all. Preserving it was protecting a convenience that was already spent.
+
+So interface 1 is now a boot keyboard, `bInterval` 1 — the same 125 µs the telemetry interface gets,
+because a keypress waiting on a poll is the one thing this board exists to avoid.
+
+| | |
+|---|---|
+| detection | per-key baseline, `\|value − baseline\|`, hysteresis 150 press / 80 release |
+| direction | **agnostic** — a TMR2615 swings either way depending on which pole faces it, and nothing yet knows how each key is fitted |
+| output | **off at boot**; `CMD_KEYS 1` enables it |
+
+The gate is not timidity. Those thresholds are guesses until the travel pipeline calibrates them, and
+this interface types into whatever machine it is plugged into. The interface still *enumerates* while
+gated, which is all that is needed to earn wake capability from the host.
+
+macOS reports both interfaces cleanly — `0xFF60/0x61` vendor and `0x0001/0x06` keyboard — and the
+telemetry tooling kept working, so the feared Input Monitoring prompt did not materialise for an
+already-permitted terminal.
+
+### Two bugs the multi-interface change surfaced
+
+**`tud_hid_report()` takes a report ID, not an instance.** `tud_hid_report(ITF_NUM_KBD, ...)` would have
+quietly sent a `report_id` of 1 down the *telemetry* interface. The multi-instance API is
+`tud_hid_n_report(instance, report_id, ...)`, and the short forms are hardwired to instance 0.
+
+**`tud_hid_set_report_cb()` ignored `instance`.** Every OUT report was parsed as a protocol command —
+including the keyboard's lock-LED reports, so a host toggling caps lock could have executed whatever
+opcode the LED bitmap happened to spell. Now gated to interface 0.
+
+### Host tooling had to learn which interface it wants
+
+`hid.enumerate()` returns one entry per interface, and every tool deduped by serial and took the first —
+a coin flip that, landing on the keyboard interface, looks exactly like a dead board because it answers
+nothing. All six tools now select on `usage_page == 0xFF60`, falling back to interface 0 on platforms
+that do not report usage pages.
+
+### Merging the peer's keys
+
+Peer keys are merged into the report only when the peer reports **no host of its own** — topology (a),
+where this half is the only route to a machine. In topology (b) both halves have hosts, and merging
+would type on both at once; choosing which host receives what is the input-owner token's job, and the
+token does not exist yet. So (b) currently has each half report only its own keys: wrong in the long
+run, harmless in the short one.
+
 ## 14. Updating the half that has no host (topology a)
 
 In `PC → half A → half B`, half B has no USB connection to anything. Two questions fall out of that:
