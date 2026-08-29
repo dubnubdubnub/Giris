@@ -25,7 +25,7 @@
 #include <stdint.h>
 
 #define PROTO_REPORT_SIZE     64
-#define PROTO_VERSION         3
+#define PROTO_VERSION         4
 
 /* ----- host -> device ------------------------------------------------- */
 enum {
@@ -90,6 +90,12 @@ enum {
  *   [45..46] uid_tag LE — the 16-bit condensation used for link arbitration
  *   [47]     link sense: bit0 = PB12 /LM_ST, bit1 = PB10 /AP_FAULT,
  *            bit2 = PC13 AP22653 EN, bit3 = PC6 pad, bit4 = PC7 pad
+ *   [48]     why the MCU last reset: bit0 power-on/brown-out, bit1 NRST pin,
+ *            bit2 software, bit3 watchdog, bit4 window watchdog, bit5 low-power.
+ *            bit0 means VBUS or the 3.3 V rail actually went away — a hub that
+ *            cut the port, not anything firmware could have prevented
+ *   [49..50] USB suspends seen since boot LE
+ *   [51..52] USB resumes seen since boot LE
  *
  * Two halves run one image, so every field above that is not identical between
  * them is the interesting one. The UID is what makes a report attributable.
@@ -97,6 +103,9 @@ enum {
 #define PROTO_INFO_UID        33
 #define PROTO_INFO_UID_TAG    45
 #define PROTO_INFO_SENSE      47
+#define PROTO_INFO_RESET      48
+#define PROTO_INFO_SUSPENDS   49
+#define PROTO_INFO_RESUMES    51
 
 /* RSP_STREAM body (offset 4): a run of frames, oldest first.
  *   [4]      frame_count in this report

@@ -19,6 +19,7 @@
 #include "link.h"
 #include "peer.h"
 #include "split.h"
+#include "reset.h"
 #include "board.h"
 #include "clock.h"
 #include "protocol.h"
@@ -179,7 +180,13 @@ static void send_info(uint8_t tag)
   memcpy(&p[PROTO_INFO_UID], uid_bytes(), 12);       /* [33..44] */
   const uint16_t tag16 = uid_tag();
   memcpy(&p[PROTO_INFO_UID_TAG], &tag16, 2);         /* [45..46] */
-  p[PROTO_INFO_SENSE] = link_sense();                /* [47]     */
+  p[PROTO_INFO_SENSE] = link_sense();
+  p[PROTO_INFO_RESET] = reset_flags();
+  {
+    const uint16_t su = reset_suspends(), re = reset_resumes();
+    memcpy(&p[PROTO_INFO_SUSPENDS], &su, 2);
+    memcpy(&p[PROTO_INFO_RESUMES],  &re, 2);
+  }                /* [47]     */
   tx_commit();
 }
 
@@ -474,8 +481,16 @@ void tud_umount_cb(void)  { telemetry_quiesce(); }
 /* Suspend is not disconnect: the host still owns us, it has just stopped
  * polling. Stop producing either way — bus-powered devices must drop to the
  * suspend current budget, and anything queued now is stale by resume. */
-void tud_suspend_cb(bool remote_wakeup_en) { (void)remote_wakeup_en; telemetry_quiesce(); }
-void tud_resume_cb(void)  { }
+void tud_suspend_cb(bool remote_wakeup_en)
+{
+  (void)remote_wakeup_en;
+  telemetry_quiesce();
+  /* A host that suspends us and a hub that cuts our power look identical from
+   * the outside. This counts the first; RESET_POR on the next boot reports the
+   * second. */
+  reset_note_suspend();
+}
+void tud_resume_cb(void) { reset_note_resume(); }
 
 uint16_t tud_hid_get_report_cb(uint8_t instance, uint8_t report_id,
                                hid_report_type_t report_type,
