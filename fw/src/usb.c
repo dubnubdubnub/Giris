@@ -21,6 +21,8 @@
 #include "split.h"
 #include "reset.h"
 #include "power.h"
+#include "keys.h"
+#include "usb_descriptors.h"
 #include "board.h"
 #include "clock.h"
 #include "protocol.h"
@@ -195,6 +197,14 @@ static void send_info(uint8_t tag)
     p[PROTO_INFO_RWU_EN] = ps.remote_wakeup_en;
     memcpy(&p[PROTO_INFO_WAKE_TRY],   &ps.wake_attempts, 2);
     memcpy(&p[PROTO_INFO_WAKE_GRANT], &ps.wake_grants, 2);
+  }
+  {
+    keys_status_t ks;
+    keys_status(&ks);
+    p[PROTO_INFO_KEYS_EN]   = ks.enabled;
+    p[PROTO_INFO_KEYS_OWN]  = ks.own_pressed;
+    p[PROTO_INFO_KEYS_PEER] = ks.peer_pressed;
+    p[PROTO_INFO_KEYS_MERGE]= ks.sending_peer;
   }                /* [47]     */
   tx_commit();
 }
@@ -272,7 +282,11 @@ void tud_hid_set_report_cb(uint8_t instance, uint8_t report_id,
                            hid_report_type_t report_type,
                            const uint8_t *buffer, uint16_t bufsize)
 {
-  (void)instance; (void)report_id; (void)report_type;
+  (void)report_id; (void)report_type;
+  /* Interface 1 is the keyboard, and its OUT reports are lock-LED state, not
+   * protocol commands. Parsing them as commands would mean a host toggling caps
+   * lock could execute whatever opcode the LED bitmap happened to spell. */
+  if (instance != ITF_NUM_HID) return;
   if (bufsize < 2) return;
 
   const uint8_t cmd = buffer[0];
@@ -405,6 +419,16 @@ void tud_hid_set_report_cb(uint8_t instance, uint8_t report_id,
        * as attempts climbing with grants at zero. */
       if (buffer[2] == 1) power_on_suspend(true);
       else if (buffer[2] == 2) power_on_resume();
+      send_info(tag);
+      break;
+
+    case CMD_KEYS:
+      /* Output is off at boot and stays off until someone asks for it. The
+       * thresholds are guesses until the travel pipeline calibrates them, and
+       * this interface types into whatever it is plugged into. */
+      if (buffer[2] == 1) keys_set_enabled(true);
+      else if (buffer[2] == 2) keys_set_enabled(false);
+      else if (buffer[2] == 3) keys_calibrate();
       send_info(tag);
       break;
 

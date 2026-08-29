@@ -15,6 +15,7 @@ static uint16_t baseline[PROTO_NUM_SLOTS];
 static bool     baseline_valid;
 static bool     press_pending;
 static uint8_t  settle;
+static uint32_t last_try_cyc;
 
 /* The peer's host being awake is the whole reason SERVING exists. Both halves
  * run one image, so this is asked from either side with the same answer. */
@@ -125,6 +126,15 @@ void power_task(void)
   if (!moved) return;
 
   press_pending = true;
+
+  /* Rate limit. A press is not instantaneous — the value crosses the threshold,
+   * the baseline is retaken mid-travel, and the finger keeps moving across it
+   * again — so one deliberate press produced a dozen attempts and a dozen
+   * calls into the USB stack. Measured 65 attempts for a handful of presses.
+   * Harmless when refused, pointlessly noisy when granted. */
+  const uint32_t per_ms = system_core_clock / 1000u;
+  if (per_ms && (DWT->CYCCNT - last_try_cyc) < 50u * per_ms) return;
+  last_try_cyc = DWT->CYCCNT;
   attempts++;
 
   /* Only the host can decide to come back. If it never granted remote wakeup

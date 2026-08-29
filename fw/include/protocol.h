@@ -25,7 +25,7 @@
 #include <stdint.h>
 
 #define PROTO_REPORT_SIZE     64
-#define PROTO_VERSION         5
+#define PROTO_VERSION         6
 
 /* ----- host -> device ------------------------------------------------- */
 enum {
@@ -42,6 +42,11 @@ enum {
   CMD_LINK_HOLD    = 0x0B,  /* args: [2]=pin (0 PC6/D-, 1 PC7/D+), [3]=1 hold low, 0 release */
   CMD_PEER         = 0x0C,  /* args: [2]=0 query, 1 enable+restart, 2 disable -> RSP_PEER */
   CMD_SPLIT        = 0x0D,  /* args: [2]=0 query, 1 test pattern on, 2 off -> RSP_SPLIT */
+  CMD_KEYS         = 0x0F,  /* args: [2]=0 query, 1 enable keyboard output,
+                             * 2 disable, 3 re-take the resting baseline.
+                             * Output is OFF at boot: the thresholds are guesses
+                             * until the travel pipeline calibrates them, and
+                             * this interface types into the attached machine. */
   CMD_POWER        = 0x0E,  /* args: [2]=0 query, 1 force the suspend path, 2 resume.
                              * 1 and 2 exercise everything tud_suspend_cb does EXCEPT
                              * the USB signalling itself, because a host cannot be asked
@@ -104,6 +109,10 @@ enum {
  *            asleep but the PEER's host is awake, so we stay at full rate)
  *   [54]     1 if the host granted SET_FEATURE(DEVICE_REMOTE_WAKEUP)
  *   [55..56] presses seen while suspended LE
+ *   [59]     keyboard output enabled
+ *   [60]     this half's pressed-key bitmap
+ *   [61]     the peer's pressed-key bitmap, when merged
+ *   [62]     1 if peer keys are being merged into our report (topology a)
  *   [57..58] remote wakeups the stack accepted LE.  Attempts climbing with
  *            grants at zero is the host refusing, not a missed keypress —
  *            which is the distinction anyone debugging "it won't wake my
@@ -122,6 +131,10 @@ enum {
 #define PROTO_INFO_RWU_EN     54
 #define PROTO_INFO_WAKE_TRY   55
 #define PROTO_INFO_WAKE_GRANT 57
+#define PROTO_INFO_KEYS_EN    59
+#define PROTO_INFO_KEYS_OWN   60
+#define PROTO_INFO_KEYS_PEER  61
+#define PROTO_INFO_KEYS_MERGE 62
 
 /* RSP_STREAM body (offset 4): a run of frames, oldest first.
  *   [4]      frame_count in this report

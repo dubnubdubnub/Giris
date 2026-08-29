@@ -24,7 +24,7 @@
  * VBUS — see usb.c, which sets GCCFG.VBUSIG by hand. */
 #define CFG_TUD_VBUS_DETECT_HW    0
 
-#define CFG_TUD_HID               1
+#define CFG_TUD_HID               2
 #define CFG_TUD_CDC               0
 #define CFG_TUD_MSC               0
 #define CFG_TUD_MIDI              0

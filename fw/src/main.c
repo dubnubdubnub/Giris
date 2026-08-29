@@ -17,6 +17,7 @@
 #include "uid.h"
 #include "reset.h"
 #include "power.h"
+#include "keys.h"
 #include "link.h"
 #include "peer.h"
 #include "split.h"
@@ -155,6 +156,9 @@ int main(void)
   console_stage("power policy");
   power_init();
 
+  console_stage("keyboard (output disabled until asked)");
+  keys_init();
+
   console_stage("link arbitration");
   console_puts("   link protocol v");
   console_dec(PEER_PROTO);
@@ -189,6 +193,7 @@ int main(void)
      * cannot be worked out locally. */
     split_set_host(tud_mounted());
     peer_task();
+    keys_task();
     power_task();
 
     /* Only when the host is asleep AND no peer is relying on us. In SERVING the
