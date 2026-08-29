@@ -100,6 +100,27 @@ def split(d, arg=0):
                 keys=list(struct.unpack_from("<%dH" % n, r, 50)))
 
 
+RESET_NAMES = ((0x01, "power-on/brown-out"), (0x02, "NRST pin"), (0x04, "software"),
+               (0x08, "watchdog"), (0x10, "window watchdog"), (0x20, "low-power"))
+
+
+def why_reset(d):
+    """Why the MCU last restarted, plus how many USB suspends it has seen.
+
+    Reported by firmware from CRM_CTRLSTS. 'power-on/brown-out' means VBUS or
+    the 3.3 V rail actually went away — a hub that cut the port — which is not
+    something firmware could have prevented."""
+    r = txn(d, 0x01, 0, 0x81)
+    if not r:
+        return None
+    if r[4] < 4:
+        return dict(stale=True, proto=r[4])
+    names = [n for b, n in RESET_NAMES if r[48] & b] or ["(no flag set)"]
+    return dict(stale=False, flags=r[48], why=", ".join(names),
+                suspends=struct.unpack_from("<H", r, 49)[0],
+                resumes=struct.unpack_from("<H", r, 51)[0])
+
+
 def flagstr(f):
     return "".join(c if f & b else "-" for b, c in ((1, "k"), (2, "t"), (4, "H")))
 
@@ -112,6 +133,12 @@ def header(devs):
             continue
         print(f"{n}: {PEER_STATE[p['state']]:12s} role={ROLE[p['role']]} "
               f"tag=0x{p['tag']:04X} peer=0x{p['peer']:04X} baud={p['baud']:,}")
+        w = why_reset(d)
+        if w and w.get("stale"):
+            print(f"      firmware proto v{w['proto']} predates reset reporting")
+        elif w:
+            print(f"      last reset: {w['why']}   usb suspends {w['suspends']}"
+                  f" resumes {w['resumes']}")
         if p["state"] == 6:
             print(f"      the peer speaks link protocol v{p['proto']}, this half does not.")
             print(f"      They stay paired on the 115200 discovery bus and never frame,")

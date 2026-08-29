@@ -37,6 +37,7 @@ add_executable(giris.elf
   src/link.c
   src/peer.c
   src/split.c
+  src/reset.c
   ${TUSB}/src/tusb.c
   ${TUSB}/src/common/tusb_fifo.c
   ${TUSB}/src/device/usbd.c

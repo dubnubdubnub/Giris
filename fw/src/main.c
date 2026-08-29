@@ -15,6 +15,7 @@
 #include "sk6812.h"
 #include "adc.h"
 #include "uid.h"
+#include "reset.h"
 #include "link.h"
 #include "peer.h"
 #include "split.h"
@@ -67,6 +68,10 @@ int main(void)
    * anything that can hang. The previous build initialised the PLL first and
    * spun forever waiting on HEXT — from outside that is indistinguishable from
    * a dead board. */
+  /* Before anything else can reset the part, and before the DFU jump, so the
+   * flags describe the reset that actually got us here. */
+  reset_capture();
+
   usb_bootloader_check();      /* honours a pending reboot-to-DFU request */
 
   system_core_clock_update();
@@ -105,6 +110,17 @@ int main(void)
   console_puts(uid_serial());
   console_puts("\n   tag    0x");
   console_hex(uid_tag());
+  {
+    const uint8_t rf = reset_flags();
+    console_puts("\n   reset  ");
+    if (rf & RESET_POR)    console_puts("power-on/brown-out ");
+    if (rf & RESET_NRST)   console_puts("NRST-pin ");
+    if (rf & RESET_SW)     console_puts("software ");
+    if (rf & RESET_WDT)    console_puts("watchdog ");
+    if (rf & RESET_WWDT)   console_puts("window-watchdog ");
+    if (rf & RESET_LOWPWR) console_puts("low-power ");
+    if (rf == 0)           console_puts("(no flag set)");
+  }
   console_puts("\n");
 
   console_stage("link pins (J1 / USART6)");
