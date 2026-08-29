@@ -170,8 +170,17 @@ def main():
                 send(d, CMD_STREAM_SET, 0, 1)
                 time.sleep(0.2)
                 stale = 0
-                while d.read(RPT, timeout_ms=50):
-                    stale += 1
+                while True:
+                    r = d.read(RPT, timeout_ms=50)
+                    if not r:
+                        break
+                    # Only RSP_STREAM counts. CMD_STREAM_SET answers with an
+                    # RSP_INFO of its own, so counting every report made this
+                    # loop find exactly one "stale" frame on a perfectly clean
+                    # stop, every attempt, and warn each time. A warning that
+                    # always fires is worse than no warning at all.
+                    if r[0] == RSP_STREAM:
+                        stale += 1
                 if stale == 0:
                     break
             except OSError:
