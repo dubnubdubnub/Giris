@@ -16,6 +16,7 @@
 #include "adc.h"
 #include "uid.h"
 #include "reset.h"
+#include "power.h"
 #include "link.h"
 #include "peer.h"
 #include "split.h"
@@ -151,6 +152,9 @@ int main(void)
   adc_scan_init();
   if (adc_calibration_failed()) console_puts("!! ADC calibration timed out\n");
 
+  console_stage("power policy");
+  power_init();
+
   console_stage("link arbitration");
   console_puts("   link protocol v");
   console_dec(PEER_PROTO);
@@ -185,5 +189,10 @@ int main(void)
      * cannot be worked out locally. */
     split_set_host(tud_mounted());
     peer_task();
+    power_task();
+
+    /* Only when the host is asleep AND no peer is relying on us. In SERVING the
+     * link still has a frame due every 125 us and sleeping would wreck it. */
+    if (power_may_idle()) __WFI();
   }
 }

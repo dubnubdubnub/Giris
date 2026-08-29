@@ -25,7 +25,7 @@
 #include <stdint.h>
 
 #define PROTO_REPORT_SIZE     64
-#define PROTO_VERSION         4
+#define PROTO_VERSION         5
 
 /* ----- host -> device ------------------------------------------------- */
 enum {
@@ -42,6 +42,10 @@ enum {
   CMD_LINK_HOLD    = 0x0B,  /* args: [2]=pin (0 PC6/D-, 1 PC7/D+), [3]=1 hold low, 0 release */
   CMD_PEER         = 0x0C,  /* args: [2]=0 query, 1 enable+restart, 2 disable -> RSP_PEER */
   CMD_SPLIT        = 0x0D,  /* args: [2]=0 query, 1 test pattern on, 2 off -> RSP_SPLIT */
+  CMD_POWER        = 0x0E,  /* args: [2]=0 query, 1 force the suspend path, 2 resume.
+                             * 1 and 2 exercise everything tud_suspend_cb does EXCEPT
+                             * the USB signalling itself, because a host cannot be asked
+                             * to suspend one device on demand. -> RSP_INFO */
   CMD_LINK_PROBE   = 0x0A,  /* args: [2]=link_mode_t, [3..6]=baud LE -> RSP_PROBE */
   CMD_BOOTLOADER   = 0x7E,  /* jump to the ROM DFU — no buttons needed */
 };
@@ -96,6 +100,14 @@ enum {
  *            cut the port, not anything firmware could have prevented
  *   [49..50] USB suspends seen since boot LE
  *   [51..52] USB resumes seen since boot LE
+ *   [53]     power state: 0 run, 1 suspended (500 Hz scan), 2 serving (host
+ *            asleep but the PEER's host is awake, so we stay at full rate)
+ *   [54]     1 if the host granted SET_FEATURE(DEVICE_REMOTE_WAKEUP)
+ *   [55..56] presses seen while suspended LE
+ *   [57..58] remote wakeups the stack accepted LE.  Attempts climbing with
+ *            grants at zero is the host refusing, not a missed keypress —
+ *            which is the distinction anyone debugging "it won't wake my
+ *            machine" actually needs
  *
  * Two halves run one image, so every field above that is not identical between
  * them is the interesting one. The UID is what makes a report attributable.
@@ -106,6 +118,10 @@ enum {
 #define PROTO_INFO_RESET      48
 #define PROTO_INFO_SUSPENDS   49
 #define PROTO_INFO_RESUMES    51
+#define PROTO_INFO_POWER      53
+#define PROTO_INFO_RWU_EN     54
+#define PROTO_INFO_WAKE_TRY   55
+#define PROTO_INFO_WAKE_GRANT 57
 
 /* RSP_STREAM body (offset 4): a run of frames, oldest first.
  *   [4]      frame_count in this report

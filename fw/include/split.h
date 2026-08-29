@@ -71,6 +71,18 @@
 #define SPLIT_F_HOST      0x04u     /* this half has an enumerated USB host.
                                      * Both halves setting it is topology (b),
                                      * the dual-host KVM case. */
+#define SPLIT_F_AWAKE     0x08u     /* ...and that host is actually awake.
+                                     *
+                                     * Deliberately a separate bit from _HOST,
+                                     * because two different questions are being
+                                     * asked. Topology detection wants "is there
+                                     * a host on that end", which stays true
+                                     * across a suspend. The power policy wants
+                                     * "is anyone over there who still needs my
+                                     * keys", which does not. Conflating them
+                                     * means a half can never stop serving a
+                                     * sleeping peer, and pays full scan current
+                                     * for a machine nobody is using. */
 
 /* Two tiers, because they answer different questions.
  *
@@ -145,5 +157,8 @@ bool split_test_enabled(void);
 
 /* Feeds SPLIT_F_HOST. Topology detection reads it off the peer's frames. */
 void split_set_host(bool present);
+
+/* Feeds SPLIT_F_AWAKE. Driven by the USB suspend callbacks, not polled. */
+void split_set_awake(bool awake);
 
 #endif
