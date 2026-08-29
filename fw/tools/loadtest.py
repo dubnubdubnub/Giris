@@ -185,8 +185,19 @@ def main():
     if f1 is None:
         print("  device counters unavailable — the pipe errored before teardown")
         return 1
+    if f1 < f0:
+        # The frame counter is monotonic at 8 kHz from boot, so this is not a
+        # slow window — it is a reboot inside it. Every rate below would be
+        # nonsense, and worse, a soak that quietly spanned a reset would read as
+        # a pass. Say so instead.
+        print("  *** THE BOARD RESET DURING THIS RUN ***")
+        print(f"      frame counter went {f0:,} -> {f1:,}; uptime is now "
+              f"{f1/8000:.1f}s, less than the {elapsed:.0f}s window.")
+        print("      Nothing else here is meaningful. Check RSP_INFO[48] for why.")
+        return 1
     produced, dropped = f1 - f0, drop1 - drop0
     delivered = produced - dropped
+    print(f"  uptime        {f1/8000:9,.0f} s        (no reset inside the window)")
     print(f"  scan          {produced/elapsed:9,.0f} frames/s")
     print(f"  usb device    {delivered/elapsed:9,.0f} reports/s  ({dropped:,} dropped by the device)")
     if s0 and s1:

@@ -219,6 +219,22 @@ static void tx_frame(uint8_t type, uint16_t dst, uint32_t arg)
 static bool tx_done(void)
 {
   if (!tx_busy) return true;
+
+  /* Both conditions, and the DMA one is NOT redundant with TDC.
+   *
+   * TDC says only that the shift register drained. It drains just the same in
+   * the gap left when a starved DMA fails to deliver the next byte in time —
+   * so on TDC alone this returns "sent" while the DMA still has bytes to fetch,
+   * the main loop rebuilds the buffer underneath it, and the tail of the frame
+   * goes out as the head of the next one. The receiver sees a bad CRC and then
+   * slides a byte at a time hunting for the sync it just lost.
+   *
+   * Measured, 300 s each way: an idle half corrupts nothing, while a half also
+   * servicing 8 kHz USB — where the OTG core's DMA contends for the bus —
+   * produced 1,661 corrupt frames and 52,594 resync slides at the far end while
+   * its OWN reception stayed spotless. That asymmetry is what named the bug:
+   * the fault was always in what the busy half transmitted. */
+  if (dma_data_number_get(DMA1_CHANNEL3) != 0u) return false;
   if (usart_flag_get(USART6, USART_TDC_FLAG) != SET) return false;
   usart_dma_transmitter_enable(USART6, FALSE);
   dma_channel_enable(DMA1_CHANNEL3, FALSE);
