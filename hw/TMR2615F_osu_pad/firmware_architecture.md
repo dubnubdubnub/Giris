@@ -928,6 +928,126 @@ today is the raw 12-bit count shifted to 9 bits, and key *index* is hardware sca
 keymap layer that would give these positions names does not exist either. The transport is final; the
 semantics are not.
 
+## 13c. Dual-host bring-up, and the USB suspend gap (2026-08-28)
+
+One half on the Mac, one on a Windows box, J1 between them. Both halves reached the run phase
+unaided and framed at 12 Mbaud across two machines, and — the thing worth having — **each read
+`SPLIT_F_HOST` set in the other's frames**. Topology (b) detecting itself, from both sides, with no
+configuration. When the Windows half later lost its host, the Mac half's view of the peer flags went
+from `k-H` to `k--` within a frame. That bit is the input topology detection cannot derive locally, and
+it works.
+
+### The board was power-cycling, and the frame counter proved it
+
+Everything measured on the Windows side was, for a while, garbage: a 180 s run that produced zero USB
+reports, a storm of `hid_read` errors, the link dropping to `alone`, and the host tool reporting "no
+Giris found" seconds after a successful query. The firmware's own frame counter settled it:
+
+```
+  0.1s  frame 321,092   uptime 40.1s
+  5.3s  device absent
+ 15.8s  frame  18,360   uptime  2.3s   <<< COUNTER WENT BACKWARDS - MCU REBOOTED
+```
+
+Not a re-enumeration — the MCU was restarting, sporadically, a few times per ten minutes. A monotonic
+counter that survives nothing is a better disconnect detector than anything the host can offer, because
+the host cannot tell a re-enumerated device from a rebooted one.
+
+### Cause: we ignore USB suspend
+
+The board is behind an Anker 556 hub — a hub is exactly where per-port power switching lives — and the
+Windows box had **USB selective suspend enabled** with the device's per-device policy set to permit
+power-down. Our firmware treats suspend as a telemetry event only: `tud_suspend_cb()` quiesces the
+stream and nothing else. The part stays at 216 MHz with the ADC scanning, the link framing, and the HS
+PHY up, which is orders of magnitude over the **2.5 mA** USB 2.0 §7.2.3 allows a suspended device. A hub
+that cuts an over-budget suspended port produces exactly the observed symptom.
+
+Disabling power-down for the device and both hub nodes:
+
+| | resets observed |
+|---|---|
+| before | 3 in ~10 minutes of watching |
+| after | **0 in 300 s, uptime 300.7 s continuous** |
+
+That is a workaround on one machine, not a fix. **Honouring USB suspend is unfinished firmware work**,
+and it is not optional for a keyboard: any host that sleeps will do this. It is also entangled with the
+split, because a suspended half stops framing and its peer drops the link after 250 ms — in dual-host
+topology (b) one host may sleep while the other is wide awake, so "suspended" must mean *this half stops
+talking to its own host*, not *this half stops working*. Remote wakeup has to arrive at the same time.
+
+### `RSP_INFO[48]`: why the MCU last reset
+
+Added because the ambiguity above cost hours. `CRM_CTRLSTS` records the cause; the flags are sticky
+(RM 4.3.21) so `reset_capture()` reads and clears them first thing in `main()`, or every later boot
+reports the reason for the first one.
+
+The distinction that matters is **power-on reset versus anything else**: a POR means VBUS or the 3.3 V
+rail actually went away, which no firmware could have prevented. Verified rather than assumed — the
+first boot after the old image read `POR + NRST + software` (correct: nothing had ever cleared them, so
+they had accumulated since the board's original power-up), and the next read `0x06`, NRST + software,
+with POR correctly absent.
+
+Suspend and resume counts sit alongside it, because a host that suspends us and a hub that cuts our
+power look identical from outside: a suspend that does not end in a reset shows in the counter, one that
+does shows as `RESET_POR` on the next boot.
+
+### The TX completion race — found only under combined load
+
+With the resets gone, the full-load test earned its keep immediately. 300 s with the Windows half
+running everything at once — 8 kHz scan, 8 kHz link both ways, 8 kHz USB HID:
+
+| | Windows half (**under full USB load**) | Mac half (idle host) |
+|---|---|---|
+| usb | 7,994/s host, 8,000/s device, 0 dropped | — |
+| link rx | 8,000/s | 7,994/s |
+| **crc errors** | **0** | **1,661** |
+| **frames lost** | **0** | **1,654** |
+| resync slides | 0 | 52,594 |
+
+The asymmetry is what named the bug. The *loaded* half received flawlessly; the *idle* half saw 5.5
+corrupt frames a second. So the fault was never in reception — it was in what the busy half
+**transmitted**. A control run with the loaded half idle confirmed it: 112 s, zero errors of every kind.
+
+The cause is in `tx_done()`, which declared a frame sent on `USART_TDC_FLAG` alone:
+
+> **TDC says only that the shift register drained.** It drains just the same in the gap left when a
+> starved DMA fails to deliver the next byte in time. On TDC alone, `tx_done()` reports "sent" while the
+> DMA still has bytes to fetch; the main loop then rebuilds the frame buffer underneath it, and the tail
+> of one frame goes out as the head of the next.
+
+Which is why it needs *both* halves loaded to appear: the OTG core's DMA has to be contending for the
+bus hard enough to starve the USART TX channel mid-frame. On an idle half it never happens. Fix is one
+line — also require `dma_data_number_get(DMA1_CHANNEL3) == 0`.
+
+Confirmed by reversing the roles, which the split makes free: load the **fixed** half instead and watch
+the unfixed one. Same 8 kHz USB, same link, opposite direction:
+
+```
+  30.1s  rx 7,999/s  gaps+0  crc+0  resync+0  bad+0
+  60.1s  rx 8,000/s  gaps+0  crc+0  resync+0  bad+0
+```
+
+Zero, where the unfixed transmitter produced ~330 errors in the same 60 s. The loaded half meanwhile
+held 8,000 USB reports/s with 0 read errors.
+
+> Worth keeping: **a peripheral's "done" flag and its DMA's "done" are different facts.** Any DMA-fed
+> transmitter needs both, and the gap between them only opens under bus contention — so it will not
+> appear in any test that loads one subsystem at a time.
+
+### A host tool can take down a host controller
+
+Worth recording as a hazard in its own right. While the board was flapping, `loadtest.py` reacted to
+each failed read with a bare `continue`. A failing read returns instantly, so that became **~44,500
+`hid_read` calls per second** — 889,778 read errors in 20 s — and the AMD xHCI controller it was aimed
+at ended in `CM_PROB_FAILED_POST_START`, taking a reboot to recover. Its teardown was also not
+unconditional: `snapshot()` raised inside the `finally`, so the stream-off after it never ran and the
+board was left streaming into a host with nothing reading it — the same condition that took down a
+controller earlier in this bring-up (§15).
+
+Both are fixed: failed reads back off, a budget aborts the run, and teardown always executes. The rule
+generalises — **a diagnostic that reacts to failure by retrying as fast as it can is a denial-of-service
+tool**, and the thing it takes down is the thing you were trying to measure.
+
 ## 14. Updating the half that has no host (topology a)
 
 In `PC → half A → half B`, half B has no USB connection to anything. Two questions fall out of that:
