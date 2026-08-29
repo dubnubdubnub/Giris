@@ -24,6 +24,18 @@
 #define SCAN_SLOTS       10
 #define SEQ_LEN          5
 #define TMR2_PERIOD      13499u   /* 216 MHz / 13500 = 16 kHz -> 8 kHz frames */
+/* Suspend rate. A Hall key has no contact and no edge, so there is nothing to
+ * hang a GPIO wake interrupt on: detecting a press REQUIRES converting, and the
+ * only lever available is how often. 500 Hz frames is 1/16 of the run rate —
+ * a press is seen within 2 ms, far below anything a person notices when waking
+ * a machine, and the mux and ADC duty cycle fall by the same factor. */
+/* Reached with the PRESCALER, not a long period. The driver declares TMR2's
+ * period field as 32-bit but the timer implements 16: a period of 215999 came
+ * back as 215999 & 0xFFFF = 19391, giving 5,569 Hz frames instead of 500 — an
+ * 11x miss that only the measurement caught. 216 MHz / 216 = 1 MHz, / 1000 =
+ * 1 kHz timer = 500 Hz frames, and both numbers fit any timer on the part. */
+#define TMR2_PERIOD_LP   999u
+#define TMR2_DIV_LP      215u
 
 static volatile uint16_t adc_ring[SCAN_SLOTS];
 
@@ -206,6 +218,21 @@ void adc_scan_init(void)
 
   dma_channel_enable(DMA1_CHANNEL1, TRUE);
   gpio_bits_reset(MUX_SEL_PORT, MUX_SEL_PIN);
+  tmr_counter_enable(TMR2, TRUE);
+}
+
+/* Reprogram the scan rate. The period register is buffered through the period
+ * shadow, so this takes effect at the next overflow rather than truncating the
+ * conversion in flight; the caller still has to adc_resync(), because the mux
+ * bank and the DMA ring have to be put back in step afterwards. */
+void adc_set_low_power(bool on)
+{
+  tmr_counter_enable(TMR2, FALSE);
+  tmr_base_init(TMR2, on ? TMR2_PERIOD_LP : TMR2_PERIOD,
+                on ? TMR2_DIV_LP    : 0u);
+  tmr_cnt_dir_set(TMR2, TMR_COUNT_UP);
+  tmr_primary_mode_select(TMR2, TMR_PRIMARY_SEL_OVERFLOW);
+  tmr_flag_clear(TMR2, TMR_OVF_FLAG);
   tmr_counter_enable(TMR2, TRUE);
 }
 

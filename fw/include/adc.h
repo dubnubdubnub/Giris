@@ -35,6 +35,10 @@ bool adc_calibration_failed(void);
  * interrupts for more than a scan period. */
 void adc_resync(void);
 
+/* Drop the scan to a low rate for USB suspend, or restore it. See power.h for
+ * why an analog keyboard cannot simply stop scanning. Call adc_resync() after. */
+void adc_set_low_power(bool on);
+
 /* Ordinary-sequence order, rank 1..4, as ADC channel numbers 0..3. */
 const uint8_t *adc_sequence(void);
 void adc_set_sequence(const uint8_t ch[5]);

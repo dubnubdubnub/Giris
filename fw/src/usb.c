@@ -20,6 +20,7 @@
 #include "peer.h"
 #include "split.h"
 #include "reset.h"
+#include "power.h"
 #include "board.h"
 #include "clock.h"
 #include "protocol.h"
@@ -186,6 +187,14 @@ static void send_info(uint8_t tag)
     const uint16_t su = reset_suspends(), re = reset_resumes();
     memcpy(&p[PROTO_INFO_SUSPENDS], &su, 2);
     memcpy(&p[PROTO_INFO_RESUMES],  &re, 2);
+  }
+  {
+    power_status_t ps;
+    power_status(&ps);
+    p[PROTO_INFO_POWER]  = ps.state;
+    p[PROTO_INFO_RWU_EN] = ps.remote_wakeup_en;
+    memcpy(&p[PROTO_INFO_WAKE_TRY],   &ps.wake_attempts, 2);
+    memcpy(&p[PROTO_INFO_WAKE_GRANT], &ps.wake_grants, 2);
   }                /* [47]     */
   tx_commit();
 }
@@ -386,6 +395,19 @@ void tud_hid_set_report_cb(uint8_t instance, uint8_t report_id,
       break;
     }
 
+    case CMD_POWER:
+      /* Drives the real code path, not a mock: same power_on_suspend() the USB
+       * stack calls. What it cannot reproduce is the bus going idle, so the
+       * remote-wakeup handshake itself still needs a host that actually sleeps.
+       * Pretend the host granted remote wakeup, so the press detector's call to
+       * tud_remote_wakeup() is exercised too — it will simply be refused by the
+       * stack while the bus is awake, which is the correct outcome and shows up
+       * as attempts climbing with grants at zero. */
+      if (buffer[2] == 1) power_on_suspend(true);
+      else if (buffer[2] == 2) power_on_resume();
+      send_info(tag);
+      break;
+
     case CMD_LINK_HOLD:
       peer_enable(false);           /* nothing else may drive USART6 meanwhile */
       link_hold(buffer[2], buffer[3] != 0);
@@ -489,8 +511,9 @@ void tud_suspend_cb(bool remote_wakeup_en)
    * the outside. This counts the first; RESET_POR on the next boot reports the
    * second. */
   reset_note_suspend();
+  power_on_suspend(remote_wakeup_en);
 }
-void tud_resume_cb(void) { reset_note_resume(); }
+void tud_resume_cb(void) { reset_note_resume(); power_on_resume(); }
 
 uint16_t tud_hid_get_report_cb(uint8_t instance, uint8_t report_id,
                                hid_report_type_t report_type,

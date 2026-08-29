@@ -1048,6 +1048,93 @@ Both are fixed: failed reads back off, a budget aborts the run, and teardown alw
 generalises — **a diagnostic that reacts to failure by retrying as fast as it can is a denial-of-service
 tool**, and the thing it takes down is the thing you were trying to measure.
 
+## 13d. USB suspend, and why a Hall keyboard cannot wake the normal way
+
+### The constraint
+
+A mechanical keyboard suspends by stopping everything and arming a GPIO interrupt: the switch shorts a
+pin, an edge fires, the MCU wakes from deep sleep having drawn microamps. **None of that is available
+here.** A TMR2615 has no contact and produces no edge — its output at rest is a mid-scale voltage
+indistinguishable from its output under a finger except by *measuring* it. Detecting a press requires
+running the mux and the ADC.
+
+Checked for an escape and there isn't one on this part: the only comparators in the reference manual are
+the timers' own output-compare units, so there is no standalone analog comparator to sit on a key while
+the core sleeps. The ADC's voltage monitor (`VMOR`, thresholds plus interrupt) is the useful refinement —
+it does not remove the need to convert, but it lets the CPU sleep between conversions instead of
+inspecting every sample. Worth building; not built yet.
+
+So **suspend here means scan slower, not stop.** 500 Hz instead of 8 kHz: a 16x cut in mux and ADC duty,
+with a press still seen inside 2 ms — far below anything a person notices when waking a machine.
+
+Be honest about what this is: it does **not** reach the 2.5 mA USB 2.0 §7.2.3 allows a suspended device.
+Getting there needs the PLL stopped and the OTG PHY in low-power mode. What it does is remove the two
+largest consumers that were running for no reason — a full-rate scan nobody was reading, and the LEDs.
+
+### The split makes suspend a three-state problem
+
+In topology (b) each half has its own host and **they sleep independently.** If half A's host sleeps
+while half B's is wide awake, A's keys must keep reaching B — the person is still typing, just on the
+other machine. A half that powered down on suspend would silently kill half the keyboard.
+
+That forced `SPLIT_F_HOST` to split in two. It meant "enumerated", which stays true across a suspend;
+the power policy needs "awake", which does not. Conflating them means a half can never stop serving a
+sleeping peer:
+
+| flag | question it answers | used by |
+|---|---|---|
+| `SPLIT_F_HOST` | is there a host on that end at all | topology detection |
+| `SPLIT_F_AWAKE` | is anyone over there who still needs my keys | power policy |
+
+| state | meaning | scan |
+|---|---|---|
+| `POWER_RUN` | our host is awake | 8 kHz |
+| `POWER_SERVING` | our host sleeps, the **peer's** host is awake | **8 kHz** — costs current, and is still right |
+| `POWER_SUSPENDED` | nobody needs us | 500 Hz |
+
+Measured across all four transitions, both halves:
+
+```
+both awake          5C13 run       8,000 Hz   peer k-HA
+5C13 host asleep    5C13 SERVING   8,000 Hz   peer sees k-H-   (AWAKE cleared, HOST kept)
+both asleep         5C13 SUSPENDED   500 Hz   peer k-H-
+resumed             5C13 run       8,000 Hz   peer k-HA
+```
+
+### Two things the measurement caught that reasoning did not
+
+**The low-power rate was 11x wrong.** `tmr_base_init()` takes a 32-bit period and the driver's struct
+declares it 32-bit, but TMR2 implements 16: a period of 215999 came back as `215999 & 0xFFFF` = 19391,
+giving **5,569 Hz instead of 500**. Reached with the prescaler instead — 216 MHz / 216 = 1 MHz, / 1000 =
+1 kHz timer = 500 Hz frames — which keeps both numbers inside any timer on the part.
+
+**Every rate change produced a spurious wake.** `adc_resync()` realigns the mux bank with the DMA ring,
+and the frame straddling that realignment can carry one bank's readings in the other's slots. Taken as
+the wake baseline, it makes every following frame look like a huge deflection: exactly one false wake
+per transition, with nobody near the keyboard. A false wake is the worst failure this code can produce —
+it wakes someone's machine at random — so the baseline now starts from a settled frame. 20 s suspended,
+untouched, both halves: **0 attempts.**
+
+### Remote wakeup
+
+`TUSB_DESC_CONFIG_ATT_REMOTE_WAKEUP` was already in the config descriptor; what was missing was
+everything behind it. `tud_suspend_cb()` now records whether the host actually granted
+`SET_FEATURE(DEVICE_REMOTE_WAKEUP)`, and a press while suspended calls `tud_remote_wakeup()`.
+
+`RSP_INFO` reports attempts and grants separately, because they answer the question anyone debugging
+"my keyboard won't wake the machine" actually has:
+
+| reading | meaning |
+|---|---|
+| attempts 0 | the press was never detected — threshold or scan rate |
+| attempts > 0, grants 0 | **the host refused remote wakeup**, nothing wrong with the keyboard |
+| grants > 0, machine still asleep | we signalled and the OS ignored it — a wake-source policy question |
+
+The remaining unknown is whether a **vendor-defined HID** is a permitted wake source at all. A HID
+keyboard is; a vendor collection frequently is not. That cannot be settled without a host that really
+sleeps, and it may resolve itself once there is a real keyboard interface — which carries its own cost
+on macOS, since keyboard usages are what make it demand Input Monitoring to open the device (§main.c).
+
 ## 14. Updating the half that has no host (topology a)
 
 In `PC → half A → half B`, half B has no USB connection to anything. Two questions fall out of that:

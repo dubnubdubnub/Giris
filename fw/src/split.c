@@ -26,6 +26,7 @@ static uint32_t      t_rx_cyc;
 static bool          rx_any;
 static bool          test_mode;
 static bool          host_present;
+static bool          host_awake = true;
 static uint16_t      peer_keys[SPLIT_KEYS];
 
 /* --------------------------------------------------------------------- crc */
@@ -126,13 +127,16 @@ bool split_tx_due(void)
 void split_set_test(bool on)  { test_mode = on; }
 bool split_test_enabled(void) { return test_mode; }
 void split_set_host(bool p)   { host_present = p; }
+void split_set_awake(bool a)  { host_awake = a; }
 
 const uint16_t *split_peer_keys(void) { return peer_keys; }
 
 const void *split_build_tx(void)
 {
   uint16_t keys[SPLIT_KEYS];
-  uint8_t  flags = host_present ? SPLIT_F_HOST : 0u;
+  uint8_t  flags = 0u;
+  if (host_present) flags |= SPLIT_F_HOST;
+  if (host_present && host_awake) flags |= SPLIT_F_AWAKE;
 
   if (test_mode) {
     pattern(keys, tx_seq);

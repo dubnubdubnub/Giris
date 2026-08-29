@@ -111,6 +111,6 @@ void peer_enable(bool on);
  * must keep their offsets in every future version, or two halves lose the ability
  * to work out that they disagree. peer.c static-asserts those offsets.
  */
-#define PEER_PROTO  2u
+#define PEER_PROTO  3u
 
 #endif

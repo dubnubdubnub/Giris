@@ -122,7 +122,8 @@ def why_reset(d):
 
 
 def flagstr(f):
-    return "".join(c if f & b else "-" for b, c in ((1, "k"), (2, "t"), (4, "H")))
+    return "".join(c if f & b else "-"
+                   for b, c in ((1, "k"), (2, "t"), (4, "H"), (8, "A")))
 
 
 def header(devs):
@@ -270,3 +271,20 @@ def main():
 
 if __name__ == "__main__":
     sys.exit(main())
+
+
+# --- power / suspend ------------------------------------------------------
+
+POWER_STATE = ("run", "suspended (500 Hz scan)", "serving peer (full rate)")
+
+
+def power(d, arg=0):
+    """Query, or drive the suspend path without a host that actually sleeps."""
+    r = txn(d, 0x0E, arg, 0x81)
+    if not r or r[4] < 5:
+        return None
+    return dict(state=r[53], rwu=r[54],
+                tries=struct.unpack_from("<H", r, 55)[0],
+                grants=struct.unpack_from("<H", r, 57)[0],
+                suspends=struct.unpack_from("<H", r, 49)[0],
+                resumes=struct.unpack_from("<H", r, 51)[0])
