@@ -2,11 +2,28 @@
  * Copyright 2026 Isaac Chiu
  */
 /*
- * usb_descriptors.c — one raw-HID interface, high speed, bInterval = 1.
+ * usb_descriptors.c — two HID interfaces, high speed, bInterval = 1.
  *
- * Deliberately no keyboard interface yet: with no keyboard usages anywhere in
- * the descriptor, macOS does not require Input Monitoring permission to open
- * this device, so the browser viewer just works.
+ *   ITF_NUM_HID  vendor raw HID, usage page 0xFF60. Telemetry and config.
+ *   ITF_NUM_KBD  boot-protocol keyboard.
+ *
+ * The keyboard lives on its own interface rather than sharing the vendor one,
+ * and that separation is load-bearing: macOS evaluates Input Monitoring per
+ * IOHIDDevice, which is per USB interface. Keyboard usages on the vendor
+ * interface would make the browser viewer demand permission to open it.
+ * Anything added later — a gamepad, an NKRO report — gets its own interface for
+ * the same reason.
+ *
+ * String indices: only 0..3 are served; tud_descriptor_string_cb returns NULL
+ * above that, so index 0xEE STALLS. That matters more than it looks. 0xEE is
+ * where Windows asks for the MS OS 1.0 descriptor, and it caches the failure as
+ * osvc = 0 under HKLM\SYSTEM\CurrentControlSet\Control\UsbFlags\<vid><pid><bcd>
+ * — keyed on bcdDevice, which is still 0x0100. So every Windows machine that
+ * has ever seen this firmware has already recorded "this device has no MS OS
+ * descriptor". Adding one later without bumping bcdDevice will appear to do
+ * nothing, and the XUSB interface it gates will silently fail to bind.
+ *
+ * BUMP bcdDevice ON ANY CHANGE TO THE USB-VISIBLE DESCRIPTOR SET.
  */
 #include "tusb.h"
 #include "protocol.h"

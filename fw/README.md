@@ -75,8 +75,11 @@ of flash — a BSP bug. `ld/at32f405rbt7.ld` is that file with the length correc
   viewer,
 - drives the SK6812 chain as a status indicator.
 
-There is deliberately **no keyboard interface yet**. With no keyboard usages in the descriptor, macOS
-does not demand Input Monitoring permission, so the viewer just works.
+There are **two HID interfaces**: the vendor raw-HID one the viewer speaks (usage page `0xFF60`), and
+a boot-protocol keyboard. They are separate interfaces on purpose — macOS evaluates Input Monitoring
+per `IOHIDDevice`, which means per USB interface, so putting keyboard usages on the vendor interface
+would make the viewer demand permission to open it. Keyboard output is gated off at boot; see
+`CMD_KEYS`.
 
 ### The viewer
 

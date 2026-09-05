@@ -1,6 +1,22 @@
 # Giris
 
-KiCad hardware for the Giris project. The boards live under `hw/`.
+An open-source **analog Hall-effect split keyboard**. Each half reads 32 TMR2615F magnetic sensors
+with an ArteryTek AT32F405 and links to the other half over USB-C, so travel is measured in
+millimetres rather than switches being merely open or closed — which is what makes adjustable
+actuation, rapid trigger and analog stick output possible.
+
+The two halves run one firmware image and work out between themselves which is which. They handle
+three topologies: chained through one host, standalone, and dual-host — where each half is plugged
+into a different computer and a keypress moves input between them.
+
+- `fw/` — firmware, written from scratch in C on the Artery BSP with TinyUSB. 8 kHz USB HS polling,
+  8 kHz inter-half link. Host tools and a WebHID configurator live in `fw/tools/`.
+- `hw/` — KiCad schematics and layout. `TMR2615F_osu_pad` is the 6-key development board the
+  firmware is brought up on; `giris` is the full-size split.
+- `mech/` — plates and frames.
+
+Status: bring-up. The dev board enumerates, scans at 8 kHz, types, sleeps and wakes a host, and the
+two halves link at 12 Mbaud. The travel pipeline and the configurator are in progress.
 
 ## Setup
 
