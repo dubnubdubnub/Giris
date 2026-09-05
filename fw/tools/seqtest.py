@@ -13,7 +13,7 @@ nothing moves.
 import statistics as st, struct, sys, time
 import hid
 
-VID, PID, RPT = 0x1209, 0x0001, 64
+VID, PID, RPT = 0x1209, 0x6415, 64
 CMD_SNAPSHOT, CMD_SEQ_SET = 0x03, 0x08
 RSP_SNAPSHOT, RSP_SEQ = 0x83, 0x88
 

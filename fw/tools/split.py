@@ -45,7 +45,7 @@ def giris_interfaces(vid, pid):
 
 
 
-VID, PID = 0x1209, 0x0001
+VID, PID = 0x1209, 0x6415
 RPT = 64
 CMD_PEER, CMD_SPLIT = 0x0C, 0x0D
 RSP_PEER, RSP_SPLIT, RSP_ERROR = 0x8B, 0x8C, 0xEE
