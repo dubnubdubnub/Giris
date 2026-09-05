@@ -18,10 +18,11 @@
  * above that, so index 0xEE STALLS. That matters more than it looks. 0xEE is
  * where Windows asks for the MS OS 1.0 descriptor, and it caches the failure as
  * osvc = 0 under HKLM\SYSTEM\CurrentControlSet\Control\UsbFlags\<vid><pid><bcd>
- * — keyed on bcdDevice, which is still 0x0100. So every Windows machine that
- * has ever seen this firmware has already recorded "this device has no MS OS
- * descriptor". Adding one later without bumping bcdDevice will appear to do
- * nothing, and the XUSB interface it gates will silently fail to bind.
+ * — keyed on bcdDevice. Every Windows machine that saw this firmware while
+ * bcdDevice was 0x0100 has already recorded "this device has no MS OS
+ * descriptor", and would keep serving that answer from cache. Adding one later
+ * without bumping bcdDevice will appear to do nothing, and the XUSB interface it
+ * gates will silently fail to bind.
  *
  * BUMP bcdDevice ON ANY CHANGE TO THE USB-VISIBLE DESCRIPTOR SET.
  */
@@ -29,8 +30,12 @@
 #include "protocol.h"
 #include "uid.h"
 
-#define USB_VID   0x1209   /* pid.codes — open-source range, fine for a dev board */
-#define USB_PID   0x0001   /* placeholder; claim a real one before anything ships */
+#define USB_VID   0x1209   /* pid.codes — open-source range */
+/* 0x0001 is pid.codes' PRIVATE TESTING pid: "MUST NOT be used on any device that
+ * will be redistributed, sold, or manufactured". Correct for a bench, barred for
+ * anything else. 0x6415 is requested and will replace this once the allocation
+ * lands; the queue there is long, so this stays until it does. */
+#define USB_PID   0x0001
 /* 2.00, not 2.10.
  *
  * Declaring 2.01 or higher obliges the device to answer GET_DESCRIPTOR(BOS), and
@@ -52,7 +57,11 @@ static const tusb_desc_device_t desc_device = {
     .bMaxPacketSize0    = CFG_TUD_ENDPOINT0_SIZE,
     .idVendor           = USB_VID,
     .idProduct          = USB_PID,
-    .bcdDevice          = 0x0100,
+    /* Bump on ANY change to what USB can see — interfaces, endpoints, strings,
+     * MS OS descriptors. Windows caches per <vid><pid><bcdDevice>, so a stale
+     * entry otherwise serves old strings and a remembered "no MS OS descriptor".
+     * 0x0100 -> 0x0101: manufacturer and product strings changed. */
+    .bcdDevice          = 0x0101,
     .iManufacturer      = 0x01,
     .iProduct           = 0x02,
     .iSerialNumber      = 0x03,
@@ -148,8 +157,8 @@ const uint8_t *tud_descriptor_configuration_cb(uint8_t index)
 /* --------------------------------------------------------------- strings */
 static const char *string_desc_arr[] = {
     (const char[]){0x09, 0x04},   /* 0: en-US */
-    "Giris",                      /* 1: manufacturer */
-    "Giris osu pad (telemetry)",  /* 2: product      */
+    "Bohe Labs",                  /* 1: manufacturer */
+    "Giris",                      /* 2: product      */
     NULL,                         /* 3: serial — filled from the 96-bit UID */
 };
 
