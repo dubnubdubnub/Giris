@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: Apache-2.0
+# Copyright 2026 Isaac Chiu
 """Field of an axially magnetized cylinder magnet at an off-axis point.
 
 Model: equivalent solenoid (azimuthal surface current sheet), integrated as a

@@ -1,3 +1,6 @@
+/* SPDX-License-Identifier: Apache-2.0
+ * Copyright 2026 Isaac Chiu
+ */
 /*
  * usb_descriptors.c — one raw-HID interface, high speed, bInterval = 1.
  *

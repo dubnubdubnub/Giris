@@ -1,0 +1,97 @@
+Giris — analog split keyboard
+Copyright 2026 Isaac Chiu
+
+This product includes software developed for the Giris project.
+
+Licensed under the Apache License, Version 2.0 (the "License"); you may not use
+these files except in compliance with the License. You may obtain a copy of the
+License in the LICENSE file at the root of this repository, or at:
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+The hardware designs under hw/ are licensed separately under the CERN Open
+Hardware Licence Version 2 - Permissive (CERN-OHL-P v2). See hw/LICENSE.
+
+--------------------------------------------------------------------------------
+Third-party attributions
+--------------------------------------------------------------------------------
+
+Binaries built from this repository include, or are derived from, the following
+third-party works. THIRD_PARTY.md records the full inventory and the reasoning;
+this file carries the attributions that must travel with a distributed binary.
+
+TinyUSB
+  Copyright (c) 2012-2026, Ha Thach (tinyusb.org)
+  SPDX-License-Identifier: MIT
+  https://github.com/hathach/tinyusb
+
+  Not committed to this repository. Fetched at build time by
+  fw/tools/fetch-deps.sh.
+
+  MIT requires the full permission notice, not merely the copyright line, so it
+  is reproduced here:
+
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+    of this software and associated documentation files (the "Software"), to deal
+    in the Software without restriction, including without limitation the rights
+    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    copies of the Software, and to permit persons to whom the Software is
+    furnished to do so, subject to the following conditions:
+
+    The above copyright notice and this permission notice shall be included in
+    all copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+    SOFTWARE.
+
+Arm CMSIS
+  Copyright (c) 2009-2020 Arm Limited. All rights reserved.
+  SPDX-License-Identifier: Apache-2.0
+  https://github.com/ARM-software/CMSIS_5
+
+  Shipped inside the Artery BSP at
+  fw/vendor/at32f402_405/libraries/cmsis/cm4/core_support/ and therefore not
+  committed here either. It reaches the firmware binary through the CMSIS core
+  headers — fw/src/clock.c uses CoreDebug and DWT directly, and fw/src/split.c
+  reads DWT->CYCCNT on every link frame.
+
+  Apache-2.0 obliges anyone distributing a binary to supply a copy of the licence
+  and to retain this attribution. The licence text is in LICENSE at the root of
+  this repository, which is the same licence Giris itself uses.
+
+ArteryTek AT32F402/405 Board Support Package
+  Copyright (c) 2025, Artery Technology, All rights reserved.
+  https://www.arterytek.com/
+
+  Not committed to this repository, with two exceptions noted below. Fetched at
+  build time by fw/tools/fetch-deps.sh.
+
+  Artery ships two licence statements that do not agree. The BSP's LICENSE file
+  is a plain BSD 3-Clause. The notice at the head of each BSP source file is
+  narrower: it authorises use, copying and distribution "for the purpose of
+  design and development in conjunction with Artery microcontrollers". That
+  field-of-use limit is not an open-source grant. Giris satisfies the narrower
+  reading regardless, because the firmware only runs on an AT32F405, but the
+  distinction is recorded rather than smoothed over. See THIRD_PARTY.md.
+
+  Three files in this repository are Artery-derived and carry their notice:
+    fw/include/at32f402_405_conf.h    unmodified
+    fw/src/startup_at32f402_405.s     unmodified
+    fw/ld/at32f405rbt7.ld             modified — see the file header
+
+marbastlib (KiCad keyboard footprint library)
+  Copyright ebastler and contributors
+  SPDX-License-Identifier: CERN-OHL-P-2.0
+  https://github.com/ebastler/marbastlib
+
+  Included as the git submodule hw/marbastlib and declared in the boards'
+  fp-lib-table and sym-lib-table. No footprint or symbol from it is currently
+  placed in any schematic or PCB, so nothing of it is redistributed today; the
+  attribution is kept because the library is wired into the projects and a future
+  placement would create the obligation silently. CERN-OHL-P v2 requires that its
+  notices be retained.

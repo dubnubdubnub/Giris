@@ -1,3 +1,6 @@
+/* SPDX-License-Identifier: Apache-2.0
+ * Copyright 2026 Isaac Chiu
+ */
 /* TinyUSB configuration — AT32F405 OTG_HS (rhport 1) device only. */
 #ifndef _TUSB_CONFIG_H_
 #define _TUSB_CONFIG_H_

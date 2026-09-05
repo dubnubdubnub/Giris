@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: Apache-2.0
+# Copyright 2026 Isaac Chiu
 """Predict the in-plane field at the osu!pad's TMR2615F for commercial magnetic switches.
 
 Two evidence tiers:

@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: Apache-2.0
+# Copyright 2026 Isaac Chiu
 """
 Watch the run-phase data plane — the 48-byte frames that cross J1 at 8 kHz once
 peer.c has both halves at 12 Mbaud.

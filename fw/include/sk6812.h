@@ -1,3 +1,6 @@
+/* SPDX-License-Identifier: Apache-2.0
+ * Copyright 2026 Isaac Chiu
+ */
 #ifndef GIRIS_SK6812_H
 #define GIRIS_SK6812_H
 

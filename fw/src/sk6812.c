@@ -1,3 +1,6 @@
+/* SPDX-License-Identifier: Apache-2.0
+ * Copyright 2026 Isaac Chiu
+ */
 /*
  * sk6812.c — bit-banged SK6812MINI-E driver, bring-up only.
  *

@@ -1,3 +1,6 @@
+/* SPDX-License-Identifier: Apache-2.0
+ * Copyright 2026 Isaac Chiu
+ */
 #ifndef GIRIS_CLOCK_H
 #define GIRIS_CLOCK_H
 
