@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# SPDX-License-Identifier: Apache-2.0
+# Copyright 2026 Isaac Chiu
 # WebHID requires a secure context. http://localhost counts, so this is enough —
 # no TLS, no build step.
 set -euo pipefail

@@ -1,581 +1,82 @@
 <!doctype html>
+<!-- SPDX-License-Identifier: Apache-2.0
+     Copyright 2026 Isaac Chiu
+-->
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Giris scope</title>
-<style>
-  :root {
-    --paper:#0D1211; --surface:#131A18; --surface-2:#1B2422;
-    --ink:#DFE7E4; --ink-2:#A9B6B2; --ink-3:#7C8A86;
-    --rule:#2A3634; --accent:#56CDB4; --warn:#DE9A5C; --stop:#E58A83;
-    --k0:#56CDB4; --k1:#7FB3E8; --k2:#E8B84F; --k3:#D98BC9; --k4:#8FD96B; --k5:#E58A83;
-  }
-  * { box-sizing:border-box; }
-  body {
-    margin:0; background:var(--paper); color:var(--ink);
-    font:13px/1.5 ui-monospace,"SF Mono",Menlo,monospace;
-  }
-  header {
-    display:flex; align-items:center; gap:16px; flex-wrap:wrap;
-    padding:12px 18px; border-bottom:1px solid var(--rule); background:var(--surface);
-    position:sticky; top:0; z-index:5;
-  }
-  h1 { font-size:14px; letter-spacing:.14em; text-transform:uppercase; color:var(--accent); margin:0 12px 0 0; font-weight:600; }
-  button {
-    font:inherit; background:var(--surface-2); color:var(--ink); border:1px solid var(--rule);
-    border-radius:4px; padding:5px 12px; cursor:pointer;
-  }
-  button:hover:not(:disabled) { border-color:var(--accent); color:var(--accent); }
-  button:disabled { opacity:.4; cursor:default; }
-  button.on { background:var(--accent); color:#08201C; border-color:var(--accent); font-weight:600; }
-  label { color:var(--ink-3); }
-  input[type=number],select {
-    font:inherit; background:var(--surface-2); color:var(--ink);
-    border:1px solid var(--rule); border-radius:4px; padding:4px 6px; width:5.5em;
-  }
-  .status { margin-left:auto; color:var(--ink-3); }
-  .status b { color:var(--ink); font-weight:600; }
-  .dot { display:inline-block; width:8px; height:8px; border-radius:50%; background:var(--stop); margin-right:6px; vertical-align:1px; }
-  .dot.live { background:var(--accent); }
-
-  main { padding:18px; display:flex; flex-direction:column; gap:18px; }
-  .panel { background:var(--surface); border:1px solid var(--rule); border-radius:6px; }
-  .panel > h2 {
-    font-size:10px; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-3);
-    margin:0; padding:9px 14px; border-bottom:1px solid var(--rule); font-weight:600;
-  }
-  .panel > .body { padding:14px; }
-  canvas { display:block; width:100%; border-radius:4px; background:var(--paper); }
-
-  .keys { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:10px; }
-  .key { background:var(--surface-2); border-radius:5px; padding:10px 12px; border-left:3px solid var(--kc); }
-  .key .name { font-size:10px; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-3); }
-  .key .val { font-size:20px; font-variant-numeric:tabular-nums; margin:2px 0; }
-  .key .sub { font-size:11px; color:var(--ink-3); font-variant-numeric:tabular-nums; }
-  .bar { height:5px; background:var(--paper); border-radius:3px; margin-top:7px; overflow:hidden; }
-  .bar i { display:block; height:100%; background:var(--kc); width:0; }
-
-  table { border-collapse:collapse; width:100%; font-size:12px; }
-  th,td { text-align:left; padding:5px 10px; border-bottom:1px solid var(--rule); font-variant-numeric:tabular-nums; }
-  th { color:var(--ink-3); font-weight:500; font-size:10px; letter-spacing:.1em; text-transform:uppercase; }
-  .muted { color:var(--ink-3); }
-  .row { display:flex; gap:12px; align-items:center; flex-wrap:wrap; }
-  .hint { color:var(--ink-3); font-size:12px; max-width:80ch; }
-  .err { color:var(--stop); }
-</style>
+<meta name="description" content="Live viewer for the Giris analog keyboard: 8 kHz Hall telemetry over raw HID, in the browser, with no build step.">
+<link rel="stylesheet" href="style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%230D1211'/><path d='M4 22h4l3-11 3 8 3-13 3 18 3-8h5' fill='none' stroke='%2356CDB4' stroke-width='2.2' stroke-linejoin='round' stroke-linecap='round'/></svg>">
 </head>
 <body>
 
 <header>
-  <h1>Giris scope</h1>
-  <button id="connect">Connect</button>
-  <button id="stream" disabled>Stream</button>
-  <label>decim <input type="number" id="decim" value="8" min="1" max="255"></label>
-  <button id="record" disabled>Record</button>
-  <button id="save" disabled>Save CSV</button>
-  <button id="boot" disabled title="Jump to the ROM bootloader for reflashing">DFU</button>
-  <span class="status"><span class="dot" id="dot"></span><span id="status">not connected</span></span>
+  <h1>Giris <span>scope</span></h1>
+  <nav class="controls">
+    <button id="connect">Connect</button>
+    <button id="synth" title="A generated board: every view works with no hardware attached">Synthetic board</button>
+    <span class="sep"></span>
+    <button id="stream" disabled>Stream</button>
+    <label class="field" title="Device-side decimation. 1 = every 8 kHz frame reaches the host.">decim
+      <input type="number" id="decim" value="1" min="1" max="255"></label>
+    <span class="sep"></span>
+    <button id="record" disabled>Record</button>
+    <button id="save" disabled>Save CSV</button>
+    <button id="boot" disabled title="Jump to the ROM bootloader for reflashing">DFU</button>
+  </nav>
+  <span class="status"><span class="dot" id="dot"></span><span id="status">starting…</span></span>
+  <div class="tabs" id="tabs" hidden></div>
 </header>
 
+<div class="banner" id="banner" hidden></div>
+
 <main>
-  <section class="panel">
-    <h2>Live traces</h2>
-    <div class="body"><canvas id="chart" height="320"></canvas></div>
+
+  <section class="panel" id="panel-keypad">
+    <h2>Key layout <span class="sub">3 × 2 · 19.05 mm pitch · live travel</span></h2>
+    <div class="body"></div>
   </section>
 
-  <section class="panel">
-    <h2>Keys</h2>
-    <div class="body"><div class="keys" id="keys"></div></div>
+  <section class="panel" id="panel-trace">
+    <h2>Live traces <span class="sub">min/max envelope — full 8 kHz, nothing discarded</span></h2>
+    <div class="body"></div>
   </section>
 
-  <section class="panel">
-    <h2>Burst capture &mdash; noise spectrum</h2>
-    <div class="body">
-      <div class="row" style="margin-bottom:12px">
-        <label>slot <select id="bslot"></select></label>
-        <label>samples <input type="number" id="bcount" value="4096" min="256" max="8192" step="256"></label>
-        <button id="burst" disabled>Capture</button>
-        <button id="bsave" disabled>Save samples</button>
-        <span class="muted" id="bstat">idle</span>
-      </div>
-      <canvas id="fft" height="240"></canvas>
-      <p class="hint" style="margin:10px 0 0">
-        A straight line on a log&ndash;log plot is the tell: slope 0 is white noise, slope &minus;1/2 in
-        amplitude is 1/f. That decides whether narrowing the analog filter is worth the
-        transport delay, or buys ~5&nbsp;% for nothing.
-      </p>
-    </div>
+  <section class="panel panel--feature" id="panel-compare">
+    <h2>What slower polling misses <span class="sub">one keypress, sampled three ways</span></h2>
+    <div class="body"></div>
   </section>
 
-  <section class="panel">
-    <h2>Raw slots &mdash; hardware scan order</h2>
-    <div class="body">
-      <table>
-        <thead><tr><th>slot</th><th>mux</th><th>adc ch</th><th>maps to</th><th>counts</th><th>volts</th></tr></thead>
-        <tbody id="slots"></tbody>
-      </table>
-      <p class="hint" style="margin:10px 0 0">
-        Slot&nbsp;3 is the VBUS&nbsp;&divide;2 divider and slot&nbsp;7 is a floating header pin. If slot&nbsp;7
-        ever reads higher than slot&nbsp;3 the DMA ring has slipped phase &mdash; the firmware counts that.
-      </p>
-    </div>
+  <section class="panel" id="panel-burst">
+    <h2>Burst zoom <span class="sub">one captured keypress, every sample, 125 µs apart</span></h2>
+    <div class="body"></div>
   </section>
+
+  <section class="panel" id="panel-spectrum">
+    <h2>Noise spectrum <span class="sub">same burst, frequency domain</span></h2>
+    <div class="body"></div>
+  </section>
+
+  <section class="panel" id="panel-histogram">
+    <h2>Timing <span class="sub">frame period and host inter-arrival</span></h2>
+    <div class="body"></div>
+  </section>
+
+  <section class="panel" id="panel-slots">
+    <h2>Raw slots &amp; device info <span class="sub">hardware scan order</span></h2>
+    <div class="body"></div>
+  </section>
+
 </main>
 
-<script>
-// ---- protocol (mirrors fw/include/protocol.h) --------------------------
-const RPT = 64;
-const CMD = { INFO:0x01, STREAM_SET:0x02, SNAPSHOT:0x03, BURST_START:0x04,
-              BURST_STATUS:0x05, BURST_READ:0x06, BURST_ABORT:0x07, BOOTLOADER:0x7E };
-const RSP = { INFO:0x81, STREAM:0x82, SNAPSHOT:0x83, BURST_STATUS:0x85,
-              BURST_DATA:0x86, ERROR:0xEE };
-const SLOT_VBUS = 0xFE, SLOT_UNUSED = 0xFF;
-const FRAMES_PER_RPT = 3, FRAME_BYTES = 16, STREAM_HDR = 8, BURST_PER_RPT = 28;
+<footer>
+  <span>Giris scope — WebHID, vendor usage page 0xFF60 / usage 0x61, 64-byte reports, no report IDs.</span>
+  <span>Chromium only (Chrome or Edge). Serve with <code>./serve.sh</code>; <code>http://localhost</code> is a secure context, so no TLS and no build step.</span>
+</footer>
 
-const KEY_COLORS = ['--k0','--k1','--k2','--k3','--k4','--k5'];
-
-let dev = null, info = null, tag = 1;
-const pending = new Map();
-
-// ---- ring buffer of live samples --------------------------------------
-const CAP = 20000;
-const ring = { t:new Float64Array(CAP), v:[], n:0, w:0 };
-for (let i=0;i<6;i++) ring.v.push(new Uint16Array(CAP));
-
-let recording = false;
-let recorded = [];
-let lastSeq = null, seqGaps = 0, frameGaps = 0, rptCount = 0, lastRateAt = performance.now(), rptRate = 0;
-
-// ---- connection --------------------------------------------------------
-const $ = id => document.getElementById(id);
-
-function setStatus(txt, live) {
-  $('status').textContent = txt;
-  $('dot').classList.toggle('live', !!live);
-}
-
-async function connect() {
-  if (!('hid' in navigator)) {
-    setStatus('WebHID unavailable — use Chrome or Edge over http://localhost');
-    return;
-  }
-  try {
-    const devices = await navigator.hid.requestDevice({
-      filters: [{ usagePage: 0xFF60, usage: 0x61 }]
-    });
-    if (!devices.length) return;
-    // requestDevice returns one HIDDevice per matching interface of the chosen
-    // physical device, so pick the one that really carries our collection.
-    dev = devices.find(d => d.collections.some(c => c.usagePage === 0xFF60)) || devices[0];
-    if (!dev.opened) await dev.open();
-    dev.addEventListener('inputreport', onReport);
-    navigator.hid.addEventListener('disconnect', e => { if (e.device === dev) onGone(); });
-
-    info = await request(CMD.INFO);
-    buildKeyCards();
-    buildSlotRows();
-    for (const b of ['stream','record','burst','boot']) $(b).disabled = false;
-    setStatus(`${dev.productName} · ${info.numKeys} keys · ${info.scanHz} Hz scan · build ${info.build.toString(16)}`, true);
-  } catch (e) {
-    setStatus('connect failed: ' + e.message);
-  }
-}
-
-function onGone() {
-  dev = null;
-  setStatus('disconnected');
-  for (const b of ['stream','record','save','burst','bsave','boot']) $(b).disabled = true;
-  $('stream').classList.remove('on');
-}
-
-function send(cmd, args = []) {
-  const t = (tag++ & 0x7F) || 1;
-  const buf = new Uint8Array(RPT);
-  buf[0] = cmd; buf[1] = t;
-  args.forEach((v, i) => buf[2 + i] = v);
-  return { t, promise: dev.sendReport(0, buf) };
-}
-
-function request(cmd, args = []) {
-  const { t, promise } = send(cmd, args);
-  return new Promise((resolve, reject) => {
-    const timer = setTimeout(() => { pending.delete(t); reject(new Error('timeout')); }, 2000);
-    pending.set(t, v => { clearTimeout(timer); resolve(v); });
-    promise.catch(reject);
-  });
-}
-
-// ---- inbound -----------------------------------------------------------
-function onReport(e) {
-  const d = e.data;                       // DataView, 64 bytes, no report ID
-  const msg = d.getUint8(0), t = d.getUint8(1), seq = d.getUint16(2, true);
-
-  if (lastSeq !== null && ((lastSeq + 1) & 0xFFFF) !== seq) seqGaps++;
-  lastSeq = seq;
-
-  let parsed = null;
-  switch (msg) {
-    case RSP.INFO:         parsed = parseInfo(d); break;
-    case RSP.SNAPSHOT:     parsed = parseSnapshot(d); break;
-    case RSP.BURST_STATUS: parsed = parseBurstStatus(d); break;
-    case RSP.BURST_DATA:   parsed = parseBurstData(d); break;
-    case RSP.STREAM:       onStream(d); return;
-    case RSP.ERROR:        parsed = { error: d.getUint8(4) }; break;
-  }
-  const cb = pending.get(t);
-  if (cb) { pending.delete(t); cb(parsed); }
-}
-
-function parseInfo(d) {
-  const slotMap = [];
-  for (let i = 0; i < 8; i++) slotMap.push(d.getUint8(10 + i));
-  return {
-    version: d.getUint8(4), numKeys: d.getUint8(5), numSlots: d.getUint8(6),
-    adcBits: d.getUint8(7), scanHz: d.getUint16(8, true), slotMap,
-    countsPerGauss: d.getUint32(18, true) / 256,
-    build: d.getUint32(22, true),
-  };
-}
-
-function parseSnapshot(d) {
-  const slots = [];
-  for (let i = 0; i < 8; i++) slots.push(d.getUint16(8 + 2 * i, true));
-  return { frame: d.getUint32(4, true), slots,
-           phaseErrors: d.getUint32(24, true), txDropped: d.getUint32(28, true) };
-}
-
-function parseBurstStatus(d) {
-  return { state: d.getUint8(4), slot: d.getUint8(5),
-           captured: d.getUint16(6, true), periodNs: d.getUint32(8, true) };
-}
-
-function parseBurstData(d) {
-  const off = d.getUint16(4, true), n = d.getUint8(6), out = new Uint16Array(n);
-  for (let i = 0; i < n; i++) out[i] = d.getUint16(7 + 2 * i, true);
-  return { off, samples: out };
-}
-
-let lastFrameIdx = null;
-function onStream(d) {
-  rptCount++;
-  const n = d.getUint8(4);
-  if (d.getUint8(5) & 1) frameGaps++;
-
-  for (let i = 0; i < n; i++) {
-    const base = STREAM_HDR + i * FRAME_BYTES;
-    const frame = d.getUint32(base, true);
-    if (lastFrameIdx !== null && frame <= lastFrameIdx) continue;
-    lastFrameIdx = frame;
-
-    const w = ring.w;
-    ring.t[w] = frame / (info ? info.scanHz : 8000);
-    const rec = recording ? [ring.t[w].toFixed(6)] : null;
-    for (let k = 0; k < 6; k++) {
-      const v = d.getUint16(base + 4 + 2 * k, true);
-      ring.v[k][w] = v;
-      if (rec) rec.push(v);
-    }
-    if (rec) recorded.push(rec.join(','));
-    ring.w = (w + 1) % CAP;
-    ring.n = Math.min(ring.n + 1, CAP);
-  }
-}
-
-// ---- ui build ----------------------------------------------------------
-function buildKeyCards() {
-  const host = $('keys'); host.innerHTML = '';
-  for (let k = 0; k < info.numKeys; k++) {
-    const el = document.createElement('div');
-    el.className = 'key';
-    el.style.setProperty('--kc', `var(${KEY_COLORS[k % 6]})`);
-    el.innerHTML = `<div class="name">key ${k}</div>
-      <div class="val" id="kv${k}">—</div>
-      <div class="sub" id="ks${k}">—</div>
-      <div class="bar"><i id="kb${k}"></i></div>`;
-    host.appendChild(el);
-  }
-  const sel = $('bslot'); sel.innerHTML = '';
-  info.slotMap.forEach((m, i) => {
-    const o = document.createElement('option');
-    o.value = i;
-    o.textContent = `${i} — ${m === SLOT_VBUS ? 'VBUS/2' : m === SLOT_UNUSED ? 'unused' : 'key ' + m}`;
-    sel.appendChild(o);
-  });
-}
-
-function buildSlotRows() {
-  const tb = $('slots'); tb.innerHTML = '';
-  const adcCh = [3, 2, 1, 0, 3, 2, 1, 0];
-  info.slotMap.forEach((m, i) => {
-    const tr = document.createElement('tr');
-    tr.innerHTML = `<td>${i}</td><td>${i < 4 ? 'A (SEL 0)' : 'B (SEL 1)'}</td>
-      <td>IN${adcCh[i]}</td>
-      <td class="muted">${m === SLOT_VBUS ? 'VBUS ÷2' : m === SLOT_UNUSED ? '—' : 'key ' + m}</td>
-      <td id="sv${i}">—</td><td id="sx${i}">—</td>`;
-    tb.appendChild(tr);
-  });
-}
-
-// ---- chart -------------------------------------------------------------
-const chart = $('chart'), cctx = chart.getContext('2d');
-function fitCanvas(c) {
-  const r = c.getBoundingClientRect(), dpr = devicePixelRatio || 1;
-  if (c.width !== Math.round(r.width * dpr)) {
-    c.width = Math.round(r.width * dpr); c.height = Math.round(c.height * dpr) || c.height;
-  }
-  return dpr;
-}
-
-function css(v) { return getComputedStyle(document.documentElement).getPropertyValue(v).trim(); }
-
-function draw() {
-  requestAnimationFrame(draw);
-  if (!info || ring.n === 0) return;
-
-  const dpr = devicePixelRatio || 1;
-  const r = chart.getBoundingClientRect();
-  chart.width = Math.round(r.width * dpr); chart.height = Math.round(320 * dpr);
-  const W = chart.width, H = chart.height;
-
-  cctx.fillStyle = css('--paper'); cctx.fillRect(0, 0, W, H);
-
-  const show = Math.min(ring.n, 2000);
-  const start = (ring.w - show + CAP) % CAP;
-
-  // autoscale across all keys in view
-  let lo = 65535, hi = 0;
-  for (let k = 0; k < info.numKeys; k++)
-    for (let i = 0; i < show; i++) {
-      const v = ring.v[k][(start + i) % CAP];
-      if (v < lo) lo = v; if (v > hi) hi = v;
-    }
-  if (hi - lo < 40) { const m = (hi + lo) / 2; lo = m - 20; hi = m + 20; }
-  const pad = (hi - lo) * 0.08; lo -= pad; hi += pad;
-
-  cctx.strokeStyle = css('--rule'); cctx.lineWidth = dpr;
-  cctx.font = `${10 * dpr}px ui-monospace,monospace`;
-  cctx.fillStyle = css('--ink-3');
-  for (let g = 0; g <= 4; g++) {
-    const y = (H - 20 * dpr) * g / 4 + 10 * dpr;
-    cctx.beginPath(); cctx.moveTo(0, y); cctx.lineTo(W, y); cctx.stroke();
-    cctx.fillText(Math.round(hi - (hi - lo) * g / 4), 4 * dpr, y - 3 * dpr);
-  }
-
-  for (let k = 0; k < info.numKeys; k++) {
-    cctx.strokeStyle = css(KEY_COLORS[k % 6]);
-    cctx.lineWidth = 1.4 * dpr;
-    cctx.beginPath();
-    for (let i = 0; i < show; i++) {
-      const v = ring.v[k][(start + i) % CAP];
-      const x = i / (show - 1) * W;
-      const y = 10 * dpr + (1 - (v - lo) / (hi - lo)) * (H - 20 * dpr);
-      i ? cctx.lineTo(x, y) : cctx.moveTo(x, y);
-    }
-    cctx.stroke();
-  }
-
-  // readouts
-  const latest = (ring.w - 1 + CAP) % CAP;
-  for (let k = 0; k < info.numKeys; k++) {
-    const v = ring.v[k][latest];
-    let mn = 65535, mx = 0;
-    for (let i = 0; i < show; i++) {
-      const s = ring.v[k][(start + i) % CAP];
-      if (s < mn) mn = s; if (s > mx) mx = s;
-    }
-    $('kv' + k).textContent = v;
-    $('ks' + k).textContent = `${(v / info.countsPerGauss).toFixed(1)} Gs · pp ${mx - mn}`;
-    // depth bar: counts fall as the key travels (F variant output is inverted)
-    const span = Math.max(mx - mn, 1);
-    $('kb' + k).style.width = `${Math.max(0, Math.min(1, (mx - v) / span)) * 100}%`;
-  }
-
-  const now = performance.now();
-  if (now - lastRateAt > 500) {
-    rptRate = rptCount / ((now - lastRateAt) / 1000);
-    rptCount = 0; lastRateAt = now;
-  }
-  if (dev) setStatus(`${rptRate.toFixed(0)} rpt/s · seq gaps ${seqGaps} · frame gaps ${frameGaps}` +
-                     (recording ? ` · REC ${recorded.length}` : ''), true);
-}
-requestAnimationFrame(draw);
-
-// poll the raw slot table separately — it is debug, not hot path
-setInterval(async () => {
-  if (!dev || !info) return;
-  try {
-    const s = await request(CMD.SNAPSHOT);
-    if (!s) return;
-    s.slots.forEach((v, i) => {
-      const a = $('sv' + i), b = $('sx' + i);
-      if (a) a.textContent = v;
-      if (b) b.textContent = (v * 3.3 / 4096).toFixed(3) + ' V';
-    });
-  } catch {}
-}, 500);
-
-// ---- controls ----------------------------------------------------------
-$('connect').onclick = connect;
-
-$('stream').onclick = async () => {
-  const on = !$('stream').classList.contains('on');
-  await request(CMD.STREAM_SET, [on ? 1 : 0, Math.max(1, Math.min(255, +$('decim').value || 8))]);
-  $('stream').classList.toggle('on', on);
-};
-
-$('record').onclick = () => {
-  recording = !recording;
-  if (recording) recorded = [];
-  $('record').classList.toggle('on', recording);
-  $('record').textContent = recording ? 'Stop' : 'Record';
-  $('save').disabled = recording || recorded.length === 0;
-};
-
-$('save').onclick = async () => {
-  const header = 't_s,' + Array.from({length: info.numKeys}, (_, k) => 'key' + k).join(',');
-  const blob = new Blob([header + '\n' + recorded.join('\n') + '\n'], { type: 'text/csv' });
-  await saveBlob(blob, `giris-${Date.now()}.csv`);
-};
-
-async function saveBlob(blob, name) {
-  if (window.showSaveFilePicker) {
-    try {
-      const h = await window.showSaveFilePicker({ suggestedName: name });
-      const w = await h.createWritable();
-      await w.write(blob); await w.close();
-      return;
-    } catch (e) { if (e.name === 'AbortError') return; }
-  }
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob); a.download = name; a.click();
-  setTimeout(() => URL.revokeObjectURL(a.href), 5000);
-}
-
-$('boot').onclick = async () => {
-  if (!confirm('Jump to the ROM bootloader? The device will disappear and reappear as DFU on J2.')) return;
-  try { await request(CMD.BOOTLOADER); } catch {}
-  setStatus('rebooting to DFU…');
-};
-
-// ---- burst capture -----------------------------------------------------
-let burstSamples = null, burstPeriodNs = 0;
-
-$('burst').onclick = async () => {
-  const slot = +$('bslot').value;
-  const want = Math.max(256, Math.min(8192, +$('bcount').value || 4096));
-  $('bstat').textContent = 'capturing…';
-  await request(CMD.BURST_START, [slot, want & 0xFF, want >> 8]);
-
-  let st;
-  for (let i = 0; i < 200; i++) {
-    await new Promise(r => setTimeout(r, 50));
-    st = await request(CMD.BURST_STATUS);
-    if (st && st.state === 2) break;
-    if (st) $('bstat').textContent = `capturing… ${st.captured}/${want}`;
-  }
-  if (!st || st.state !== 2) { $('bstat').textContent = 'capture did not complete'; return; }
-
-  burstPeriodNs = st.periodNs;
-  burstSamples = new Uint16Array(st.captured);
-  for (let off = 0; off < st.captured; off += BURST_PER_RPT) {
-    const chunk = await request(CMD.BURST_READ, [off & 0xFF, off >> 8]);
-    if (!chunk || !chunk.samples.length) break;
-    burstSamples.set(chunk.samples, chunk.off);
-  }
-  $('bstat').textContent = `${st.captured} samples @ ${(1e9 / burstPeriodNs / 1000).toFixed(2)} kHz`;
-  $('bsave').disabled = false;
-  drawSpectrum();
-};
-
-$('bsave').onclick = async () => {
-  const lines = ['n,counts'];
-  burstSamples.forEach((v, i) => lines.push(`${i},${v}`));
-  await saveBlob(new Blob([lines.join('\n') + '\n'], { type: 'text/csv' }), `giris-burst-${Date.now()}.csv`);
-};
-
-function drawSpectrum() {
-  const c = $('fft'), ctx = c.getContext('2d');
-  const dpr = devicePixelRatio || 1, r = c.getBoundingClientRect();
-  c.width = Math.round(r.width * dpr); c.height = Math.round(240 * dpr);
-  const W = c.width, H = c.height;
-  ctx.fillStyle = css('--paper'); ctx.fillRect(0, 0, W, H);
-  if (!burstSamples || burstSamples.length < 64) return;
-
-  // power of two, mean-removed, Hann window
-  let N = 1; while (N * 2 <= burstSamples.length) N *= 2;
-  let mean = 0; for (let i = 0; i < N; i++) mean += burstSamples[i]; mean /= N;
-  const re = new Float64Array(N), im = new Float64Array(N);
-  for (let i = 0; i < N; i++) {
-    const w = 0.5 - 0.5 * Math.cos(2 * Math.PI * i / (N - 1));
-    re[i] = (burstSamples[i] - mean) * w;
-  }
-  fft(re, im);
-
-  const fs = 1e9 / burstPeriodNs;
-  const bins = N / 2;
-  const mag = new Float64Array(bins);
-  for (let i = 1; i < bins; i++) mag[i] = Math.hypot(re[i], im[i]) / N;
-
-  let mx = 0; for (let i = 1; i < bins; i++) mx = Math.max(mx, mag[i]);
-  if (mx <= 0) return;
-
-  const fmin = fs / N, fmax = fs / 2;
-  const lx = f => (Math.log10(f) - Math.log10(fmin)) / (Math.log10(fmax) - Math.log10(fmin)) * (W - 44 * dpr) + 38 * dpr;
-  const ly = m => {
-    const db = 20 * Math.log10(Math.max(m, mx * 1e-5) / mx);
-    return 10 * dpr + (-db / 100) * (H - 34 * dpr);
-  };
-
-  ctx.strokeStyle = css('--rule'); ctx.lineWidth = dpr;
-  ctx.fillStyle = css('--ink-3'); ctx.font = `${10 * dpr}px ui-monospace,monospace`;
-  for (let d = 0; d >= -100; d -= 20) {
-    const y = 10 * dpr + (-d / 100) * (H - 34 * dpr);
-    ctx.beginPath(); ctx.moveTo(38 * dpr, y); ctx.lineTo(W, y); ctx.stroke();
-    ctx.fillText(d + 'dB', 2 * dpr, y - 2 * dpr);
-  }
-  for (let dec = Math.ceil(Math.log10(fmin)); dec <= Math.log10(fmax); dec++) {
-    const f = Math.pow(10, dec), x = lx(f);
-    ctx.beginPath(); ctx.moveTo(x, 10 * dpr); ctx.lineTo(x, H - 22 * dpr); ctx.stroke();
-    ctx.fillText(f >= 1000 ? (f / 1000) + 'k' : f + 'Hz', x + 2 * dpr, H - 8 * dpr);
-  }
-
-  ctx.strokeStyle = css('--accent'); ctx.lineWidth = 1.2 * dpr;
-  ctx.beginPath();
-  let first = true;
-  for (let i = 1; i < bins; i++) {
-    const f = i * fs / N;
-    const x = lx(f), y = ly(mag[i]);
-    first ? (ctx.moveTo(x, y), first = false) : ctx.lineTo(x, y);
-  }
-  ctx.stroke();
-}
-
-// iterative radix-2 FFT
-function fft(re, im) {
-  const n = re.length;
-  for (let i = 1, j = 0; i < n; i++) {
-    let bit = n >> 1;
-    for (; j & bit; bit >>= 1) j ^= bit;
-    j ^= bit;
-    if (i < j) { [re[i], re[j]] = [re[j], re[i]]; [im[i], im[j]] = [im[j], im[i]]; }
-  }
-  for (let len = 2; len <= n; len <<= 1) {
-    const ang = -2 * Math.PI / len;
-    const wr = Math.cos(ang), wi = Math.sin(ang);
-    for (let i = 0; i < n; i += len) {
-      let cr = 1, ci = 0;
-      for (let k = 0; k < len / 2; k++) {
-        const ur = re[i + k], ui = im[i + k];
-        const vr = re[i + k + len / 2] * cr - im[i + k + len / 2] * ci;
-        const vi = re[i + k + len / 2] * ci + im[i + k + len / 2] * cr;
-        re[i + k] = ur + vr; im[i + k] = ui + vi;
-        re[i + k + len / 2] = ur - vr; im[i + k + len / 2] = ui - vi;
-        const ncr = cr * wr - ci * wi; ci = cr * wi + ci * wr; cr = ncr;
-      }
-    }
-  }
-}
-</script>
+<script type="module" src="js/app.js"></script>
 </body>
 </html>
