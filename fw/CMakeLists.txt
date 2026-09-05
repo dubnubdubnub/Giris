@@ -40,10 +40,12 @@ add_executable(giris.elf
   src/reset.c
   src/power.c
   src/keys.c
+  src/xusb.c
   ${TUSB}/src/tusb.c
   ${TUSB}/src/common/tusb_fifo.c
   ${TUSB}/src/device/usbd.c
   ${TUSB}/src/class/hid/hid_device.c
+  ${TUSB}/src/class/vendor/vendor_device.c
   ${TUSB}/src/portable/synopsys/dwc2/dcd_dwc2.c
   ${TUSB}/src/portable/synopsys/dwc2/dwc2_common.c
   ${CMSIS}/device_support/system_at32f402_405.c

@@ -21,6 +21,7 @@
 #include "reset.h"
 #include "power.h"
 #include "keys.h"
+#include "xusb.h"
 #include "link.h"
 #include "peer.h"
 #include "split.h"
@@ -161,6 +162,9 @@ int main(void)
 
   console_stage("keyboard (output disabled until asked)");
   keys_init();
+
+  console_stage("xusb (reporting disabled until asked)");
+  xusb_init();
 
   console_stage("link arbitration");
   console_puts("   link protocol v");

@@ -12,7 +12,7 @@
  */
 
 export const RPT_SIZE = 64;
-export const PROTO_VERSION = 6;
+export const PROTO_VERSION = 7;
 
 export const HDR_LEN = 4; /* [0]=msg [1]=tag [2..3]=seq */
 export const NUM_SLOTS = 10; /* PROTO_NUM_SLOTS: 2 mux banks x 5 conversions */

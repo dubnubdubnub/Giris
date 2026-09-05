@@ -28,7 +28,7 @@
 #include <stdint.h>
 
 #define PROTO_REPORT_SIZE     64
-#define PROTO_VERSION         6
+#define PROTO_VERSION         7
 
 /* ----- host -> device ------------------------------------------------- */
 enum {
@@ -55,6 +55,14 @@ enum {
                              * the USB signalling itself, because a host cannot be asked
                              * to suspend one device on demand. -> RSP_INFO */
   CMD_LINK_PROBE   = 0x0A,  /* args: [2]=link_mode_t, [3..6]=baud LE -> RSP_PROBE */
+  CMD_XUSB         = 0x10,  /* args: [2]=0 query, 1 enable+set, 2 disable, 3 set only
+                             *       [3..6] = int8 LX, LY, RX, RY (-127..127)
+                             *       [7]  = u8 left trigger, [8] = u8 right trigger
+                             *       [9..10] = bmButtons LE ([MS-XUSBI] Table 54)
+                             * Pure test injection until the travel pipeline exists.
+                             * Reporting is OFF at boot for the same reason CMD_KEYS
+                             * is: a board that shoves a stick into whatever game has
+                             * focus is a bad afternoon. -> RSP_INFO */
   CMD_BOOTLOADER   = 0x7E,  /* jump to the ROM DFU — no buttons needed */
 };
 
@@ -138,6 +146,14 @@ enum {
 #define PROTO_INFO_KEYS_OWN   60
 #define PROTO_INFO_KEYS_PEER  61
 #define PROTO_INFO_KEYS_MERGE 62
+/*   [63]     XUSB status: bit0 report gate on, bit1 interface mounted, bit2 an IN
+ *            report was ACKed, bit3 an OUT report (rumble/LED) ARRIVED — which is
+ *            proof xusb22.sys bound and is talking, bit4 Windows asked for string
+ *            0xEE, bit5 Windows fetched the Extended Compatible ID, bits6-7 low
+ *            bits of the OUT count. Bits 4 and 5 are the pair that matters when it
+ *            does not work: they separate "Windows never asked" from "Windows
+ *            asked and did not like the answer". */
+#define PROTO_INFO_XUSB       63
 
 /* RSP_STREAM body (offset 4): a run of frames, oldest first.
  *   [4]      frame_count in this report
