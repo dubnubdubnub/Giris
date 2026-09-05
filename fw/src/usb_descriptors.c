@@ -31,11 +31,25 @@
 #include "uid.h"
 
 #define USB_VID   0x1209   /* pid.codes — open-source range */
-/* 0x0001 is pid.codes' PRIVATE TESTING pid: "MUST NOT be used on any device that
- * will be redistributed, sold, or manufactured". Correct for a bench, barred for
- * anything else. 0x6415 is requested and will replace this once the allocation
- * lands; the queue there is long, so this stays until it does. */
-#define USB_PID   0x0001
+
+/* 0x6415 is REQUESTED, not yet allocated: pid.codes PR #1271.
+ *
+ * Deliberately not 0x0001. That is pid.codes' private-testing PID and carries an
+ * explicit prohibition — "MUST NOT be used on any device that will be
+ * redistributed, sold, or manufactured" — which is a rule this project would be
+ * breaking the moment a board leaves the bench. Using the number we have
+ * publicly asked for breaks no rule; it is at worst a claim staked early, and it
+ * is staked in the open: the PR names it, this repo is public, and anyone
+ * hitting a collision can see exactly who is using it and why.
+ *
+ * Checked clear at submission against both the merged tree and all 77 open PRs
+ * (98 PIDs are claimed by unmerged PRs and invisible in master). Allocation goes
+ * by PR order and ours is filed, so the exposure is small and shrinks with time.
+ * If it is ever assigned elsewhere, this is a one-line change and a reflash.
+ *
+ * pid.codes had merged one commit in the 129 days before this was filed, so
+ * expect to be on this number for a while. */
+#define USB_PID   0x6415
 /* 2.00, not 2.10.
  *
  * Declaring 2.01 or higher obliges the device to answer GET_DESCRIPTOR(BOS), and

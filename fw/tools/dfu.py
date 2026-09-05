@@ -35,7 +35,7 @@ def giris_interfaces(vid, pid):
 
 
 
-VID, PID = 0x1209, 0x0001
+VID, PID = 0x1209, 0x6415
 CMD_BOOTLOADER = 0x7E
 
 

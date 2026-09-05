@@ -7,7 +7,7 @@ even while macOS has the HID device open."""
 import ctypes, ctypes.util, sys
 import usb.core, usb.util
 
-VID, PID = 0x1209, 0x0001
+VID, PID = 0x1209, 0x6415
 SPEED = {0: "unknown", 1: "low (1.5 Mb/s)", 2: "full (12 Mb/s)",
          3: "HIGH (480 Mb/s)", 4: "super (5 Gb/s)", 5: "super+ (10 Gb/s)"}
 
