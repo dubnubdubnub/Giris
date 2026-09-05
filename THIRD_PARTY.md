@@ -182,16 +182,17 @@ same documents. Datasheets are free to *download* and essentially never free to
 open hardware and rarely challenged, but it is unlicensed redistribution, so it
 deserves a decision rather than a default.
 
-Three items are worse than the rest and worth handling regardless:
+Two items still stand out:
 
-- `hw/refs/CH32V307WCU6-R0/*.SchDoc` and `*.PcbDoc` — WCH's **editable Altium
-  reference-design source**, for a part this project does not use. Redistributing
-  a vendor's design source is a stronger claim than sharing a datasheet, and
-  there is no reason to carry it.
 - `pins_raw.txt`, at the repository root, is a verbatim text extraction of the
   Artery datasheet — it still carries `===PAGE` markers and the document header.
 - `rm0440-...-stm32g4-...pdf` (37 MB) is an **ST** reference manual for a
   different vendor's MCU family.
+
+**Removed 2026-09:** `hw/refs/CH32V307WCU6-R0/*.SchDoc` and `*.PcbDoc` — WCH's
+editable Altium reference-design source (2.6 MB) for a part this project does not
+use. Redistributing a vendor's *design source* is a stronger claim than sharing a
+datasheet. Gone from `HEAD`; still in history.
 
 If the rest is to go, replace it with a manifest of part numbers and source URLs
 and fetch on demand. Note that `hw/TMR2615F_osu_pad/magnetics/measure_switch.py`
