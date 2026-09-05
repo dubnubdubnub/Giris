@@ -1,3 +1,6 @@
+/* SPDX-License-Identifier: Apache-2.0
+ * Copyright 2026 Isaac Chiu
+ */
 /*
  * board.h — Giris TMR2615F_osu_pad (6-key analog dev pad) pin map.
  *

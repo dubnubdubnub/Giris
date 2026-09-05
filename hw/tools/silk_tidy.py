@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: Apache-2.0
+# Copyright 2026 Isaac Chiu
 """Auto-place silkscreen reference designators in a .kicad_pcb file.
 
 Standalone: parses the s-expression directly (supports the new

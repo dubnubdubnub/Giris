@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: Apache-2.0
+# Copyright 2026 Isaac Chiu
 """Measure magnet + geometry from a Gateron-style switch drawing PDF.
 
 Renders 600dpi crops with pdftoppm, finds long straight edges by dark-pixel

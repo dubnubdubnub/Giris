@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: Apache-2.0
+# Copyright 2026 Isaac Chiu
 """Verify the Giris device enumerated at USB high speed with the endpoint
 interval we asked for. Reads descriptors only — no interface claim, so it works
 even while macOS has the HID device open."""

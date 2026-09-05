@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: Apache-2.0
+# Copyright 2026 Isaac Chiu
 """Generate vendor-ready fabrication + assembly packages from a KiCad project.
 
 Targets NextPCB and JLCPCB. Drives the KiCad `kicad-cli` binary only (no pcbnew

@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# SPDX-License-Identifier: Apache-2.0
+# Copyright 2026 Isaac Chiu
 # Fetch the vendor dependencies. They are gitignored on purpose: the Giris repo
 # tracks hardware, and pinning ~500 MB of upstream firmware libraries into it (or
 # into .gitmodules) is a decision to make deliberately, not a side effect of a

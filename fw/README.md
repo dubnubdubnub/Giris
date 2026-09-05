@@ -244,4 +244,7 @@ the sensor's inverted output.
 - **Artery BSP** — *not* a free licence. Artery grants use, copying and distribution "for the purpose of
   design and development in conjunction with Artery microcontrollers". Fine for this product; it does not
   travel to a non-Artery target, and it is not BSD-3.
-- Everything under `src/`, `include/`, `ld/`, `cmake/`, `tools/` is ours.
+- Everything under `src/`, `include/`, `ld/`, `cmake/`, `tools/` is ours **except three
+  Artery-derived files**: `src/startup_at32f402_405.s`, `ld/at32f405rbt7.ld` (modified) and
+  `include/at32f402_405_conf.h`. Those keep Artery's notice and are not covered by Giris'
+  Apache-2.0 grant. See `THIRD_PARTY.md`.

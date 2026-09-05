@@ -1,3 +1,6 @@
+/* SPDX-License-Identifier: Apache-2.0
+ * Copyright 2026 Isaac Chiu
+ */
 /*
  * uid.h — per-board identity from the 96-bit factory unique ID.
  *

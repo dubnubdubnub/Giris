@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: Apache-2.0
+# Copyright 2026 Isaac Chiu
 """Post-placement cleanup steps, applied after silk_tidy.py refdes pass:
 1. unfill large silk body shapes (>1 mm^2)
 2. normalize 180/270 refdes angles

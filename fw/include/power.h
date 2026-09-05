@@ -1,3 +1,6 @@
+/* SPDX-License-Identifier: Apache-2.0
+ * Copyright 2026 Isaac Chiu
+ */
 /*
  * power.h — what this half does when its own host goes to sleep.
  *

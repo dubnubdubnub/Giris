@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: Apache-2.0
+# Copyright 2026 Isaac Chiu
 """
 Exercise the J1 inter-board link (USART6 on PC6/PC7) from the host.
 

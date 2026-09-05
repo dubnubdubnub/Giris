@@ -1,3 +1,6 @@
+/* SPDX-License-Identifier: Apache-2.0
+ * Copyright 2026 Isaac Chiu
+ */
 /*
  * usb.c — OTG_HS device bring-up and the raw-HID telemetry protocol.
  *

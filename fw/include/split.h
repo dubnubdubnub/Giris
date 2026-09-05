@@ -1,3 +1,6 @@
+/* SPDX-License-Identifier: Apache-2.0
+ * Copyright 2026 Isaac Chiu
+ */
 /*
  * split.h — the run-phase data plane: what actually crosses J1 once the two
  * halves have agreed on a rate.

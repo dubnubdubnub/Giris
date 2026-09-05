@@ -1,3 +1,6 @@
+/* SPDX-License-Identifier: Apache-2.0
+ * Copyright 2026 Isaac Chiu
+ */
 #ifndef GIRIS_CONSOLE_H
 #define GIRIS_CONSOLE_H
 

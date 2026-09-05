@@ -1,3 +1,6 @@
+/* SPDX-License-Identifier: Apache-2.0
+ * Copyright 2026 Isaac Chiu
+ */
 /*
  * link.h — the inter-board link on J1 (USART6, PC6/PC7).
  *

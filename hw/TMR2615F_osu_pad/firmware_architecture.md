@@ -22,7 +22,7 @@ superloop cannot hold a 125 µs deadline once a link and RGB are added.
 
 | Layer | Choice |
 |---|---|
-| Base | Clean-room C on Artery BSP (BSD-3) + TinyUSB (MIT), CMake. libhmk as a read-only reference. |
+| Base | Clean-room C on Artery BSP (see §11) + TinyUSB (MIT), CMake. libhmk as a read-only reference. |
 | Scheduling | SOF-phased interrupt pipeline, strict NVIC priority hierarchy, lock-free SPSC handoff |
 | Split cut point | **Semi-smart peripheral**: each half owns analog→key-position; centre owns keymap/layers/HID |
 | Link | Fixed-size full-duplex isochronous frames on **USART6 at 12 Mbaud**, DMA both ways, hardware CRC-32; 115200 open-drain only for discovery |
@@ -164,7 +164,7 @@ What is worth stealing, concretely:
 
 | Option | Verdict |
 |---|---|
-| **A. Artery BSP (BSD-3) + TinyUSB (MIT) + own CMake, libhmk as reference** | ✅ **Recommended.** Only combination that leaves licensing free. Board code is genuinely small (libhmk's is ~260 lines). 1–2 weeks to first enumerating 8 kHz HID with ADC scanning. |
+| **A. Artery BSP (see §11) + TinyUSB (MIT) + own CMake, libhmk as reference** | ✅ **Recommended.** Only combination that leaves licensing free. Board code is genuinely small (libhmk's is ~260 lines). 1–2 weeks to first enumerating 8 kHz HID with ADC scanning. |
 | B. Fork libhmk and add split + RGB | 3–5 days to a blinking fork, then weeks unpicking single-half assumptions — and you ship GPL-3.0. Good source of validated constants (clock recipe, DWC2 quirks). |
 | C. Artery's own `usbd` stack | Keep the clone for bisecting a TinyUSB bug. Not a base. |
 | D. QMK / vial-qmk | 1 kHz, no analog, GPL-2.0. Not viable. |
@@ -440,7 +440,16 @@ Then the peer/token model and topology detection.
 
 ## 11. Licensing
 
-- **Artery BSP** BSD-3-Clause, **TinyUSB** MIT → a closed or permissively-licensed product is fine.
+**Resolved 2026-09-04: Apache-2.0 for software, CERN-OHL-P v2 for `hw/`.** See `LICENSE`,
+`hw/LICENSE`, `NOTICE` and `THIRD_PARTY.md`; the notes below are what led there.
+
+- **TinyUSB** MIT → clean, attribution on binaries only.
+- **Artery BSP** — *corrected.* This section previously read "BSD-3-Clause", which is what the BSP's
+  `LICENSE` file says. The notice at the head of every BSP **source file** says something narrower:
+  use, copy and distribute *"in conjunction with Artery microcontrollers"*. A field-of-use limit is
+  not an open-source grant, so the BSP is not straightforwardly BSD-3-Clause. No practical
+  consequence for Giris — the firmware only runs on an AT32F405 — but it is a real discrepancy, it
+  travels with the three committed Artery-derived files, and a compliance scan will flag it.
 - **libhmk, minipad, DeskHop, VIA app** are GPL-3.0; **QMK/vial-qmk** GPL-2.0. Reading them and copying
   an *approach* is fine; copying code makes the firmware GPL. Keep libhmk as a reference checkout that
   no source file is ever pasted out of, and note in the repo that this was deliberate.

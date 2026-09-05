@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: Apache-2.0
+# Copyright 2026 Isaac Chiu
 """Checks for the cylinder-magnet field model. Run: python3 test_magfield.py"""
 import math
 

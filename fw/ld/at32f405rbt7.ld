@@ -16,6 +16,37 @@
 **  Environment : Arm gcc toolchain
 **
 *****************************************************************************
+**
+**  Copyright (c) 2025, Artery Technology, All rights reserved.
+**
+**  The software Board Support Package (BSP) that is made available to
+**  download from Artery official website is the copyrighted work of Artery.
+**  Artery authorizes customers to use, copy, and distribute the BSP
+**  software and its related documentation for the purpose of design and
+**  development in conjunction with Artery microcontrollers. Use of the
+**  software is governed by this copyright notice and the following
+**  disclaimer.
+**
+**  THIS SOFTWARE IS PROVIDED ON "AS IS" BASIS WITHOUT WARRANTIES,
+**  GUARANTEES OR REPRESENTATIONS OF ANY KIND. ARTERY EXPRESSLY DISCLAIMS,
+**  TO THE FULLEST EXTENT PERMITTED BY LAW, ALL EXPRESS, IMPLIED OR
+**  STATUTORY OR OTHER WARRANTIES, GUARANTEES OR REPRESENTATIONS,
+**  INCLUDING BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+**  MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, OR NON-INFRINGEMENT.
+**
+*****************************************************************************
+**
+**  MODIFIED for Giris, 2026, from Artery's AT32F405xB_FLASH.ld:
+**
+**    - FLASH LENGTH corrected 256K -> 128K. Artery's script declares 256K for
+**      this part; the AT32F405RBT7-7 has 128 KB in 128 x 1 KB sectors. The
+**      original silently permits a link that cannot be flashed.
+**    - Added a .noinit (NOLOAD) section in RAM, so the bootloader-entry magic
+**      survives the NVIC_SystemReset used to reach the ROM DFU.
+**
+**  Derived work. NOT covered by Giris' Apache-2.0 grant — see THIRD_PARTY.md.
+**
+*****************************************************************************
 */
 
 /* Entry Point */

@@ -43,3 +43,6 @@ fp-info-cache
 
 # Transient tool logs (analyzer/exporter stderr captures)
 *.err
+
+# 600 dpi render scratch from magnetics/measure_switch.py
+*.ppm

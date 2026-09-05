@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# SPDX-License-Identifier: Apache-2.0
+# Copyright 2026 Isaac Chiu
 # Flash over the factory ROM DFU.
 #
 # The ROM bootloader is DfuSe on VID:PID 2e3c:df11 and lives on OTGFS (PA11/PA12)

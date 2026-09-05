@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: Apache-2.0
+# Copyright 2026 Isaac Chiu
 """
 Ground audit for TMR2615F_osu_pad.
 

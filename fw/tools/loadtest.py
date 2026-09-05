@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: Apache-2.0
+# Copyright 2026 Isaac Chiu
 """
 Run a half at full load and see whether anything gives: 8 kHz ADC scan, 8 kHz
 link frames in both directions, and 8 kHz USB HID telemetry, all at once.

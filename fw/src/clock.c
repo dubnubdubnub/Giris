@@ -1,3 +1,6 @@
+/* SPDX-License-Identifier: Apache-2.0
+ * Copyright 2026 Isaac Chiu
+ */
 /*
  * clock.c — bring the AT32F405RBT7-7 up to 216 MHz from the 12 MHz crystal.
  *
