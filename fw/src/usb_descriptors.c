@@ -14,15 +14,20 @@
  * Anything added later — a gamepad, an NKRO report — gets its own interface for
  * the same reason.
  *
- * String indices: only 0..3 are served; tud_descriptor_string_cb returns NULL
- * above that, so index 0xEE STALLS. That matters more than it looks. 0xEE is
- * where Windows asks for the MS OS 1.0 descriptor, and it caches the failure as
- * osvc = 0 under HKLM\SYSTEM\CurrentControlSet\Control\UsbFlags\<vid><pid><bcd>
- * — keyed on bcdDevice. Every Windows machine that saw this firmware while
- * bcdDevice was 0x0100 has already recorded "this device has no MS OS
- * descriptor", and would keep serving that answer from cache. Adding one later
- * without bumping bcdDevice will appear to do nothing, and the XUSB interface it
- * gates will silently fail to bind.
+ *   ITF_NUM_XUSB vendor class 0xFF/0x5D/0x01 — the Xbox 360 controller
+ *                interface, which is how analog travel reaches XInput.
+ *
+ * String index 0xEE is served, and must stay served: it is where Windows asks
+ * for the MS OS 1.0 descriptor that carries the XUSB10 compatible ID, which is
+ * the ONLY thing that makes the inbox xusb22.sys bind to a non-Microsoft VID.
+ * It used to return NULL and STALL.
+ *
+ * That history is why bcdDevice matters here more than it looks. Windows caches
+ * the outcome of the 0xEE probe as osvc under
+ * HKLM\SYSTEM\CurrentControlSet\Control\usbflags\<vid><pid><bcdDevice> and
+ * never asks again — so a machine that met this board while 0xEE stalled would
+ * keep serving "no MS OS descriptor" from cache no matter how correct the
+ * firmware became.
  *
  * BUMP bcdDevice ON ANY CHANGE TO THE USB-VISIBLE DESCRIPTOR SET.
  */
@@ -74,8 +79,12 @@ static const tusb_desc_device_t desc_device = {
     /* Bump on ANY change to what USB can see — interfaces, endpoints, strings,
      * MS OS descriptors. Windows caches per <vid><pid><bcdDevice>, so a stale
      * entry otherwise serves old strings and a remembered "no MS OS descriptor".
-     * 0x0100 -> 0x0101: manufacturer and product strings changed. */
-    .bcdDevice          = 0x0101,
+     * 0x0100 -> 0x0101: manufacturer and product strings changed.
+     * 0x0101 -> 0x0102: XUSB interface added, plus MS OS 1.0 descriptors.
+     *   That bump is NOT cosmetic. Index 0xEE used to STALL, and Windows
+     *   recorded osvc = 0 against 120964150101 and never asks again. A
+     *   flawless descriptor set at the old revision would do nothing. */
+    .bcdDevice          = 0x0102,
     .iManufacturer      = 0x01,
     .iProduct           = 0x02,
     .iSerialNumber      = 0x03,
@@ -140,8 +149,12 @@ const uint8_t *tud_hid_descriptor_report_cb(uint8_t instance)
 #define EP_HID_IN      0x81
 #define EP_KBD_IN      0x82
 
+/* interface 9 + XUSB device descriptor 17 + two endpoints 7 each = 40 (0x28) */
+#define XUSB_DESC_LEN     (9 + 17 + 7 + 7)
+
 #define CONFIG_TOTAL_LEN  (TUD_CONFIG_DESC_LEN + TUD_HID_INOUT_DESC_LEN \
-                                               + TUD_HID_DESC_LEN)
+                                               + TUD_HID_DESC_LEN \
+                                               + XUSB_DESC_LEN)
 
 static const uint8_t desc_configuration[] = {
     TUD_CONFIG_DESCRIPTOR(1, ITF_NUM_TOTAL, 0, CONFIG_TOTAL_LEN,
@@ -160,7 +173,59 @@ static const uint8_t desc_configuration[] = {
     TUD_HID_DESCRIPTOR(ITF_NUM_KBD, 0, HID_ITF_PROTOCOL_KEYBOARD,
                        sizeof(desc_hid_report_kbd), EP_KBD_IN,
                        CFG_TUD_HID_EP_BUFSIZE, 1),
+
+    /* ---- XUSB game controller.  [MS-XUSBI] section 3.2.1.1.1, Table 46. ----
+     *
+     * Written from Microsoft's published specification rather than adapted from
+     * either of the two open implementations of it, both of which are copyleft.
+     * Every value below is traceable to a numbered table; the three that differ
+     * from the tables are marked, and differ only because the tables describe a
+     * single-function Microsoft pad rather than a composite device.
+     *
+     * bInterfaceNumber is 2, not Table 46's 0, because ours is the third
+     * interface. iInterface is 0, not 1: Table 46's 1 would resolve to our
+     * manufacturer string, and Table 15 marks the field optional. */
+    9, TUSB_DESC_INTERFACE, ITF_NUM_XUSB, 0, 2, 0xFF, 0x5D, 0x01, 0x00,
+
+    /* XUSB Interface Device Descriptor — section 2.2.4.5 Table 17, with the
+     * wired values of section 3.2.1.1.2 Table 47. Type 0x21 is the wired device;
+     * 0x22 would be a wireless adapter, which has a different report layout.
+     * bLength is 0x11 (17): Table 47's offsets run 0..16 with a field at 16.
+     *
+     * Emitted inline because 2.2.4.5 requires it between the interface and the
+     * endpoints and says it "cannot be retrieved separately" — so a
+     * GET_DESCRIPTOR for type 0x21 is never serviced. TinyUSB's descriptor walk
+     * skips unknown types, so it passes through untouched.
+     *
+     * The two wReports words are spelled as byte pairs rather than u16 literals
+     * so the substitution stays visible: the high byte of each IS an endpoint
+     * address and must track EP_XUSB_IN / EP_XUSB_OUT. Byte order comes from
+     * USB 2.0 section 8.1 — [MS-XUSBI] never states descriptor endianness. */
+    0x11, 0x21, 0x00, 0x01, 0x01,
+    0x25, EP_XUSB_IN,  0x14, 0x00, 0x00, 0x00, 0x00,
+    0x13, EP_XUSB_OUT, 0x08, 0x00, 0x00,
+
+    /* Sections 3.2.1.1.3 / 3.2.1.1.4, Tables 48 and 49. Both say the endpoint
+     * address "is determined by the individual chip design", so EP3 is fine.
+     *
+     * bInterval is the one field that must NOT be copied numerically. Table 16
+     * defines it in MILLISECONDS, which is the full-speed encoding, and the
+     * spec covers low and full speed only. At high speed the field is an
+     * exponent: 2^(bInterval-1) microframes. So 5 = 2 ms, which is Table 10's
+     * stated minimum for interrupt IN, and 6 = 4 ms for OUT. Copying Table 48's
+     * 4 and Table 49's 8 literally would give 1 ms and 16 ms. */
+    7, TUSB_DESC_ENDPOINT, EP_XUSB_IN,  TUSB_XFER_INTERRUPT, U16_TO_U8S_LE(32), 5,
+    7, TUSB_DESC_ENDPOINT, EP_XUSB_OUT, TUSB_XFER_INTERRUPT, U16_TO_U8S_LE(32), 6,
 };
+
+/* wTotalLength in the config descriptor is CONFIG_TOTAL_LEN, but the bytes the
+ * host actually receives are sizeof(desc_configuration). If those ever disagree
+ * the host reads past the end or truncates an interface, and the failure looks
+ * like "the device enumerates but one function is missing" — which is a long
+ * afternoon. The XUSB block is hand-written bytes with no macro to keep them in
+ * step, so this is not hypothetical. */
+_Static_assert(sizeof(desc_configuration) == CONFIG_TOTAL_LEN,
+               "config descriptor length does not match wTotalLength");
 
 const uint8_t *tud_descriptor_configuration_cb(uint8_t index)
 {
@@ -178,10 +243,31 @@ static const char *string_desc_arr[] = {
 
 static uint16_t _desc_str[33];
 
+/* [MS-XUSBI] section 2.2.4.6, Table 18. Fixed 18 bytes, always at index 0xEE.
+ * The MSFT100 signature bytes are given literally by the table.
+ *
+ * Cannot go through the _desc_str widening path below: that one measures with
+ * strlen and builds a length from it, and this is fixed-width UTF-16 with a
+ * vendor code and a pad byte rather than a NUL-terminated string. */
+static const uint16_t msos_string_desc[9] = {
+    (uint16_t)((TUSB_DESC_STRING << 8) | 0x12),   /* bLength 18, type STRING */
+    'M', 'S', 'F', 'T', '1', '0', '0',
+    (uint16_t)MSOS_VENDOR_CODE,                   /* low byte code, high byte pad */
+};
+
 const uint16_t *tud_descriptor_string_cb(uint8_t index, uint16_t langid)
 {
   (void)langid;
   size_t chr_count = 0;
+
+  /* Before the bounds check below, which would otherwise reject 0xEE and STALL.
+   * usbd takes the length from byte 0 of whatever we return and never consults
+   * string_desc_arr, so indices 0..3 are unaffected.
+   *
+   * Served unconditionally: this probe happens during enumeration, before any
+   * driver is loaded, against the whole device. A bug here does not degrade XUSB
+   * — it breaks enumeration of the keyboard and the viewer interface too. */
+  if (index == 0xEEu) return msos_string_desc;
 
   if (index == 0) {
     memcpy(&_desc_str[1], string_desc_arr[0], 2);

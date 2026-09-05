@@ -31,7 +31,30 @@
 #define CFG_TUD_CDC               0
 #define CFG_TUD_MSC               0
 #define CFG_TUD_MIDI              0
-#define CFG_TUD_VENDOR            0
+#define CFG_TUD_VENDOR            1
+/* The XUSB (Xbox) interface rides TinyUSB's vendor class. Without this,
+ * vendord_open is absent from usbd's driver table, nothing claims interface 2,
+ * and the TU_ASSERT inside SET_CONFIGURATION fails — the WHOLE device stops
+ * enumerating, keyboard and raw HID included. */
+
+/* XUSB is interrupt-only ([MS-XUSBI] Table 16). These default to 0, and with
+ * them off tud_vendor_int_write() and friends do not exist, so xusb.c fails to
+ * link. */
+#define CFG_TUD_VENDOR_EP_INT_IN          1
+#define CFG_TUD_VENDOR_EP_INT_OUT         1
+
+/* Default 64. vendord_open asserts the descriptor's packet size fits the
+ * buffer, and ours is 32 ([MS-XUSBI] Tables 48/49). */
+#define CFG_TUD_VENDOR_EP_INT_IN_BUFSIZE  32
+#define CFG_TUD_VENDOR_EP_INT_OUT_BUFSIZE 32
+
+/* No bulk endpoints here. Zeroing the FIFO sizes drops the stream buffers, but
+ * that un-gates a raw endpoint buffer sized from CFG_TUD_VENDOR_EPSIZE — which
+ * defaults to the 512-byte high-speed bulk maximum. All three move together, or
+ * we carry 1 KB of dead DMA buffer. */
+#define CFG_TUD_VENDOR_EPSIZE     32
+#define CFG_TUD_VENDOR_RX_BUFSIZE 0
+#define CFG_TUD_VENDOR_TX_BUFSIZE 0
 
 #define CFG_TUD_HID_EP_BUFSIZE    64
 

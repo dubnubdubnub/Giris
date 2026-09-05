@@ -25,6 +25,7 @@
 #include "reset.h"
 #include "power.h"
 #include "keys.h"
+#include "xusb.h"
 #include "usb_descriptors.h"
 #include "board.h"
 #include "clock.h"
@@ -208,6 +209,9 @@ static void send_info(uint8_t tag)
     p[PROTO_INFO_KEYS_OWN]  = ks.own_pressed;
     p[PROTO_INFO_KEYS_PEER] = ks.peer_pressed;
     p[PROTO_INFO_KEYS_MERGE]= ks.sending_peer;
+  }
+  {
+    p[PROTO_INFO_XUSB] = xusb_status();
   }                /* [47]     */
   tx_commit();
 }
@@ -435,6 +439,22 @@ void tud_hid_set_report_cb(uint8_t instance, uint8_t report_id,
       send_info(tag);
       break;
 
+    case CMD_XUSB:
+      /* Test injection. There is no travel pipeline yet, so the sticks are
+       * driven straight from the host — which is exactly what is wanted for
+       * proving the interface binds: no calibration, no config store, nothing
+       * between the command and the wire. */
+      if (buffer[2] == 1) xusb_set_enabled(true);
+      else if (buffer[2] == 2) xusb_set_enabled(false);
+      if (buffer[2] == 1 || buffer[2] == 3) {
+        const uint16_t btn = (uint16_t)(buffer[9] | ((uint16_t)buffer[10] << 8));
+        xusb_set_state((int8_t)buffer[3], (int8_t)buffer[4],
+                       (int8_t)buffer[5], (int8_t)buffer[6],
+                       buffer[7], buffer[8], btn);
+      }
+      send_info(tag);
+      break;
+
     case CMD_LINK_HOLD:
       peer_enable(false);           /* nothing else may drive USART6 meanwhile */
       link_hold(buffer[2], buffer[3] != 0);
@@ -524,8 +544,16 @@ static void telemetry_quiesce(void)
   tx_head = tx_tail = 0;      /* drop anything queued for a host that is gone */
 }
 
-void tud_mount_cb(void)   { telemetry_quiesce(); }
-void tud_umount_cb(void)  { telemetry_quiesce(); }
+void tud_mount_cb(void)
+{
+  telemetry_quiesce();
+  xusb_quiesce();
+  /* The interrupt OUT endpoint is not armed by the class driver, only the bulk
+   * one is. Without this the driver's LED and rumble writes NAK forever. */
+  xusb_arm_out();
+}
+
+void tud_umount_cb(void)  { telemetry_quiesce(); xusb_quiesce(); }
 
 /* Suspend is not disconnect: the host still owns us, it has just stopped
  * polling. Stop producing either way — bus-powered devices must drop to the
@@ -534,6 +562,7 @@ void tud_suspend_cb(bool remote_wakeup_en)
 {
   (void)remote_wakeup_en;
   telemetry_quiesce();
+  xusb_quiesce();
   /* A host that suspends us and a hub that cuts our power look identical from
    * the outside. This counts the first; RESET_POR on the next boot reports the
    * second. */
@@ -610,6 +639,9 @@ void usb_init(void)
 void usb_task(void)
 {
   tud_task();
+  /* Ahead of the telemetry pumps so a stick update never queues behind a burst
+   * or a stream frame. It is one comparison in the common case. */
+  xusb_service();
   burst_service();
   stream_service();
   tx_pump();
