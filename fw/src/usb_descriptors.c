@@ -34,6 +34,7 @@
 #include "tusb.h"
 #include "protocol.h"
 #include "uid.h"
+#include "xusb.h"
 
 #define USB_VID   0x1209   /* pid.codes — open-source range */
 
@@ -267,7 +268,19 @@ const uint16_t *tud_descriptor_string_cb(uint8_t index, uint16_t langid)
    * Served unconditionally: this probe happens during enumeration, before any
    * driver is loaded, against the whole device. A bug here does not degrade XUSB
    * — it breaks enumeration of the keyboard and the viewer interface too. */
-  if (index == 0xEEu) return msos_string_desc;
+  if (index == 0xEEu) {
+    /* Report it, so RSP_INFO[63] bit 4 can distinguish "Windows never asked"
+     * from "Windows asked and did not like the answer" — which are the two
+     * failures that look identical from the outside.
+     *
+     * Note this only ever fires ONCE per machine per bcdDevice: Windows caches
+     * the outcome in usbflags and does not re-probe. On a host that has already
+     * enumerated this revision the bit stays clear even though the descriptor
+     * is being served correctly, so read it together with the registry value,
+     * not instead of it. */
+    xusb_note_msos_string();
+    return msos_string_desc;
+  }
 
   if (index == 0) {
     memcpy(&_desc_str[1], string_desc_arr[0], 2);
