@@ -35,14 +35,28 @@ def giris_interfaces(vid, pid):
 
 
 
-VID, PID = 0x1209, 0x6415
+VID = 0x1209
+
+# Every PID this firmware has ever enumerated under, newest first.
+#
+# This tool alone must know the OLD ones. Its whole job is upgrading a board
+# across firmware versions, and the board it is about to flash is by definition
+# running the version BEFORE the change — so a flasher that only recognises the
+# PID it is installing can never perform the first upgrade across a PID change.
+# That is exactly what happened moving off pid.codes' test PID: every other tool
+# correctly stopped seeing old boards, and this one has to keep seeing them.
+#
+#   0x6415  requested allocation, pid.codes PR #1271
+#   0x0001  pid.codes private-testing PID, used during bring-up
+PIDS = (0x6415, 0x0001)
 CMD_BOOTLOADER = 0x7E
 
 
 def boards():
     out = {}
-    for e in giris_interfaces(VID, PID):
-        out.setdefault(e["serial_number"] or "?", e)
+    for pid in PIDS:
+        for e in giris_interfaces(VID, pid):
+            out.setdefault(e["serial_number"] or "?", e)
     return out
 
 
