@@ -1,31 +1,30 @@
 # Giris
 
-An open-source **analog Hall-effect split keyboard**. Each half reads 32 TMR2615F magnetic sensors
-with an ArteryTek AT32F405 and links to the other half over USB-C, so travel is measured in
-millimetres rather than switches being merely open or closed — which is what makes adjustable
-actuation, rapid trigger and analog stick output possible.
+An open-source 32 key/half (64 total) **analog TMR split ortholinear keyboard**. Layout is similar to Keeb.io Iris with an extra column. Uses TMR2615F, 4:8 TMUX1574RSVR Mux, & AT32F405. Link is UART over type-c cable.
 
-The two halves run one firmware image and work out between themselves which is which. They handle
-three topologies: chained through one host, standalone, and dual-host — where each half is plugged
-into a different computer and a keypress moves input between them.
+There are 3 unique modes of operation: 
+- standalone
+- half A --> half B --> computer
+- computer A <-- half A <--> half B --> computer B
+    - Giris doubles as a KVM, you can control which computer you're typing on with a programmable macro
+    - Relevant power circuitry to prevent backfeeding (GROUNDS ARE STILL BONDED!!!)
 
-- `fw/` — firmware, written from scratch in C on the Artery BSP with TinyUSB. 8 kHz USB HS polling,
-  8 kHz inter-half link. Host tools and a WebHID configurator live in `fw/tools/`.
+Done by Human:
 - `hw/` — KiCad schematics and layout. `TMR2615F_osu_pad` is the 6-key development board the
   firmware is brought up on; `giris` is the full-size split.
 - `mech/` — plates and frames.
 
-Status: bring-up. The dev board enumerates, scans at 8 kHz, types, sleeps and wakes a host, and the
-two halves link at 12 Mbaud. The travel pipeline and the configurator are in progress.
+Done by LLM + Human:
+- `fw/` — firmware, written from scratch in C on the Artery BSP with TinyUSB. 8 kHz USB HS polling,
+  8 kHz inter-half link. Host tools and a WebHID configurator live in `fw/tools/`.
 
 ## Schematics and photos
 
 <img src="docs/photos/2026-08-27-osu-pad-first-enumeration.jpg" width="420" alt="First-revision osu!pad dev board enumerating over USB">
 
-PDFs for reading the design without KiCad (the boards are saved by a KiCad fork whose file format
-release KiCad cannot open yet):
+PDFs:
 
-- **osu!pad dev board** (built and running, pictured above):
+- **osu pad dev board** (built and running, pictured above):
   [schematic](hw/TMR2615F_osu_pad/output/TMR2615F_osu_pad.pdf) ·
   [PCB layers](hw/TMR2615F_osu_pad/output/TMR2615F_osu_pad-layers.pdf)
 - **Giris split** (in layout): [schematic](hw/giris/output/giris.pdf)
@@ -36,7 +35,7 @@ regenerate them with `hw/tools/sch_pdf.py`.
 
 ## Setup
 
-This repo uses git submodules for its shared footprint/3D-model library (`hw/library`) and `hw/marbastlib`. **The 3D bodies will not appear in KiCad's 3D viewer until the submodules are checked out**, because the `.step` files they reference live in `hw/library/packages3d/`.
+This repo uses git submodules for its shared footprint/3D-model library (`hw/library`) and `hw/marbastlib`. **The 3D bodies will not appear in KiCad's 3D viewer unless the submodules are checked out**; `.step` files live in `hw/library/packages3d/`.
 
 Clone with submodules:
 
@@ -63,7 +62,7 @@ When adding new 3D models to a board, reference them with one of the path variab
 
 ## Licence
 
-Giris uses two licences, because it is two kinds of work.
+Giris uses two licences:
 
 | What | Licence | File |
 |---|---|---|
