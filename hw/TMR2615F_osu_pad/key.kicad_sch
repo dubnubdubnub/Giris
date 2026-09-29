@@ -980,30 +980,6 @@
 						(type none)
 					)
 				)
-				(arc
-					(start 0 -0.0025)
-					(mid 0 -0.0012)
-					(end 0 0)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(arc
-					(start 3.81 -0.0025)
-					(mid 3.81 -0.0012)
-					(end 3.81 0)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
 				(polyline
 					(pts
 						(xy -3.81 0) (xy -2.794 0)
