@@ -1,6 +1,6 @@
 # Giris
 
-An open-source 32 key/half (64 total) **analog TMR split ortholinear keyboard**. Layout is similar to Keeb.io Iris with an extra column. Uses TMR2615F, 4:8 TMUX1574RSVR Mux, & AT32F405. Link is UART over type-c cable.
+An open source 32 key/half (64 total) **analog TMR split ortholinear keyboard**. Layout is similar to Keeb.io Iris with an extra column. Uses TMR2615F, 4:8 TMUX1574RSVR Mux, & AT32F405. Link is UART over type-c cable.
 
 There are 3 unique modes of operation: 
 - standalone
