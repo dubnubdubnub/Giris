@@ -18,6 +18,22 @@ into a different computer and a keypress moves input between them.
 Status: bring-up. The dev board enumerates, scans at 8 kHz, types, sleeps and wakes a host, and the
 two halves link at 12 Mbaud. The travel pipeline and the configurator are in progress.
 
+## Schematics and photos
+
+<img src="docs/photos/2026-08-27-osu-pad-first-enumeration.jpg" width="420" alt="First-revision osu!pad dev board enumerating over USB">
+
+PDFs for reading the design without KiCad (the boards are saved by a KiCad fork whose file format
+release KiCad cannot open yet):
+
+- **osu!pad dev board** (built and running, pictured above):
+  [schematic](hw/TMR2615F_osu_pad/output/TMR2615F_osu_pad.pdf) ·
+  [PCB layers](hw/TMR2615F_osu_pad/output/TMR2615F_osu_pad-layers.pdf)
+- **Giris split** (in layout): [schematic](hw/giris/output/giris.pdf)
+- **More photos and video** of built boards: [`docs/photos/`](docs/photos/)
+
+The schematic PDFs draw the per-key sheet once and list each key's designators at the end;
+regenerate them with `hw/tools/sch_pdf.py`.
+
 ## Setup
 
 This repo uses git submodules for its shared footprint/3D-model library (`hw/library`) and `hw/marbastlib`. **The 3D bodies will not appear in KiCad's 3D viewer until the submodules are checked out**, because the `.step` files they reference live in `hw/library/packages3d/`.
